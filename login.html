@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Deporty</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <main class="page-container" data-page="login">
+        <div class="form-container" data-component="login-form">
+
+            <!-- Botón para regresar a la página principal -->
+            <a href="index.html" class="form-container__back-button" aria-label="Regresar a la página de inicio"
+                data-action="go-back-home">&larr; Regresar</a>
+
+            <!-- Logo clickeable que lleva al inicio -->
+            <a href="index.html" class="form-container__logo-link" aria-label="Página de inicio de Deporty">
+                <img src="assets/images/icon.png" alt="Logo de Deporty" class="form-container__logo">
+            </a>
+
+            <h2 class="form-container__title">Inicia Sesión en Deporty</h2>
+
+            <!-- Formulario de login -->
+            <form id="loginForm" class="form" novalidate>
+
+                <!-- Campo de Email -->
+                <div class="form__group">
+                    <label for="email" class="form__label">Correo Electrónico</label>
+                    <input type="email" id="email" name="email" class="form__input" data-field="email"
+                        placeholder="tu@email.com" required autocomplete="email">
+                </div>
+
+                <!-- Campo de Contraseña -->
+                <div class="form__group">
+                    <label for="password" class="form__label">Contraseña</label>
+                    <input type="password" id="password" name="password" class="form__input" data-field="password"
+                        placeholder="••••••••" required minlength="8" autocomplete="current-password">
+                </div>
+
+                <!-- Link para recuperar contraseña (futuro) -->
+                <div class="form__group">
+                    <a href="#" class="form__link" data-action="forgot-password">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <!-- Contenedor para mensajes de error/éxito -->
+                <div id="form-message" class="form__message"></div>
+
+                <!-- Botón de envío -->
+                <button type="submit" class="button button--primary button--full-width" data-action="submit-login">
+                    Iniciar Sesión
+                </button>
+            </form>
+
+            <!-- Footer con link a registro -->
+            <div class="form__footer">
+                <p>¿No tienes una cuenta? <a href="signup.html">Regístrate aquí</a></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Script de JavaScript para la lógica del login -->
+    <script src="assets/js/login.js"></script>
+</body>
+
+</html>

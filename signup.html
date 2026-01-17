@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro en Deporty</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
+
 <body>
     <main class="page-container" data-page="registration">
         <div class="form-container" data-component="registration-form">
-            
-            <a href="index.html" class="form-container__back-button" aria-label="Regresar a la página de inicio" data-action="go-back-home">&larr; Regresar</a>
-            
+
+            <a href="index.html" class="form-container__back-button" aria-label="Regresar a la página de inicio"
+                data-action="go-back-home">&larr; Regresar</a>
+
             <a href="index.html" class="form-container__logo-link" aria-label="Página de inicio de Deporty">
                 <img src="assets/images/icon.png" alt="Logo de Deporty" class="form-container__logo">
             </a>
 
             <h2 class="form-container__title">Crea tu cuenta en Deporty</h2>
-            
+
             <form id="registrationForm" class="form" novalidate>
                 <div class="form__group">
                     <label for="role" class="form__label">Elige tu rol</label>
@@ -29,16 +32,18 @@
                         <option value="club">Club</option>
                     </select>
                 </div>
-                
+
                 <div id="dynamic-fields-section" style="display: none;">
-                    
+
                     <div id="groupFullName" class="form__group-dynamic">
                         <label for="fullName" class="form__label">Nombre Completo</label>
-                        <input type="text" id="fullName" name="fullName" class="form__input" data-field="full-name" required>
+                        <input type="text" id="fullName" name="fullName" class="form__input" data-field="full-name"
+                            required>
                     </div>
                     <div id="groupBusinessName" class="form__group-dynamic">
                         <label for="businessName" class="form__label">Razón Social</label>
-                        <input type="text" id="businessName" name="businessName" class="form__input" data-field="business-name" required>
+                        <input type="text" id="businessName" name="businessName" class="form__input"
+                            data-field="business-name" required>
                     </div>
 
                     <div id="fields-natural-person" class="form__group-role">
@@ -46,7 +51,8 @@
                             <legend class="form__legend">Información Personal</legend>
                             <div id="groupBirthDate" class="form__group">
                                 <label for="birthDate" class="form__label">Fecha de Nacimiento</label>
-                                <input type="date" id="birthDate" name="birthDate" class="form__input" data-field="birth-date" required>
+                                <input type="date" id="birthDate" name="birthDate" class="form__input"
+                                    data-field="birth-date" required>
                                 <input type="hidden" id="calculatedAge" name="calculatedAge">
                                 <input type="hidden" id="calculatedCategory" name="calculatedCategory">
                             </div>
@@ -62,7 +68,8 @@
                             <legend class="form__legend">Ubicación</legend>
                             <div class="form__group">
                                 <label for="country" class="form__label">País</label>
-                                <input type="text" id="country" name="country" class="form__input" value="Colombia" readonly>
+                                <input type="text" id="country" name="country" class="form__input" value="Colombia"
+                                    readonly>
                             </div>
                             <div class="form__group">
                                 <label for="department" class="form__label">Departamento</label>
@@ -91,17 +98,20 @@
                         </div>
                         <div class="form__group">
                             <label for="password" class="form__label">Contraseña</label>
-                            <input type="password" id="password" name="password" class="form__input" data-field="password" required minlength="8">
+                            <input type="password" id="password" name="password" class="form__input"
+                                data-field="password" required minlength="8">
                         </div>
                         <div class="form__group">
                             <label for="confirmPassword" class="form__label">Confirmar Contraseña</label>
-                            <input type="password" id="confirmPassword" name="confirmPassword" class="form__input" data-field="confirm-password" required minlength="8">
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="form__input"
+                                data-field="confirm-password" required minlength="8">
                         </div>
                     </fieldset>
 
                     <div id="form-message" class="form__message"></div>
-                    
-                    <button type="submit" class="button button--primary button--full-width" data-action="submit-registration">Crear Cuenta</button>
+
+                    <button type="submit" class="button button--primary button--full-width"
+                        data-action="submit-registration">Crear Cuenta</button>
                 </div>
             </form>
 
@@ -112,4 +122,5 @@
     </main>
     <script src="assets/js/registration.js"></script>
 </body>
+
 </html>
