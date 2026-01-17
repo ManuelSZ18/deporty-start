@@ -1,7 +1,8 @@
 // Espera a que el contenido del HTML esté completamente cargado.
 document.addEventListener('DOMContentLoaded', () => {
-
-    const COMPETITION_YEAR = 2025;
+    
+    // TODO: A largo plazo, este valor debería obtenerse del evento específico al que el usuario se inscribe.
+    const DEFAULT_COMPETITION_YEAR = 2025;
 
     const form = document.getElementById('registrationForm');
     if (!form) {
@@ -19,9 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ageOutput = document.getElementById('calculatedAge');
     const categoryOutput = document.getElementById('calculatedCategory');
     const messageContainer = document.getElementById('form-message');
-    const groupBirthDate = document.getElementById('groupBirthDate');
-    const groupGender = document.getElementById('groupGender');
-    const genderSelector = document.getElementById('gender');
+    const naturalPersonFields = document.getElementById('fields-natural-person');
     
     // --- DEFINICIÓN DE ROLES ---
     const naturalPersonRoles = ['athlete', 'coach', 'judge', 'parent'];
@@ -50,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         fieldsToReset.forEach(field => {
             if (field.tagName === 'INPUT') {
-                // --- ¡ESTA ES LA CORRECCIÓN! ---
                 // Solo limpia el campo si NO es de solo lectura (readonly).
                 if (!field.readOnly) {
                     field.value = '';
@@ -116,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         const birthYear = new Date(birthDateInput.value).getUTCFullYear();
-        const ageAtYearEnd = COMPETITION_YEAR - birthYear;
+        const ageAtYearEnd = DEFAULT_COMPETITION_YEAR - birthYear;
         ageOutput.value = ageAtYearEnd;
 
         let category = 'No definida';
@@ -154,18 +152,12 @@ document.addEventListener('DOMContentLoaded', () => {
             locationFields.forEach(field => field.required = true);
 
             if (selectedRole === 'athlete') {
-                // Para DEPORTISTAS: mostrar y requerir fecha de nacimiento y género.
-                groupBirthDate.style.display = 'block';
-                groupGender.style.display = 'block';
-                birthDateInput.required = true;
-                genderSelector.required = true;
+                // Para DEPORTISTAS: mostrar la sección completa de persona natural.
+                naturalPersonFields.style.display = 'block';
             } else {
-                // Para OTROS ROLES (entrenador, juez): ocultar y NO requerir estos campos.
-                groupBirthDate.style.display = 'none';
-                groupGender.style.display = 'none';
-                birthDateInput.required = false;
-                genderSelector.required = false;
-            }            
+                // Para OTROS ROLES (entrenador, juez): ocultar la sección completa.
+                naturalPersonFields.style.display = 'none';
+}        
         } else if (legalEntityRoles.includes(selectedRole)) {
             groupBusinessName.style.display = 'block';
             businessNameInput.required = true;
@@ -174,63 +166,50 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Convertimos la función a 'async' para poder usar 'await'
-const handleFormSubmit = async (event) => {
-    event.preventDefault(); 
-    clearMessage();
+    const handleFormSubmit = async (event) => {
+        event.preventDefault(); 
+        clearMessage();
 
-    // --- La validación inicial se mantiene igual ---
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
+        // --- La validación inicial se mantiene igual ---
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
 
-    if (password !== confirmPassword) {
-        showMessage('Las contraseñas no coinciden. Por favor, verifica.');
-        return;
-    }
-    if (password.length < 8) {
-        showMessage('La contraseña debe tener al menos 8 caracteres.');
-        return;
-    }
-
-    // --- Lógica de envío de datos con FETCH ---
-
-    // 1. Recolectar todos los datos del formulario en un objeto
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-    console.log("Datos que se enviarán al servidor:", data);
-
-    // 2. Enviar los datos al servidor de forma asíncrona
-    try {
-        // Muestra un mensaje de "cargando" al usuario
-        showMessage('Creando tu cuenta...', 'info'); // 'info' sería un nuevo estilo que puedes añadir
-
-        // Debes reemplazar '/api/register' con la URL real de tu backend
-        const response = await fetch('/api/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-
-        if (response.ok) {
-            // El servidor respondió con éxito (ej. código 200-299)
-            const result = await response.json();
-            console.log('Respuesta del servidor:', result);
-            showMessage('¡Cuenta creada con éxito!', 'success');
-            // Opcional: Redirigir al usuario a la página de login después de un momento
-            // setTimeout(() => { window.location.href = 'login.html'; }, 2000);
-        } else {
-            // El servidor respondió con un error (ej. email ya existe, código 400)
-            const errorData = await response.json();
-            showMessage(`Error: ${errorData.message || 'Ocurrió un problema.'}`, 'error');
+        if (password !== confirmPassword) {
+            showMessage('Las contraseñas no coinciden. Por favor, verifica.');
+            return;
+        }
+        if (password.length < 8) {
+            showMessage('La contraseña debe tener al menos 8 caracteres.');
+            return;
         }
 
-    } catch (error) {
-        // Error de red (ej. no hay conexión a internet)
-        console.error('Error de red:', error);
-        showMessage('Error de conexión. Por favor, revisa tu internet.', 'error');
-    }
-};
+        // --- Lógica de envío de datos con FETCH ---
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        console.log("Datos que se enviarán al servidor:", data);
+
+        try {
+            showMessage('Creando tu cuenta...', 'info');
+            // Debes reemplazar '/api/register' con la URL real de tu backend
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Respuesta del servidor:', result);
+                showMessage('¡Cuenta creada con éxito!', 'success');
+            } else {
+                const errorData = await response.json();
+                showMessage(`Error: ${errorData.message || 'Ocurrió un problema.'}`, 'error');
+            }
+        } catch (error) {
+            console.error('Error de red:', error);
+            showMessage('Error de conexión. Por favor, revisa tu internet.', 'error');
+        }
+    };
 
     // --- VINCULACIÓN DE EVENTOS ---
     roleSelector.addEventListener('change', handleRoleChange);
