@@ -16,9 +16,9 @@
         <link rel="mask-icon" href="/assets/images/logo.svg" color="#00BDFF">
         <meta name="theme-color" content="#00BDFF">
         <link rel="manifest" href="/site.webmanifest">
-        <!-- Preload main app image for faster first paint -->
-        <link rel="preload" href="/assets/images/logo-variants.jpg" as="image" type="image/jpeg">
+        <!-- Preload main app images for faster first paint (existing files only) -->
         <link rel="preload" href="/assets/images/logo.svg" as="image" type="image/svg+xml">
+        <link rel="preload" href="/assets/images/icon.png" as="image" type="image/png">
         <meta name="color-scheme" content="light dark">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-title" content="Deporty">
@@ -52,7 +52,7 @@
                     "@type": "Organization",
                     "name": "Deporty",
                     "url": "index.html",
-                    "logo": "assets/images/icon.svg"
+                    "logo": "assets/images/icon.png"
                 }
             ]
         }
@@ -68,7 +68,7 @@
         <div class="site-header">
             <div class="site-header__brand-wrap">
                 <a href="index.html" class="site-header__brand" aria-label="Deporty">
-                    <img src="assets/images/logo.svg" srcset="assets/images/logo-variants.jpg 1x, assets/images/logo-swimming.png 2x" alt="Deporty" class="site-logo" decoding="async" loading="eager">
+                    <img src="assets/images/logo.svg" srcset="assets/images/logo.svg 1x, assets/images/icon.png 2x" alt="Deporty" class="site-logo" decoding="async" loading="eager">
                 </a>
             </div>
             
@@ -82,7 +82,7 @@
     <main class="landing-page" data-page="home">
         <section class="hero">            
             <div class="hero__logo">
-                <img src="assets/images/logo-variants.jpg" srcset="assets/images/logo-variants.jpg 1x, assets/images/logo-swimming.png 2x" alt="Logotipo de Deporty" class="hero-logo-img" decoding="async" loading="eager">
+                <img src="assets/images/icon.png" srcset="assets/images/icon.png" alt="Logotipo de Deporty" class="hero-logo-img" decoding="async" loading="eager">
             </div>
             <h1 class="hero__title">Deporty</h1>
             <span class="brand-rotator" aria-live="polite">
