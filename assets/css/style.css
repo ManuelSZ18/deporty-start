@@ -68,7 +68,7 @@ header {
 
     /* Rotador de texto en el header */
     .brand-rotator { display: block; margin: 2px 0 0 0; }
-    .brand-text { font-family: var(--font-primary); font-size: 0.95rem; font-weight: 700; transition: color 180ms ease, transform 160ms ease, opacity 160ms ease; margin: 0; }
+    .brand-text { font-family: var(--font-primary); font-size: 0.95rem; font-weight: 700; transition: color 180ms ease, transform 160ms ease, opacity 160ms ease; margin-left: 130px}
     .brand-text.hidden { opacity: 0; transform: translateY(-4px); }
     .brand-text.futbol { color: var(--color-success); }
     .brand-text.natacion { color: var(--color-primary); }
@@ -132,7 +132,6 @@ header {
     font-size: clamp(2.8rem, 8vw, 4rem);
     font-style: italic;
     color: black; 
-    margin-bottom: 0.25em; 
     line-height: 1;
     text-transform: none; /* Para respetar las minúsculas de tu HTML */
     transition: letter-spacing 0.28s ease, margin-right 0.28s ease; 

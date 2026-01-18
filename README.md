@@ -23,6 +23,5 @@ Opcionales próximos pasos:
 
 - Añadir `favicon.ico` en la raíz para máxima compatibilidad.
 - Generar iconos optimizados (192/512) y agregarlos al `site.webmanifest`.
-	- Nota: actualmente la carpeta `assets/images` contiene únicamente `icon.png` y `logo.svg`. Se actualizaron las referencias rotas para usar solo estas imágenes.
 - Añadir pruebas de accesibilidad automatizadas (axe, pa11y).
 - Añadir CI y linting (ESLint, stylelint) y un `package.json`.
