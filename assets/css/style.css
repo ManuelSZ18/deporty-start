@@ -101,14 +101,14 @@ header {
     display: block;
     width: 100%;
     height: auto;
-    color: var(--color-primary); /* Color inicial (celeste) */
+    color: black; /* Color inicial (celeste) */
     transition: color 0.4s ease, transform 0.4s ease; /* Suaviza el cambio */
     margin-left: 20px;
 }
 
 /* Cuando el mouse entra en la sección hero, el logo reacciona */
 .hero:hover .hero__logo svg {
-    color: var(--color-accent); /* Cambia a naranja */
+    color: var(--color-primary); /* Cambia a naranja */
     transform: scale(1.1); /* Crece un 10% */
 }
 
@@ -195,4 +195,13 @@ header {
     .hero__title { font-size: 8rem; }
     .hero__actions { flex-direction: row; justify-content: center; }
     .form-container { padding: 40px; max-width: 600px; }
+}
+
+/* --- Mobile: mostrar CTAs en hero y ocultar nav del header --- */
+.mobile-cta { display: none; }
+
+@media (max-width: 767px) {
+    .site-header__nav { display: none; }
+    .mobile-cta { display: flex; flex-direction: column; gap: 12px; margin-top: 1rem; align-items: center; width: 100%; }
+    .mobile-cta .button { width: 90%; max-width: 360px; padding: 12px 18px; border-radius: 10px; }
 }
