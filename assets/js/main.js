@@ -54,4 +54,15 @@
 	if (window.__Deporty) window.__Deporty.brandRotator = { stop: () => clearInterval(intervalId) };
 })();
 
+// Register service worker for PWA
+if ('serviceWorker' in navigator) {
+	window.addEventListener('load', () => {
+		navigator.serviceWorker.register('/service-worker.js').then(reg => {
+			console.log('ServiceWorker registered', reg.scope);
+		}).catch(err => {
+			console.warn('ServiceWorker registration failed:', err);
+		});
+	});
+}
+
 
