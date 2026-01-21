@@ -1,0 +1,250 @@
+/* --- Variables de Color de la Marca Deporty (CSS Custom Properties) --- */
+:root {
+    --color-primary: #00BDFF;
+    --color-accent: #FF7601;
+    --color-background: #fdfdfb;
+    --color-surface: #ffffff;
+    --color-text-primary: #333333;
+    --color-text-secondary: #555555;
+    --color-border: #dddddd;
+    /* --- NUEVO: Colores para mensajes de estado --- */
+    --color-error: #D32F2F;
+    --color-success: #388E3C;
+    --color-waterpolo: #ffc400;
+    --font-primary:'Quantico', sans-serif;
+    --font-display: sans-serif; /* Nueva variable para títulos impactantes */
+    --shadow-soft: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+/* --- Reset y Estilos Base (Mobile-First) --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-display);
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* --- Header --- */
+header { 
+    width: 100%; 
+    background: transparent; }
+    .site-header { 
+        max-width: 1100px; 
+        margin: 0 auto; 
+        padding: 18px 20px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: space-between; 
+        gap: 16px; }
+    .site-header__brand { 
+        text-decoration: none; 
+        color: inherit; 
+        display: inline-flex; 
+        align-items: center; 
+        gap: 10px; }
+    .site-header__brand-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .site-header__title { 
+        font-family: var(--font-display); 
+        font-size: 1.4rem; 
+        color: var(--color-text-primary); 
+        margin: 0; }
+    .site-header__nav { 
+        display: flex; 
+        gap: 10px; 
+        align-items: center; }
+    .site-header__nav .button { 
+        padding: 8px 16px; 
+        border-radius: 999px; 
+        font-size: 0.95rem; }
+
+    /* Rotador de texto en el header */
+    .brand-rotator { display: block; margin: 2px 0 0 0; }
+    .brand-text { font-family: var(--font-primary); font-size: 0.95rem; font-weight: 700; transition: color 180ms ease, transform 160ms ease, opacity 160ms ease; margin-left: 130px}
+    .brand-text.hidden { opacity: 0; transform: translateY(-4px); }
+    .brand-text.futbol { color: var(--color-success); }
+    .brand-text.natacion { color: var(--color-primary); }
+    .brand-text.waterpolo { color: var(--color-waterpolo); }
+    .brand-text.app { color: var(--color-text-primary); }
+
+@media (min-width: 768px) {
+    .site-header__title { font-size: 1.6rem; }
+    .site-header { padding: 18px 16px; }
+}
+
+/* --- Contenedor Principal de Página --- */
+.page-container, .landing-page {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* --- Landing Page: Hero Section --- */
+.hero { 
+    text-align: center;
+    width: 100%; /* Ocupa todo el ancho para centrar respecto a la página */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra los hijos (logo, h1, p) horizontalmente */
+}
+
+.hero__logo { 
+    width: clamp(80px, 22vw, 180px); /* Mobile-first: menor tamaño inicial, escala en pantallas mayores */
+    height: auto;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero__logo svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    color: black; /* Color inicial (celeste) */
+    transition: color 0.4s ease, transform 0.4s ease; /* Suaviza el cambio */
+}
+
+.hero__logo .hero-logo-img { display: block; width: 100%; height: auto; max-width: 280px; }
+.site-header__brand-wrap .site-logo { width: 48px; height: auto; display: block; }
+
+/* Cuando el mouse entra en la sección hero, el logo reacciona */
+.hero:hover .hero__logo svg {
+    color: var(--color-primary); /* Cambia a naranja */
+    transform: scale(1.1); /* Crece un 10% */
+}
+
+
+.hero__title { 
+    font-family: var(--font-primary);
+    /* Responsive typography: mobile-first smaller, grows with viewport */
+    font-size: clamp(2.8rem, 8vw, 4rem);
+    font-style: italic;
+    color: black; 
+    line-height: 1;
+    text-transform: none; /* Para respetar las minúsculas de tu HTML */
+    transition: letter-spacing 0.28s ease, margin-right 0.28s ease; 
+    text-align: center; /* Asegura el centrado interno */
+    display: inline-block; /* Permite que el margen negativo funcione correctamente */
+    letter-spacing: -2px; /* menos agresivo en móvil */
+}
+
+.hero:hover .hero__title {
+    letter-spacing: 1px;
+    margin-right: 0; /* evitar saltos en móvil */
+}
+
+.hero__subtitle { 
+    font-size: 1.1rem; 
+    color: var(--color-text-secondary); 
+    max-width: 500px; 
+    margin-bottom: 2em; 
+}
+.hero__actions { display: flex; flex-direction: column; gap: 15px; margin-bottom: 2em; }
+.hero__link-section { margin-top: 1em; }
+.hero__link { color: var(--color-accent); text-decoration: none; font-weight: 500; }
+
+/* --- Botones --- */
+.button { display: inline-block; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; border: 2px solid transparent; transition: all 0.3s ease; cursor: pointer; text-align: center; }
+.button--primary { background-color: var(--color-primary); color: var(--color-surface); }
+.button--primary:hover { background-color: var(--color-accent); }
+.button--secondary { background-color: transparent; color: var(--color-primary); border-color: var(--color-primary); }
+.button--secondary:hover { background-color: var(--color-primary); color: var(--color-surface); }
+.button--full-width { width: 100%; }
+
+/* --- Formularios --- */
+.form-container { background-color: var(--color-surface); padding: 30px; border-radius: 12px; box-shadow: var(--shadow-soft); width: 100%; max-width: 500px; position: relative; }
+.form-container__logo { display: block; max-width: 80px; margin: 0 auto 20px; }
+.form-container__title { text-align: center; margin-bottom: 25px; color: var(--color-primary); }
+.form-container__back-button { position: absolute; top: 25px; left: 25px; background-color: transparent; color: var(--color-text-secondary); text-decoration: none; font-size: 1rem; font-weight: 600; padding: 6px 12px; border-radius: 8px; transition: all 0.2s ease; }
+.form-container__back-button:hover { background-color: #f5f5f5; color: var(--color-accent); }
+.form__group, .form__group-dynamic { margin-bottom: 20px; }
+.form__label, .form__legend { display: block; margin-bottom: 8px; font-weight: 600; }
+.form__fieldset { border: 1px solid var(--color-border); border-radius: 8px; padding: 20px; margin-top: 20px; }
+.form__input, .form__select { width: 100%; padding: 12px; border: 1px solid var(--color-border); border-radius: 5px; font-size: 1rem; font-family: var(--font-primary); background-color: var(--color-surface); }
+.form__input:disabled, .form__select:disabled { background-color: #f0f2f5; cursor: not-allowed; }
+.form__input[readonly] { background-color: #f0f2f5; cursor: default; }
+.form__input:focus, .form__select:focus { border-color: var(--color-primary); outline: none; box-shadow: 0 0 0 3px rgba(0, 128, 157, 0.2); }
+.form__footer { text-align: center; margin-top: 20px; font-size: 0.9em; }
+.form__footer a { color: var(--color-accent); text-decoration: none; font-weight: 600; }
+.form__link { color: var(--color-accent); text-decoration: none; font-size: 0.9em; font-weight: 500; }
+.form__link:hover { text-decoration: underline; }
+.form__group-role { display: none; }
+
+/* --- NUEVO: Estilos para mensajes de validación --- */
+.form__message {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: 500;
+    display: none; /* Oculto por defecto */
+}
+.form__message--error {
+    background-color: var(--color-error);
+    color: white;
+    display: block; /* Se muestra cuando tiene esta clase */
+}
+.form__message--success {
+    background-color: var(--color-success);
+    color: white;
+    display: block; /* Se muestra cuando tiene esta clase */
+}
+
+
+/* --- Media Queries (Responsive Design) --- */
+@media (min-width: 768px) {
+    .hero__title { font-size: clamp(4.2rem, 10vw, 8rem); letter-spacing: -7px; }
+    .hero__actions { flex-direction: row; justify-content: center; }
+    .form-container { padding: 40px; max-width: 600px; }
+    /* Desktop: increase brand-rotator size for visibility */
+    .brand-text { font-size: 2rem; margin-left: 300px; margin-top: -20px;}
+}
+
+/* --- Mobile: mostrar CTAs en hero y ocultar nav del header --- */
+.mobile-cta { display: none; }
+
+@media (max-width: 767px) {
+    .site-header__nav { display: none; }
+    .site-header { padding: 12px 14px; }
+    .site-header { align-items: center; }
+    .site-header__brand svg { width: 40px; height: auto; }
+    .mobile-cta { display: flex; flex-direction: column; gap: 12px; margin-top: 1rem; align-items: center; width: 100%; }
+    .mobile-cta .button { width: 90%; max-width: 360px; padding: 12px 18px; border-radius: 10px; }
+}
+
+/* --- Accessibility & Modern UX --- */
+/* Visible focus (uses newer color-mix if available) */
+:focus { outline: none; }
+:focus-visible { outline-offset: 3px; outline: 3px solid rgba(0,189,255,0.9); }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+}
+
+/* Ensure buttons have good contrast and larger hit area */
+.button { padding: 14px 20px; min-height: 44px; }
+.button--primary { box-shadow: 0 6px 18px rgba(0,189,255,0.08); }
+
+/* Brand color mappings for signup button based on rotator */
+.brand-btn--futbol { background-color: var(--color-success) !important; color: var(--color-surface) !important; border-color: var(--color-success) !important; }
+.brand-btn--futbol:hover { background-color: color-mix(in srgb, var(--color-success) 85%, black 15%); }
+.brand-btn--natacion { background-color: var(--color-primary) !important; color: var(--color-surface) !important; border-color: var(--color-primary) !important; }
+.brand-btn--natacion:hover { background-color: color-mix(in srgb, var(--color-primary) 85%, black 15%); }
+.brand-btn--app { background-color: var(--color-text-primary) !important; color: var(--color-surface) !important; border-color: var(--color-text-primary) !important; }
+.brand-btn--app:hover { background-color: color-mix(in srgb, var(--color-text-primary) 85%, black 15%); }
+.brand-btn--waterpolo { background-color: var(--color-waterpolo) !important; color: var(--color-surface) !important; border-color: var(--color-waterpolo) !important; }
+.brand-btn--waterpolo:hover { background-color: color-mix(in srgb, var(--color-waterpolo) 85%, black 15%); }
+
