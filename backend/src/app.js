@@ -30,7 +30,7 @@ app.use(express.json({ limit: '10kb' }));
 
 // 6. ARCHIVOS ESTÁTICOS: Sirve el frontend desde la nueva carpeta
 // Nota: 'path.join' asegura que funcione tanto en Linux (WSL) como en otros sistemas
-app.use(express.static(path.join(__dirname, '../../frontend')));
+app.use(express.static(path.join(__dirname, '../../public')));
 
 // 7. CONEXIÓN DE RUTAS: Definimos el prefijo para la autenticación
 app.use('/api/v1/auth', authRoutes);
