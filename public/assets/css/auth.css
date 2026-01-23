@@ -1,0 +1,378 @@
+/* --- public/assets/css/auth.css: Diseño Moderno de Autenticación --- */
+
+/* --- Contenedor de Página --- */
+.page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 1.5rem;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--color-background) 0%, #f5f5f0 100%);
+}
+
+/* --- Contenedor del Formulario --- */
+.form-container {
+    background-color: var(--color-surface);
+    padding: 3.5rem 2.5rem;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08), 0 0 1px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Efecto de fondo decorativo */
+.form-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255, 118, 1, 0.05) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+/* --- Botón de Regreso --- */
+.form-container__back-button {
+    display: inline-block;
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.form-container__back-button:hover {
+    color: var(--color-accent);
+    background-color: rgba(255, 118, 1, 0.08);
+}
+
+/* --- Logo Link --- */
+.form-container__logo-link {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    text-decoration: none;
+}
+
+.form-container__logo {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.form-container__logo-link:hover .form-container__logo {
+    transform: scale(1.1);
+}
+
+/* --- Título del Formulario --- */
+.form__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.form__subtitle {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* --- Formulario --- */
+.form {
+    position: relative;
+    z-index: 1;
+}
+
+/* --- Grupo de Formulario --- */
+.form__group {
+    margin-bottom: 1.5rem;
+    animation: slideUp 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+.form__group:nth-child(1) { animation-delay: 0.1s; }
+.form__group:nth-child(2) { animation-delay: 0.2s; }
+.form__group:nth-child(3) { animation-delay: 0.3s; }
+.form__group:nth-child(4) { animation-delay: 0.4s; }
+.form__group:nth-child(5) { animation-delay: 0.5s; }
+
+/* --- Etiquetas --- */
+.form__label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-text-primary);
+    margin-bottom: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* --- Inputs y Selects --- */
+.form__input,
+.form__fieldset select {
+    width: 100%;
+    padding: 13px 16px;
+    background-color: var(--color-background);
+    border: 2px solid var(--color-border);
+    border-radius: 10px;
+    color: var(--color-text-primary);
+    font-size: 1rem;
+    font-family: var(--font-primary);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.form__input::placeholder {
+    color: var(--color-text-secondary);
+    opacity: 0.7;
+}
+
+.form__input:focus,
+.form__fieldset select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    background-color: var(--color-surface);
+    box-shadow: 0 0 0 4px rgba(255, 118, 1, 0.08), inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.form__input:hover:not(:focus),
+.form__fieldset select:hover:not(:focus) {
+    border-color: var(--color-accent);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+/* --- Fieldset y Legend --- */
+.form__fieldset {
+    border: none;
+    padding: 0;
+    margin: 2rem 0 1.5rem 0;
+}
+
+.form__legend {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid var(--color-border);
+}
+
+/* --- Grupo Dinámico (para registro) --- */
+.form__group-dynamic {
+    margin-bottom: 1.5rem;
+}
+
+/* --- Botones --- */
+.button--primary {
+    background: linear-gradient(135deg, var(--color-accent) 0%, #ff8c1a 100%);
+    color: white;
+    font-weight: 700;
+    padding: 14px 24px;
+    border-radius: 10px;
+    width: 100%;
+    margin-top: 1.5rem;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 15px rgba(255, 118, 1, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.button--primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: left 0.3s ease;
+}
+
+.button--primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 118, 1, 0.4);
+}
+
+.button--primary:hover::before {
+    left: 100%;
+}
+
+.button--primary:active {
+    transform: translateY(-1px);
+}
+
+.button--full-width {
+    width: 100%;
+}
+
+/* --- Botón Secundario --- */
+.button--secondary {
+    background-color: transparent;
+    color: var(--color-accent);
+    border: 2px solid var(--color-accent);
+    font-weight: 700;
+    padding: 12px 24px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.button--secondary:hover {
+    background-color: var(--color-accent);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 118, 1, 0.3);
+}
+
+/* --- Link de Formulario --- */
+.form__link {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.form__link:hover {
+    text-decoration: underline;
+    color: #ff8c1a;
+}
+
+/* --- Mensaje de Estado --- */
+.form__message {
+    font-size: 0.9rem;
+    padding: 1rem;
+    border-radius: 10px;
+    margin: 1rem 0;
+    text-align: center;
+    font-weight: 600;
+    animation: slideDown 0.3s ease;
+    display: none;
+}
+
+.form__message.show {
+    display: block;
+}
+
+.form__message.error {
+    background-color: rgba(211, 47, 47, 0.1);
+    color: var(--color-error);
+    border-left: 4px solid var(--color-error);
+}
+
+.form__message.success {
+    background-color: rgba(56, 142, 60, 0.1);
+    color: var(--color-success);
+    border-left: 4px solid var(--color-success);
+}
+
+/* --- Footer del Formulario --- */
+.form__footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+}
+
+.form__footer p {
+    margin: 0;
+}
+
+.form__footer a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.form__footer a:hover {
+    text-decoration: underline;
+    color: #ff8c1a;
+}
+
+/* --- Animaciones --- */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 480px) {
+    .form-container {
+        padding: 2.5rem 1.5rem;
+        border-radius: 12px;
+    }
+
+    .form__title {
+        font-size: 1.5rem;
+    }
+
+    .form__input,
+    .form__fieldset select {
+        padding: 12px 14px;
+        font-size: 16px; /* Evita zoom en iOS */
+    }
+
+    .button--primary {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+    }
+
+    .form-container__back-button {
+        top: 1rem;
+        left: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .form-container__logo {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-container {
+        max-width: 100%;
+        margin: 0 1rem;
+    }
+}

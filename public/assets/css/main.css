@@ -1,0 +1,20 @@
+/* public/assets/css/main.css */
+body {
+    font-family: var(--font-primary);
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+.button {
+    font-family: var(--font-primary);
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+}
