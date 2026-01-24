@@ -4,65 +4,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deporty</title>
-        <meta name="description" content="Deporty — gestiona actividades deportivas, eventos y usuarios de forma sencilla. Plataforma para clubes y deportistas que facilita inscripción, seguimiento y comunicación.">
-        <meta name="robots" content="index, follow">
-        <link rel="canonical" href="index.html">
-        <!-- Favicons: primary with cache-bust, sizes and platform variants -->
-        <link rel="icon" href="/assets/images/icon.png?v=2" type="image/png">
-        <link rel="shortcut icon" href="/assets/images/icon.png?v=2">
-        <link rel="icon" href="/assets/images/icon.png?v=2" sizes="192x192" type="image/svg+xml">
-        <link rel="apple-touch-icon" href="/assets/images/icon.png?v=2">
-        <link rel="mask-icon" href="/assets/images/icon.png?v=2" color="#00BDFF">
-        <meta name="theme-color" content="#00BDFF">
-        <link rel="manifest" href="/site.webmanifest">
-        <!-- Preload main app images for faster first paint (existing files only) -->
-        <link rel="preload" href="/assets/images/icon.png?v=2" as="image" type="image/svg+xml">
-        <link rel="preload" href="/assets/images/icon.png?v=2" as="image" type="image/png">
-        <meta name="color-scheme" content="light dark">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-title" content="Deporty">
-        <meta name="apple-mobile-web-app-status-bar-style" content="default">
-
-        <!-- Open Graph / Facebook -->
-        <meta property="og:title" content="Deporty — Gestión de actividades deportivas">
-        <meta property="og:description" content="Deporty — gestiona actividades deportivas, eventos y usuarios de forma sencilla.">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="index.html">
-        <meta property="og:image" content="/assets/images/icon.png?v=2">
-
-        <!-- Twitter -->
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="Deporty — Gestión de actividades deportivas">
-        <meta name="twitter:description" content="Deporty — gestiona actividades deportivas, eventos y usuarios de forma sencilla.">
-        <meta name="twitter:image" content="/assets/images/icon.png?v=2">
-
-        <!-- JSON-LD: WebSite + Organization -->
-        <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@graph": [
-                {
-                    "@type": "WebSite",
-                    "name": "Deporty",
-                    "url": "index.html",
-                    "description": "Plataforma para gestionar actividades deportivas, inscripciones y comunicación entre clubes y deportistas."
-                },
-                {
-                    "@type": "Organization",
-                    "name": "Deporty",
-                    "url": "index.html",
-                    "logo": "/assets/images/icon.png?v=2"
-                }
-            ]
-        }
-        </script>
+    <title>Deporty - Gestión de Actividades Deportivas</title>
+    <meta name="description" content="Deporty — gestiona actividades deportivas, eventos y usuarios de forma sencilla. Plataforma para clubes y deportistas.">
+    <meta name="robots" content="index, follow">
+    <meta name="color-scheme" content="light dark">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#00BDFF">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://deporty.com/">
+    
+    <!-- Favicons optimizados para Vercel CDN -->
+    <link rel="icon" href="/assets/images/icon.png" type="image/png">
+    <link rel="shortcut icon" href="/assets/images/icon.png">
+    <link rel="apple-touch-icon" href="/assets/images/icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <!-- Preconnect a recursos externos -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <!-- Fonts (async loading para mejor rendimiento) -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Anton&family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap"></noscript>
+    
+    <!-- Stylesheets críticos -->
     <link rel="stylesheet" href="/assets/css/variables.css">
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/assets/css/index.css">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Deporty — Gestión de Actividades Deportivas">
+    <meta property="og:description" content="Gestiona actividades deportivas, eventos y usuarios de forma sencilla.">
+    <meta property="og:url" content="https://deporty.com/">
+    <meta property="og:image" content="https://deporty.com/assets/images/icon.png">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Deporty — Gestión de Actividades Deportivas">
+    <meta name="twitter:description" content="Gestiona actividades deportivas, eventos y usuarios de forma sencilla.">
+    <meta name="twitter:image" content="https://deporty.com/assets/images/icon.png">
+    
+    <!-- JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Deporty",
+        "description": "Plataforma para gestionar actividades deportivas e inscripciones",
+        "url": "https://deporty.com/",
+        "applicationCategory": "BusinessApplication",
+        "offers": {
+            "@type": "Offer",
+            "price": "0"
+        }
+    }
+    </script>
 </head>
 
 <body>
@@ -70,19 +68,17 @@
         <!-- Hero Section -->
         <section class="hero">            
             <div class="hero__logo">
-                <img src="/assets/images/icon.png?v=2" srcset="/assets/images/icon.png?v=2" alt="Logotipo de Deporty" class="hero-logo-img" decoding="async" loading="eager">
+                <img src="/assets/images/icon.png" alt="Logotipo de Deporty" class="hero-logo-img" width="120" height="120" decoding="async" loading="eager">
             </div>
             
             <h1 class="hero__title">Deporty</h1>
             
             <span class="brand-rotator" aria-live="polite">
-                <!-- <span class="brand-text">App</span> -->
-                  <!-- Ticker de Deportes -->
-        <section class="brand-ticker" aria-label="Deportes soportados">
-            <div class="brand-ticker__inner">
-                <span class="brand-ticker__item">App</span>
-            </div>
-        </section>
+                <section class="brand-ticker" aria-label="Deportes soportados">
+                    <div class="brand-ticker__inner">
+                        <span class="brand-ticker__item">App</span>
+                    </div>
+                </section>
             </span>
             
             <p class="hero__subtitle">Gestiona actividades deportivas, eventos y usuarios de forma sencilla. Conecta con tu comunidad y organiza como nunca antes.</p>
@@ -92,11 +88,12 @@
                 <a href="/signup.html" class="button button--primary">Registrarse Ahora</a>
             </div>
         </section>
-
-       
     </main>
 
+    <!-- Script optimizado para Vercel -->
     <script src="/assets/js/main.js" defer></script>
 </body>
+
+</html>
 
 </html>
