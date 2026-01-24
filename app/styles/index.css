@@ -250,6 +250,137 @@
 	}
 }
 
+/* ============================================
+   EVENTS SECTION - Sección de Eventos
+   ============================================ */
+
+.events-section {
+	padding: var(--space-3xl) var(--space-sm);
+	background: linear-gradient(180deg, rgba(0, 91, 150, 0.03) 0%, transparent 100%);
+}
+
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 var(--space-md);
+}
+
+.section-header {
+	text-align: center;
+	margin-bottom: var(--space-3xl);
+}
+
+.section-title {
+	font-size: var(--font-size-3xl);
+	font-weight: var(--font-weight-bold);
+	color: var(--brand-main);
+	margin: 0 0 var(--space-md) 0;
+	font-family: var(--font-family-primary);
+}
+
+.section-subtitle {
+	font-size: var(--font-size-lg);
+	color: var(--text-secondary);
+	margin: 0;
+	font-weight: var(--font-weight-normal);
+}
+
+.grid {
+	display: grid;
+	gap: var(--space-lg);
+	grid-template-columns: 1fr;
+}
+
+.grid--2 {
+	grid-template-columns: repeat(2, 1fr);
+}
+
+.grid--3 {
+	grid-template-columns: repeat(3, 1fr);
+}
+
+.grid--4 {
+	grid-template-columns: repeat(4, 1fr);
+}
+
+/* ============================================
+   FEATURES SECTION - Sección de Características
+   ============================================ */
+
+.features-section {
+	padding: var(--space-3xl) var(--space-sm);
+	background: var(--bg-soft);
+	border-top: 2px solid rgba(0, 91, 150, 0.1);
+}
+
+.feature-card {
+	padding: var(--space-xl);
+	background: var(--bg-default);
+	border-radius: var(--radius-lg);
+	text-align: center;
+	transition: all var(--transition-base);
+	box-shadow: var(--shadow-sm);
+	border: 1px solid rgba(0, 91, 150, 0.08);
+}
+
+.feature-card:hover {
+	box-shadow: var(--shadow-lg);
+	transform: translateY(-4px);
+	border-color: var(--brand-main);
+}
+
+.feature-icon {
+	font-size: 3rem;
+	margin-bottom: var(--space-md);
+	display: inline-block;
+}
+
+.feature-title {
+	font-size: var(--font-size-xl);
+	font-weight: var(--font-weight-bold);
+	color: var(--brand-main);
+	margin: 0 0 var(--space-sm) 0;
+}
+
+.feature-description {
+	font-size: var(--font-size-base);
+	color: var(--text-secondary);
+	margin: 0;
+	line-height: var(--line-height-relaxed);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 1024px) {
+	.grid--3,
+	.grid--4 {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 768px) {
+	.events-section,
+	.features-section {
+		padding: var(--space-2xl) var(--space-sm);
+	}
+
+	.section-title {
+		font-size: var(--font-size-2xl);
+	}
+
+	.grid--2,
+	.grid--3,
+	.grid--4 {
+		grid-template-columns: 1fr;
+	}
+
+	.container {
+		padding: 0 var(--space-sm);
+	}
+}
+
 /* --- Accesibilidad --- */
 @media (prefers-reduced-motion: reduce) {
 	* {
