@@ -1,77 +1,56 @@
-# Deporty - Next.js + Vercel
+# Deporty
 
-Plataforma de gestión deportiva con Next.js 14 optimizada para Vercel.
+Aplicación de eventos deportivos construida con Next.js 14.
 
-## 🚀 Quick Start
+## Tecnologías
+
+- **Next.js 14** - Framework React
+- **Prisma** - ORM para base de datos
+- **PostgreSQL** - Base de datos (Neon.tech)
+- **Vercel** - Deployment
+
+## Inicio Rápido
 
 ```bash
 # Instalar dependencias
 npm install
 
-# Desarrollo local
-npm run dev
+# Configurar variables de entorno
+cp .env.example .env.local
+# Editar .env.local con tu DATABASE_URL
 
-# Build para producción
-npm run build
-npm start
+# Ejecutar migraciones
+npx prisma migrate dev
+
+# Iniciar servidor de desarrollo
+npm run dev
 ```
 
-Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+Abre [http://localhost:3000](http://localhost:3000)
 
-## 📝 Deploy en Vercel
+## Scripts
 
 ```bash
-# Opción 1: Auto-deploy desde GitHub
-# 1. Push a GitHub
-# 2. Conecta en https://vercel.com/dashboard
-# 3. Auto-deploy en cada push
-
-# Opción 2: Deploy desde CLI
-npm install -g vercel
-vercel --prod
+npm run dev      # Desarrollo
+npm run build    # Build producción
+npm run start    # Servidor producción
+npm run lint     # Linter
 ```
 
-## ⚙️ Variables de Entorno
-
-Crear `.env.local`:
-
-```env
-CORS_ORIGIN=https://tu-dominio.com
-JWT_SECRET=tu_secret_aqui
-DATABASE_URL=tu_database_url
-NODE_ENV=production
-```
-
-## 📁 Estructura
+## Estructura
 
 ```
-app/
-  ├── api/              - API routes (Next.js)
-  ├── login/            - Página de login
-  ├── signup/           - Página de signup
-  ├── page.js           - Home
-  ├── layout.js         - Layout global
-  └── styles/           - Estilos CSS
-public/
-  ├── assets/           - Imágenes y assets
-  └── site.webmanifest  - PWA manifest
+deporty-start/
+├── app/          # Páginas y componentes
+├── prisma/       # Esquema de base de datos
+├── public/       # Assets estáticos
+└── lib/          # Utilidades
 ```
 
-## ✨ Features
+## Deployment
 
-- ✅ Next.js 14 (App Router)
-- ✅ API Routes integradas
-- ✅ Optimización automática de imágenes
-- ✅ Headers de seguridad
-- ✅ Service Worker incluido
-- ✅ 100% compatible con Vercel
+El proyecto está configurado para deployment automático en Vercel.
 
-## 📚 Documentación
-
-- **DEPLOYMENT.md** - Guía completa de deploy
-- **CHEATSHEET.md** - Comandos y referencia rápida
-
----
-
-**Listo para producción con Vercel** 🚀
-
+```bash
+git push origin main
+```
