@@ -1,5 +1,7 @@
 'use client'
 
+import Image from 'next/image';
+
 export default function Home() {
   const roles = [
     { icon: '🏃', nombre: 'Deportistas', descripcion: 'Participa en competencias y gestiona tu perfil deportivo' },
@@ -21,6 +23,14 @@ export default function Home() {
       {/* Hero Section */}
       <section className="hero">
         <div className="container">
+          <Image
+            src="/logo.svg"
+            alt="Deporty Logo"
+            width={140}
+            height={140}
+            className="hero-logo"
+            priority
+          />
           <div className="hero-badge">
             <span className="badge-dot"></span>
             En Construcción
