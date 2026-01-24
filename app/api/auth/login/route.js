@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import bcrypt from 'bcryptjs';
 
 /**
  * POST /api/auth/login
- * Autentica un usuario
+ * Autentica un usuario y devuelve sus datos
  */
 export async function POST(request) {
     try {
@@ -20,15 +22,46 @@ export async function POST(request) {
             );
         }
 
-        // TODO: Verificar credenciales en BD
-        // TODO: Generar JWT
-        // TODO: Establecer cookie segura
+        // Buscar usuario en BD
+        const usuario = await prisma.usuario.findUnique({
+            where: { email }
+        });
+
+        if (!usuario) {
+            return NextResponse.json(
+                {
+                    status: 'error',
+                    message: '❌ Usuario no encontrado'
+                },
+                { status: 401 }
+            );
+        }
+
+        // Verificar contraseña
+        const esValida = await bcrypt.compare(password, usuario.password);
+
+        if (!esValida) {
+            return NextResponse.json(
+                {
+                    status: 'error',
+                    message: '❌ Contraseña incorrecta'
+                },
+                { status: 401 }
+            );
+        }
+
+        // TODO: Generar JWT token real
+        // TODO: Configurar cookie segura en producción
 
         return NextResponse.json(
             {
                 status: 'success',
                 message: '✅ Login exitoso',
-                token: 'jwt_token_aqui'
+                usuario: {
+                    id: usuario.id,
+                    email: usuario.email,
+                    nombre: usuario.nombre
+                }
             },
             { status: 200 }
         );

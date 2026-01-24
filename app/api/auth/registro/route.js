@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import bcrypt from 'bcryptjs';
 
 /**
  * POST /api/auth/registro
- * Registra un nuevo usuario
+ * Registra un nuevo usuario en la base de datos
  */
 export async function POST(request) {
     try {
@@ -20,17 +22,41 @@ export async function POST(request) {
             );
         }
 
-        // TODO: Validar email único
-        // TODO: Hash de contraseña (bcrypt)
-        // TODO: Guardar en base de datos
+        // Validar email único
+        const usuarioExistente = await prisma.usuario.findUnique({
+            where: { email }
+        });
+
+        if (usuarioExistente) {
+            return NextResponse.json(
+                {
+                    status: 'error',
+                    message: '❌ El email ya está registrado'
+                },
+                { status: 409 }
+            );
+        }
+
+        // Hash de contraseña
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Guardar en base de datos
+        const usuario = await prisma.usuario.create({
+            data: {
+                email,
+                nombre,
+                password: hashedPassword
+            }
+        });
 
         return NextResponse.json(
             {
                 status: 'success',
                 message: '✅ Usuario registrado exitosamente',
                 data: {
-                    email,
-                    nombre
+                    id: usuario.id,
+                    email: usuario.email,
+                    nombre: usuario.nombre
                 }
             },
             { status: 201 }
