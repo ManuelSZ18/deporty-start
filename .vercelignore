@@ -4,12 +4,9 @@
 
 # Dependencies
 node_modules
-.pnp
-.pnp.js
 
 # Testing
 coverage
-.nyc_output
 
 # IDE
 .vscode
@@ -18,34 +15,13 @@ coverage
 *.swo
 *~
 .DS_Store
-.env.local
-.env.*.local
-
-# Build outputs (keep only what Vercel needs)
-dist
-build
-.next
-.nuxt
-.cache
 
 # Logs
 logs
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
-# Legacy backend folder (reemplazado por /api)
-backend
-
-# Documentación innecesaria en producción
+# Documentación
 README.md
-CHANGELOG.md
-.md
-docs
+DEPLOYMENT.md
+CHEATSHEET.md
 
-# Node
-.npmrc
-package-lock.json
-yarn.lock
-pnpm-lock.yaml

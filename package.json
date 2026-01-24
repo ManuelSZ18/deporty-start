@@ -1,15 +1,17 @@
 {
   "name": "deporty-start",
-  "version": "1.0.0",
-  "description": "Plataforma de gestión deportiva optimizada para Vercel",
-  "type": "module",
+  "version": "2.0.0",
+  "description": "Plataforma de gestión deportiva con Next.js en Vercel",
   "scripts": {
-    "dev": "vercel dev",
-    "build": "echo 'Static site - no build needed'",
-    "start": "node api/server.js",
-    "test": "echo 'Add tests here'"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "dotenv": "^17.2.3"
   },
   "devDependencies": {

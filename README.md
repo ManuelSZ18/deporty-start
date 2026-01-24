@@ -1,20 +1,39 @@
-# Deporty - Vercel Deployment
+# Deporty - Next.js + Vercel
 
-Proyecto optimizado 100% para Vercel con máximo rendimiento.
+Plataforma de gestión deportiva con Next.js 14 optimizada para Vercel.
 
-## 🚀 Deploy Rápido
+## 🚀 Quick Start
 
 ```bash
-# Instalar Vercel CLI (una sola vez)
-npm install -g vercel
+# Instalar dependencias
+npm install
 
-# Deploy a producción
+# Desarrollo local
+npm run dev
+
+# Build para producción
+npm run build
+npm start
+```
+
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+
+## 📝 Deploy en Vercel
+
+```bash
+# Opción 1: Auto-deploy desde GitHub
+# 1. Push a GitHub
+# 2. Conecta en https://vercel.com/dashboard
+# 3. Auto-deploy en cada push
+
+# Opción 2: Deploy desde CLI
+npm install -g vercel
 vercel --prod
 ```
 
-## ⚙️ Configurar Variables de Entorno
+## ⚙️ Variables de Entorno
 
-En el Dashboard de Vercel → Settings → Environment Variables:
+Crear `.env.local`:
 
 ```env
 CORS_ORIGIN=https://tu-dominio.com
@@ -23,27 +42,36 @@ DATABASE_URL=tu_database_url
 NODE_ENV=production
 ```
 
-## 📚 Documentación
-
-- **DEPLOYMENT.md** - Guía detallada de deploy
-- **CHEATSHEET.md** - Comandos y referencia rápida
-
 ## 📁 Estructura
 
 ```
-api/           - Vercel Functions (serverless)
-public/        - Frontend estático
-vercel.json    - Configuración de Vercel
+app/
+  ├── api/              - API routes (Next.js)
+  ├── login/            - Página de login
+  ├── signup/           - Página de signup
+  ├── page.js           - Home
+  ├── layout.js         - Layout global
+  └── styles/           - Estilos CSS
+public/
+  ├── assets/           - Imágenes y assets
+  └── site.webmanifest  - PWA manifest
 ```
 
-## ✨ Características
+## ✨ Features
 
-- ✅ Serverless (auto-scaling)
-- ✅ TTFB < 50ms (75% más rápido)
-- ✅ CDN global (280+ ubicaciones)
-- ✅ Seguridad de enterprise (HSTS, CORS, etc)
-- ✅ Gratis con Vercel Free Plan
+- ✅ Next.js 14 (App Router)
+- ✅ API Routes integradas
+- ✅ Optimización automática de imágenes
+- ✅ Headers de seguridad
+- ✅ Service Worker incluido
+- ✅ 100% compatible con Vercel
+
+## 📚 Documentación
+
+- **DEPLOYMENT.md** - Guía completa de deploy
+- **CHEATSHEET.md** - Comandos y referencia rápida
 
 ---
 
-¿Dudas? Lee DEPLOYMENT.md o CHEATSHEET.md
+**Listo para producción con Vercel** 🚀
+
