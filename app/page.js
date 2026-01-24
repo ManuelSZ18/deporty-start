@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
 import EventCard from './components/EventCard';
 import './styles/index.css';
@@ -124,17 +123,14 @@ export default function Home() {
                 </p>
 
                 <div className="hero__actions mobile-cta">
-                    <Link href="/login" className="button button--secondary">
-                        Iniciar Sesión
-                    </Link>
-                    <Link href="/signup" className="button button--primary">
-                        Registrarse Ahora
-                    </Link>
+                    <button className="button button--primary" onClick={() => document.getElementById('events-section').scrollIntoView({ behavior: 'smooth' })}>
+                        Explorar Eventos
+                    </button>
                 </div>
             </section>
 
             {/* Events Section */}
-            <section className="events-section">
+            <section className="events-section" id="events-section">
                 <div className="container">
                     <div className="section-header">
                         <h2 className="section-title">Próximos Eventos 🏊</h2>
