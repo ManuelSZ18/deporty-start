@@ -12,11 +12,15 @@
     let cities = $state<string[]>([]);
     let isLoadingCountries = $state(true);
     let isLoadingCities = $state(false);
+    let isLoadingMore = $state(false);
     let selectedCountry = $state('');
     let selectedCity = $state<string | null>(null);
     let cityQuery = $state('');
+    let cityOffset = $state(0);
+    let hasMoreCities = $state(false);
     let errorMessage = $state('');
     let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+    const cityPageSize = 50;
 
     onMount(async () => {
         if (!$authStore) {
@@ -44,28 +48,38 @@
         }
     }
 
-    async function loadCities(countryCode: string, query = '') {
+    async function loadCities(countryCode: string, query = '', append = false) {
         if (query.length > 0 && query.length < 2) {
             cities = [];
             isLoadingCities = false;
+            hasMoreCities = false;
             return;
         }
-        isLoadingCities = true;
+        isLoadingCities = !append;
+        isLoadingMore = append;
         errorMessage = '';
-        cities = [];
+        if (!append) {
+            cities = [];
+            cityOffset = 0;
+        }
         try {
             const params = new URLSearchParams({
                 country: countryCode,
                 q: query,
-                limit: '50'
+                limit: String(cityPageSize),
+                offset: String(append ? cityOffset : 0)
             });
             const res = await fetch(`/api/locations/cities?${params.toString()}`);
             const data = await res.json();
-            cities = data.cities ?? [];
+            const nextCities = data.cities ?? [];
+            cities = append ? [...cities, ...nextCities] : nextCities;
+            hasMoreCities = nextCities.length === cityPageSize;
+            cityOffset = (append ? cityOffset : 0) + nextCities.length;
         } catch {
             errorMessage = $t('error.network');
         } finally {
             isLoadingCities = false;
+            isLoadingMore = false;
         }
     }
 
@@ -73,6 +87,8 @@
         selectedCountry = code;
         selectedCity = null;
         cityQuery = '';
+        cityOffset = 0;
+        hasMoreCities = false;
         clearLocation();
         setUserCountry(code);
         loadCities(code);
@@ -87,6 +103,8 @@
         cityQuery = value;
         selectedCity = null;
         clearLocation();
+        cityOffset = 0;
+        hasMoreCities = false;
         if (debounceTimer) {
             clearTimeout(debounceTimer);
         }
@@ -94,6 +112,11 @@
             if (!selectedCountry) return;
             loadCities(selectedCountry, cityQuery.trim());
         }, 400);
+    }
+
+    function handleLoadMore() {
+        if (!selectedCountry || isLoadingMore || !hasMoreCities) return;
+        loadCities(selectedCountry, cityQuery.trim(), true);
     }
 
     async function handleContinue() {
@@ -187,6 +210,18 @@
                                 <option value={city}>{city}</option>
                             {/each}
                         </select>
+                        {#if !isLoadingCities && selectedCountry && cityQuery.trim().length >= 2 && cities.length === 0}
+                            <p class="text-xs text-slate-400">{$t('onboarding.cityNoResults')}</p>
+                        {/if}
+                        {#if hasMoreCities}
+                            <button
+                                onclick={handleLoadMore}
+                                class="mt-2 w-full rounded-lg border border-slate-700 bg-slate-800/50 py-2 text-sm font-semibold text-slate-200 transition-all hover:border-blue-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+                                disabled={isLoadingMore}
+                            >
+                                {isLoadingMore ? $t('onboarding.loadingCities') : $t('onboarding.loadMoreCities')}
+                            </button>
+                        {/if}
                     </div>
 
                     <button

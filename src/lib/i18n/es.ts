@@ -74,6 +74,8 @@ const es = {
     'onboarding.selectCity': 'Selecciona una ciudad',
     'onboarding.citySearchPlaceholder': 'Buscar ciudad (min 2 letras)',
     'onboarding.citySearchHint': 'Escribe al menos 2 letras para filtrar sin sobrecargar el sistema.',
+    'onboarding.cityNoResults': 'No hay resultados con ese criterio.',
+    'onboarding.loadMoreCities': 'Cargar mas ciudades',
     'onboarding.loadingCities': 'Cargando ciudades...',
     'onboarding.continue': 'Continuar',
 

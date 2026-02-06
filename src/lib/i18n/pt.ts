@@ -73,6 +73,8 @@ const pt: Record<string, string> = {
     'onboarding.selectCity': 'Selecione uma cidade',
     'onboarding.citySearchPlaceholder': 'Buscar cidade (min 2 letras)',
     'onboarding.citySearchHint': 'Digite pelo menos 2 letras para filtrar sem sobrecarregar o sistema.',
+    'onboarding.cityNoResults': 'Nenhum resultado para esse criterio.',
+    'onboarding.loadMoreCities': 'Carregar mais cidades',
     'onboarding.loadingCities': 'Carregando cidades...',
     'onboarding.continue': 'Continuar',
 
