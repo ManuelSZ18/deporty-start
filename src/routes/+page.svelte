@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { authStore } from '$lib/authStore';
+	import { authStore, logout } from '$lib/authStore';
 	import { t } from '$lib/i18n';
 	import { countryConfig, formatDate, formatTime } from '$lib/stores/locale';
 	import { isLocationComplete } from '$lib/stores/location';
@@ -51,8 +51,8 @@
 							{formatDate(currentTime, $countryConfig)}
 						</p>
 					</div>
-					<div class="hidden md:block">
-						<div class="text-right">
+					<div class="flex items-center gap-4">
+						<div class="hidden md:block text-right">
 							<div class="text-2xl font-bold text-blue-600">
 								{formatTime(currentTime, $countryConfig)}
 							</div>
@@ -60,6 +60,12 @@
 								{$t('dashboard.currentTime')} ({$countryConfig.timezone.split('/').pop()})
 							</div>
 						</div>
+						<button
+							onclick={logout}
+							class="rounded-lg bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 transition-all hover:bg-red-600 hover:text-white"
+						>
+							{$t('nav.logout')}
+						</button>
 					</div>
 				</div>
 			</div>
