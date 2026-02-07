@@ -60,12 +60,6 @@
 								{$t('dashboard.currentTime')} ({$countryConfig.timezone.split('/').pop()})
 							</div>
 						</div>
-						<button
-							onclick={logout}
-							class="rounded-lg bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 transition-all hover:bg-red-600 hover:text-white"
-						>
-							{$t('nav.logout')}
-						</button>
 					</div>
 				</div>
 			</div>
