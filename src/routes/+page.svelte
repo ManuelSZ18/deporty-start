@@ -46,7 +46,7 @@
 				<div class="mb-16 flex justify-center">
 					<div class="flex w-full max-w-md flex-col gap-4 sm:flex-row">
 						<a
-								href="/login"
+							href="/register"
 							class="group relative inline-flex items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 px-8 py-4 font-bold text-white shadow-2xl shadow-blue-500/50 transition-all hover:scale-105 hover:shadow-blue-500/70"
 						>
 							<span class="relative flex items-center gap-2">
@@ -57,7 +57,7 @@
 							</span>
 						</a>
 						<a
-								href="/login"
+							href="/login"
 							class="group relative inline-flex items-center justify-center overflow-hidden rounded-2xl border-2 border-slate-700 bg-slate-900/50 px-8 py-4 font-bold text-white backdrop-blur-sm transition-all hover:scale-105 hover:border-blue-500 hover:bg-slate-800/50"
 						>
 							<span class="relative flex items-center gap-2">

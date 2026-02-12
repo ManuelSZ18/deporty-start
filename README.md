@@ -6,6 +6,7 @@ Este proyecto fue simplificado para conservar solo las pantallas visuales (HTML/
 
 - Home (landing visual)
 - Login (interfaz visual)
+- Registro (interfaz visual)
 
 ## Scripts
 

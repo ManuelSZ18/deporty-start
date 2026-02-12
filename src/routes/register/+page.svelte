@@ -1,65 +1,105 @@
 <script lang="ts">
+	let nombres = $state('');
+	let apellidos = $state('');
 	let email = $state('');
+	let confirmEmail = $state('');
 	let password = $state('');
+	let confirmPassword = $state('');
+
 	let showPassword = $state(false);
+	let showConfirmPassword = $state(false);
 	let isSubmitting = $state(false);
 	let errorMessage = $state('');
-	let showForgotPasswordModal = $state(false);
-	let forgotEmail = $state('');
-	let isSendingReset = $state(false);
-	let resetSuccessMessage = $state('');
-	let resetErrorMessage = $state('');
+	let successMessage = $state('');
 
-	async function handleLogin(e: SubmitEvent) {
+	const passwordStrength = $derived(getPasswordStrength(password));
+	const strengthColor = $derived(getPasswordStrengthColor(passwordStrength));
+	const strengthText = $derived(getPasswordStrengthText(passwordStrength));
+
+	function getPasswordStrength(value: string): number {
+		let score = 0;
+		if (value.length >= 8) score += 1;
+		if (value.length >= 12) score += 1;
+		if (/[a-z]/.test(value)) score += 1;
+		if (/[A-Z]/.test(value)) score += 1;
+		if (/[0-9]/.test(value)) score += 1;
+		if (/[^A-Za-z0-9]/.test(value)) score += 1;
+		return Math.min(score, 5);
+	}
+
+	function getPasswordStrengthText(score: number): string {
+		switch (score) {
+			case 0:
+			case 1:
+				return 'Muy debil';
+			case 2:
+				return 'Debil';
+			case 3:
+				return 'Regular';
+			case 4:
+				return 'Buena';
+			case 5:
+				return 'Fuerte';
+			default:
+				return 'Debil';
+		}
+	}
+
+	function getPasswordStrengthColor(score: number): string {
+		switch (score) {
+			case 0:
+			case 1:
+				return 'bg-red-500/60';
+			case 2:
+				return 'bg-orange-500/60';
+			case 3:
+				return 'bg-yellow-500/60';
+			case 4:
+				return 'bg-lime-500/60';
+			case 5:
+				return 'bg-green-500/60';
+			default:
+				return 'bg-red-500/60';
+		}
+	}
+
+	async function handleRegister(e: SubmitEvent) {
 		e.preventDefault();
-		if (!email || !password) {
+
+		successMessage = '';
+		errorMessage = '';
+
+		if (!nombres || !apellidos || !email || !confirmEmail || !password || !confirmPassword) {
 			errorMessage = 'Por favor completa todos los campos';
 			return;
 		}
 
-		isSubmitting = true;
-		errorMessage = '';
-
-		await new Promise((resolve) => setTimeout(resolve, 500));
-		errorMessage = 'Esta pantalla es solo visual (sin backend).';
-		isSubmitting = false;
-	}
-
-	function openForgotPasswordModal() {
-		showForgotPasswordModal = true;
-		forgotEmail = email; // Pre-llenar con el email si existe
-		resetSuccessMessage = '';
-		resetErrorMessage = '';
-	}
-
-	function closeForgotPasswordModal() {
-		showForgotPasswordModal = false;
-		forgotEmail = '';
-		resetSuccessMessage = '';
-		resetErrorMessage = '';
-	}
-
-	async function handleForgotPassword(e: SubmitEvent) {
-		e.preventDefault();
-		resetErrorMessage = '';
-		resetSuccessMessage = '';
-
-		if (!forgotEmail) {
-			resetErrorMessage = 'Por favor ingresa tu email';
+		if (email !== confirmEmail) {
+			errorMessage = 'Los correos no coinciden';
 			return;
 		}
 
-		isSendingReset = true;
-		await new Promise((resolve) => setTimeout(resolve, 500));
-		resetSuccessMessage = 'Funcionalidad deshabilitada en modo solo UI.';
-		isSendingReset = false;
+		if (password !== confirmPassword) {
+			errorMessage = 'Las contraseñas no coinciden';
+			return;
+		}
+
+		if (password.length < 8) {
+			errorMessage = 'La contraseña debe tener al menos 8 caracteres';
+			return;
+		}
+
+		isSubmitting = true;
+		await new Promise((resolve) => setTimeout(resolve, 600));
+		successMessage = 'Registro simulado. Esta pantalla es solo visual.';
+		isSubmitting = false;
 	}
 </script>
 
 <div class="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 px-4 py-12">
 	<!-- Background Pattern -->
 	<div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
-	
+
 	<!-- Animated Orbs -->
 	<div class="pointer-events-none absolute inset-0 overflow-hidden">
 		<div class="absolute -top-40 -right-40 h-96 w-96 animate-pulse rounded-full bg-blue-600/20 blur-3xl"></div>
@@ -72,11 +112,21 @@
 			<div class="p-8 sm:p-10">
 				<!-- Header -->
 				<div class="mb-8 text-center">
-					<h2 class="mb-2 text-3xl font-bold text-white">
-						Bienvenido de vuelta
-					</h2>
-					<p class="text-slate-400">Inicia sesión para continuar</p>
+					<h2 class="mb-2 text-3xl font-bold text-white">Crear una cuenta</h2>
+					<p class="text-slate-400">Unete a Deporty hoy</p>
 				</div>
+
+				<!-- Success Message -->
+				{#if successMessage}
+					<div class="mb-6 rounded-xl border border-green-500/20 bg-green-500/10 p-4 text-sm text-green-400">
+						<div class="flex items-center gap-2">
+							<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+							</svg>
+							{successMessage}
+						</div>
+					</div>
+				{/if}
 
 				<!-- Error Message -->
 				{#if errorMessage}
@@ -91,7 +141,33 @@
 				{/if}
 
 				<!-- Form -->
-				<form onsubmit={handleLogin} class="space-y-5">
+				<form onsubmit={handleRegister} class="space-y-4">
+					<!-- Name Fields -->
+					<div class="grid grid-cols-2 gap-3">
+						<div class="space-y-2">
+							<label for="firstName" class="text-sm font-semibold text-slate-300">Nombre</label>
+							<input
+								id="firstName"
+								type="text"
+								bind:value={nombres}
+								class="w-full rounded-xl border border-slate-700 bg-slate-800/50 py-3 px-4 text-white placeholder-slate-500 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+								placeholder="Juan"
+								required
+							/>
+						</div>
+						<div class="space-y-2">
+							<label for="lastName" class="text-sm font-semibold text-slate-300">Apellido</label>
+							<input
+								id="lastName"
+								type="text"
+								bind:value={apellidos}
+								class="w-full rounded-xl border border-slate-700 bg-slate-800/50 py-3 px-4 text-white placeholder-slate-500 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+								placeholder="Perez"
+								required
+							/>
+						</div>
+					</div>
+
 					<!-- Email -->
 					<div class="space-y-2">
 						<label for="email" class="text-sm font-semibold text-slate-300">Email</label>
@@ -107,24 +183,32 @@
 								bind:value={email}
 								oninput={(e) => (email = e.currentTarget.value.toLowerCase())}
 								class="w-full rounded-xl border border-slate-700 bg-slate-800/50 py-3.5 pl-12 pr-4 text-white placeholder-slate-500 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-							placeholder="tunombre@email.com"
+								placeholder="tunombre@email.com"
 								required
 							/>
 						</div>
 					</div>
 
+					<!-- Confirm Email -->
+					<div class="space-y-2">
+						<label for="confirmEmail" class="text-sm font-semibold text-slate-300">Confirmar Email</label>
+						<input
+							id="confirmEmail"
+							type="email"
+							bind:value={confirmEmail}
+							oninput={(e) => (confirmEmail = e.currentTarget.value.toLowerCase())}
+							class="w-full rounded-xl border border-slate-700 bg-slate-800/50 py-3.5 px-4 text-white placeholder-slate-500 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 {confirmEmail && email !== confirmEmail ? 'border-red-500/50' : ''}"
+							placeholder="tunombre@email.com"
+							required
+						/>
+						{#if confirmEmail && email !== confirmEmail}
+							<p class="text-xs text-red-400">Los correos no coinciden</p>
+						{/if}
+					</div>
+
 					<!-- Password -->
 					<div class="space-y-2">
-						<div class="flex items-center justify-between">
-							<label for="password" class="text-sm font-semibold text-slate-300">Contraseña</label>
-							<button 
-								type="button" 
-								onclick={openForgotPasswordModal}
-								class="text-xs text-blue-400 hover:text-blue-300 transition-colors"
-							>
-								¿Recordar Contraseña?
-							</button>
-						</div>
+						<label for="password" class="text-sm font-semibold text-slate-300">Contrasena</label>
 						<div class="relative">
 							<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
 								<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -156,6 +240,48 @@
 								{/if}
 							</button>
 						</div>
+						{#if password}
+							<div class="flex items-center gap-2">
+								<div class="h-1 flex-1 rounded-full bg-slate-700">
+									<div class="h-1 rounded-full transition-all {strengthColor}" style="width: {(passwordStrength / 5) * 100}%"></div>
+								</div>
+								<span class="text-xs text-slate-400">{strengthText}</span>
+							</div>
+						{/if}
+					</div>
+
+					<!-- Confirm Password -->
+					<div class="space-y-2">
+						<label for="confirmPassword" class="text-sm font-semibold text-slate-300">Confirmar Contrasena</label>
+						<div class="relative">
+							<input
+								id="confirmPassword"
+								type={showConfirmPassword ? 'text' : 'password'}
+								bind:value={confirmPassword}
+								class="w-full rounded-xl border border-slate-700 bg-slate-800/50 py-3.5 px-4 pr-12 text-white placeholder-slate-500 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 {confirmPassword && password !== confirmPassword ? 'border-red-500/50' : ''}"
+								placeholder="••••••••"
+								required
+							/>
+							<button
+								type="button"
+								onclick={() => (showConfirmPassword = !showConfirmPassword)}
+								class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-300 transition-colors"
+							>
+								{#if showConfirmPassword}
+									<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+									</svg>
+								{:else}
+									<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+									</svg>
+								{/if}
+							</button>
+						</div>
+						{#if confirmPassword && password !== confirmPassword}
+							<p class="text-xs text-red-400">Las contrasenas no coinciden</p>
+						{/if}
 					</div>
 
 					<!-- Submit Button -->
@@ -171,15 +297,23 @@
 									<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
 									<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
 								</svg>
-							Iniciando sesión...
-						{:else}
-							<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-							</svg>
-							Iniciar Sesión
+								Creando cuenta...
+							{:else}
+								<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+								</svg>
+								Crear Cuenta
 							{/if}
 						</span>
 					</button>
+
+					<!-- Terms -->
+					<p class="text-center text-xs text-slate-500">
+						Al crear una cuenta, aceptas nuestros
+						<a href="/" class="text-blue-400 hover:text-blue-300">Terminos de Servicio</a>
+						y
+						<a href="/" class="text-blue-400 hover:text-blue-300">Politica de Privacidad</a>
+					</p>
 				</form>
 
 				<!-- Divider -->
@@ -216,9 +350,9 @@
 
 				<!-- Footer -->
 				<p class="mt-8 text-center text-sm text-slate-400">
-					¿No tienes una cuenta?
-					<a href="/register" class="font-semibold text-blue-400 hover:text-blue-300 transition-colors">
-						Registrarse
+					¿Ya tienes cuenta?
+					<a href="/login" class="font-semibold text-blue-400 hover:text-blue-300 transition-colors">
+						Iniciar Sesion
 					</a>
 				</p>
 			</div>
@@ -236,137 +370,3 @@
 		</a>
 	</div>
 </div>
-
-<!-- Forgot Password Modal -->
-{#if showForgotPasswordModal}
-	<div 
-		class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
-		role="dialog"
-		aria-modal="true"
-		tabindex="-1"
-		onclick={(e) => {
-			if (e.target === e.currentTarget) closeForgotPasswordModal();
-		}}
-		onkeydown={(e) => {
-			if (e.key === 'Escape') closeForgotPasswordModal();
-		}}
-	>
-		<div class="relative w-full max-w-md overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/95 shadow-2xl">
-			<div class="p-8">
-				<!-- Header -->
-				<div class="mb-6 text-center">
-					<div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-500/10">
-						<svg class="h-7 w-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-						</svg>
-					</div>
-					<h3 class="mb-2 text-2xl font-bold text-white">¿Olvidaste tu contraseña?</h3>
-					<p class="text-sm text-slate-400">
-						Ingresa tu email y te enviaremos instrucciones para restablecerla
-					</p>
-				</div>
-
-				<!-- Success Message -->
-				{#if resetSuccessMessage}
-					<div class="mb-6 rounded-xl border border-green-500/20 bg-green-500/10 p-4 text-sm text-green-400">
-						<div class="flex items-start gap-2">
-							<svg class="mt-0.5 h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-							</svg>
-							<div>
-								<p>{resetSuccessMessage}</p>
-								<p class="mt-1 text-xs text-green-400/80">Revisa tu bandeja de entrada y spam.</p>
-							</div>
-						</div>
-					</div>
-				{/if}
-
-				<!-- Error Message -->
-				{#if resetErrorMessage}
-					<div class="mb-6 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400">
-						<div class="flex items-center gap-2">
-							<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-							</svg>
-							{resetErrorMessage}
-						</div>
-					</div>
-				{/if}
-
-				<!-- Form -->
-				{#if !resetSuccessMessage}
-					<form onsubmit={handleForgotPassword} class="space-y-4">
-						<div class="space-y-2">
-							<label for="forgotEmail" class="text-sm font-semibold text-slate-300">Email</label>
-							<div class="relative">
-								<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-									<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-									</svg>
-								</div>
-								<input
-									id="forgotEmail"
-									type="email"
-									bind:value={forgotEmail}
-									oninput={(e) => (forgotEmail = e.currentTarget.value.toLowerCase())}
-									class="w-full rounded-xl border border-slate-700 bg-slate-800/50 py-3.5 pl-12 pr-4 text-white placeholder-slate-500 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-									placeholder="tunombre@email.com"
-									required
-								/>
-							</div>
-						</div>
-
-						<div class="flex gap-3">
-							<button
-								type="button"
-								onclick={closeForgotPasswordModal}
-								class="flex-1 rounded-xl border border-slate-700 bg-slate-800/50 py-3.5 font-semibold text-slate-300 transition-all hover:border-slate-600 hover:bg-slate-800"
-							>
-								Cancelar
-							</button>
-							<button
-								type="submit"
-								disabled={isSendingReset}
-								class="group relative flex-1 overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 py-3.5 font-bold text-white shadow-lg shadow-blue-500/50 transition-all hover:scale-[1.02] hover:shadow-blue-500/70 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
-							>
-								<div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform group-hover:translate-x-full group-hover:duration-1000"></div>
-								<span class="relative flex items-center justify-center gap-2">
-									{#if isSendingReset}
-										<svg class="h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24">
-											<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-											<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-										</svg>
-										Enviando...
-									{:else}
-										<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-										</svg>
-										Enviar
-									{/if}
-								</span>
-							</button>
-						</div>
-					</form>
-				{:else}
-					<button
-						onclick={closeForgotPasswordModal}
-						class="w-full rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 py-3.5 font-bold text-white shadow-lg shadow-blue-500/50 transition-all hover:scale-[1.02] hover:shadow-blue-500/70"
-					>
-						Cerrar
-					</button>
-				{/if}
-			</div>
-
-			<!-- Close Button -->
-			<button
-				onclick={closeForgotPasswordModal}
-				aria-label="Cerrar modal"
-				class="absolute right-4 top-4 rounded-lg p-1 text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-200"
-			>
-				<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-				</svg>
-			</button>
-		</div>
-	</div>
-{/if}
