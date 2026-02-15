@@ -57,8 +57,8 @@
 </script>
 
 <div class="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 px-4 py-12">
-	<!-- Background Pattern -->
-	<div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+	<!-- Background Pattern (no captura clics) -->
+	<div class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
 	
 	<!-- Animated Orbs -->
 	<div class="pointer-events-none absolute inset-0 overflow-hidden">

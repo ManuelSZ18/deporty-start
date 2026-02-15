@@ -4,8 +4,8 @@
 
 <!-- Landing: ocupa toda la altura disponible del main, sin scroll -->
 <main class="relative flex h-full min-h-0 flex-col overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900">
-	<!-- Grid Background Pattern (finer scale) -->
-	<div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_75%_55%_at_50%_30%,#000_60%,transparent_100%)]"></div>
+	<!-- Grid Background Pattern (finer scale, no captura clics) -->
+	<div class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_75%_55%_at_50%_30%,#000_60%,transparent_100%)]"></div>
 
 	<!-- Hero Section: centrado en el espacio disponible, padding responsivo -->
 	<section class="relative flex min-h-0 flex-1 flex-col items-center justify-center px-4 py-6 sm:px-6 sm:py-8 lg:px-8">

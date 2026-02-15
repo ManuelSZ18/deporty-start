@@ -15,14 +15,15 @@
 <div class="flex h-[var(--app-height)] min-h-[100vh] max-h-[var(--app-height)] flex-col overflow-hidden bg-gray-50 font-sans text-gray-900">
 	<!-- Navbar -->
 	<nav
-		class="flex-shrink-0 border-b border-gray-100 bg-white/80 backdrop-blur-md"
+		class="relative z-20 flex-shrink-0 border-b border-gray-100 bg-white/80 backdrop-blur-md"
 		aria-label={$t('nav.mainNav')}
 	>
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 			<div class="flex h-16 items-center justify-center">
-				<!-- Logo -->
+				<!-- Logo: siempre enlaza a la página de inicio -->
 				<a
 					href="/"
+					data-sveltekit-preload-data="hover"
 					class="flex flex-shrink-0 cursor-pointer content-center items-center gap-3 rounded-lg transition-all hover:opacity-80 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
 					aria-label={$t('nav.goHome')}
 				>
