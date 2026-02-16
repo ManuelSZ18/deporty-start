@@ -17,7 +17,7 @@ const es = {
     'landing.subtitle': 'Organiza ligas, gestiona equipos y sigue los resultados en tiempo real.',
     'landing.subtitleHighlight': 'Todo lo que necesitas',
     'landing.subtitleEnd': 'para llevar tu pasión al siguiente nivel.',
-    'landing.ctaStart': 'Empezar Gratis',
+    'landing.ctaStart': 'Registrarme',
     'landing.ctaLogin': 'Iniciar Sesión',
 };
 

@@ -19,16 +19,16 @@
 		aria-label={$t('nav.mainNav')}
 	>
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-			<div class="flex h-16 items-center justify-center">
+			<div class="flex h-[4.5rem] items-center justify-center sm:h-24">
 				<!-- Logo: siempre enlaza a la página de inicio -->
 				<a
 					href="/"
 					data-sveltekit-preload-data="hover"
-					class="flex flex-shrink-0 cursor-pointer content-center items-center gap-3 rounded-lg transition-all hover:opacity-80 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+					class="flex flex-shrink-0 cursor-pointer content-center items-center gap-3 rounded-lg transition-all hover:opacity-80 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none sm:gap-4"
 					aria-label={$t('nav.goHome')}
 				>
 					<svg
-						class="h-10 w-10 shrink-0 object-contain drop-shadow-md"
+						class="h-12 w-12 shrink-0 object-contain drop-shadow-md"
 						viewBox="0 0 277 231"
 						aria-hidden="true"
 						style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2"
@@ -45,9 +45,7 @@
 							</g>
 						</g>
 					</svg>
-					<span
-						class="font-brand text-2xl font-bold tracking-wide text-black"
-					>
+					<span class="font-brand text-3xl font-bold tracking-wide text-black sm:text-4xl">
 						DEPORTY
 					</span>
 				</a>
