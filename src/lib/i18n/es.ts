@@ -92,7 +92,6 @@ const es = {
     'register.errorEmailMismatch': 'Los correos no coinciden',
     'register.errorPasswordMismatch': 'Las contraseñas no coinciden',
     'register.errorPasswordShort': 'La contraseña debe tener al menos 8 caracteres',
-    'register.successSimulated': 'Registro simulado. Esta pantalla es solo visual.',
     // Auth — errores server-side
     'auth.error.missing_fields': 'Por favor completa todos los campos',
     'auth.error.password_short': 'La contraseña debe tener al menos 8 caracteres',

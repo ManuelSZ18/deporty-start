@@ -92,7 +92,6 @@ const pt: Record<string, string> = {
     'register.errorEmailMismatch': 'Os emails não coincidem',
     'register.errorPasswordMismatch': 'As senhas não coincidem',
     'register.errorPasswordShort': 'A senha deve ter pelo menos 8 caracteres',
-    'register.successSimulated': 'Cadastro simulado. Esta tela é apenas visual.',
     // Auth — erros do servidor
     'auth.error.missing_fields': 'Por favor, preencha todos os campos',
     'auth.error.password_short': 'A senha deve ter pelo menos 8 caracteres',
