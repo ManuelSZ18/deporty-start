@@ -1,5 +1,5 @@
 import { createServerClient } from '@supabase/ssr';
-import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 import type { RequestEvent } from '@sveltejs/kit';
 
 /**
@@ -9,7 +9,14 @@ import type { RequestEvent } from '@sveltejs/kit';
  * ⚠️  No almacenar en variables globales — debe crearse por request.
  */
 export function createSupabaseServerClient(event: RequestEvent) {
-    return createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
+	const supabaseUrl = env.PUBLIC_SUPABASE_URL;
+	const supabaseKey = env.PUBLIC_SUPABASE_ANON_KEY ?? env['PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY'];
+
+	if (!supabaseUrl || !supabaseKey) {
+		throw new Error('Missing Supabase public env vars: PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_ANON_KEY');
+	}
+
+    return createServerClient(supabaseUrl, supabaseKey, {
         cookies: {
             getAll: () => event.cookies.getAll(),
             setAll: (cookiesToSet) => {
