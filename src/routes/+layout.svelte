@@ -57,8 +57,40 @@
 					</span>
 				</a>
 
-				<!-- Language Selector -->
-				<LanguageSelector />
+				<!-- Desktop Nav & Language -->
+				<div class="flex items-center gap-4">
+					<LanguageSelector />
+
+					{#if data.session}
+						<a
+							href="/dashboard"
+							class="rounded-lg px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-100 hover:text-blue-600"
+						>
+							{$t('nav.dashboard')}
+						</a>
+						<form method="POST" action="/logout">
+							<button
+								type="submit"
+								class="rounded-lg border border-red-200 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 hover:border-red-300"
+							>
+								{$t('nav.logout')}
+							</button>
+						</form>
+					{:else}
+						<a
+							href="/login"
+							class="rounded-lg px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-100 hover:text-blue-600"
+						>
+							{$t('nav.login')}
+						</a>
+						<a
+							href="/register"
+							class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition-all hover:bg-blue-700 hover:shadow-lg"
+						>
+							{$t('nav.register')}
+						</a>
+					{/if}
+				</div>
 			</div>
 		</div>
 	</nav>

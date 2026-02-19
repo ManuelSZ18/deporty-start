@@ -10,6 +10,9 @@ const pt: Record<string, string> = {
     'nav.skipToContent': 'Pular para o conteúdo principal',
     'nav.mainNav': 'Navegação principal',
     'nav.goHome': 'Deporty - Ir para página principal',
+    'nav.login': 'Entrar',
+    'nav.register': 'Cadastrar',
+    // nav.dashboard e nav.logout já existiam no final do arquivo
 
     // ─── Landing Page ─────────────────────────────────
     'landing.heroTitle1': 'Gerencie seus torneios',
@@ -90,6 +93,64 @@ const pt: Record<string, string> = {
     'register.errorPasswordMismatch': 'As senhas não coincidem',
     'register.errorPasswordShort': 'A senha deve ter pelo menos 8 caracteres',
     'register.successSimulated': 'Cadastro simulado. Esta tela é apenas visual.',
+    // Auth — erros do servidor
+    'auth.error.missing_fields': 'Por favor, preencha todos os campos',
+    'auth.error.password_short': 'A senha deve ter pelo menos 8 caracteres',
+    'auth.error.email_exists': 'Já existe uma conta com este e-mail',
+    'auth.error.invalid_email': 'Por favor, insira um e-mail válido',
+    'auth.error.auth_error': 'Erro de autenticação. Tente novamente.',
+    'auth.error.invalid_credentials': 'E-mail ou senha incorretos',
+    'auth.error.email_not_confirmed': 'Você precisa confirmar seu e-mail antes de entrar. Verifique sua caixa de entrada.',
+
+    // ─── Organizações ────────────────────────────────
+    'organizations.title': 'Minhas Organizações',
+    'organizations.subtitle': 'Gerencie suas ligas e clubes esportivos',
+    'organizations.create': 'Nova Organização',
+    'organizations.empty': 'Você ainda não tem organizações',
+    'organizations.emptyCta': 'Crie sua primeira organização para começar a gerenciar torneios e equipes.',
+    'organizations.members': 'Membros',
+    'organizations.teams': 'Equipes',
+    'organizations.tournaments': 'Torneios',
+    'organizations.new.title': 'Nova Organização',
+    'organizations.new.nameLabel': 'Nome da Organização',
+    'organizations.new.namePlaceholder': 'Ex: Liga de Futebol do Sul',
+    'organizations.new.descriptionLabel': 'Descrição (Opcional)',
+    'organizations.new.submit': 'Criar Organização',
+    'organizations.new.cancel': 'Cancelar',
+    'organizations.new.success': 'Organização criada com sucesso',
+    'organizations.new.error': 'Erro ao criar a organização',
+
+    // ─── Detalhes da Organização ──────────────────────
+    'organization.details.teams': 'Equipes Registradas',
+    'organization.details.newTeam': 'Nova Equipe',
+    'organization.details.noTeams': 'Não há equipes registradas nesta organização.',
+    'organization.details.createTeamCta': 'Crie a primeira equipe para começar.',
+    'organization.details.members': 'Membros da Organização',
+    'organization.details.noMembers': 'Ainda não há membros.',
+
+    // ─── Equipes ──────────────────────────────────────
+    'teams.new.title': 'Nova Equipe',
+    'teams.new.nameLabel': 'Nome da Equipe',
+    'teams.new.namePlaceholder': 'Ex: Os Raios',
+    'teams.new.sportLabel': 'Esporte',
+    'teams.new.categoryLabel': 'Categoria (Opcional)',
+    'teams.new.categoryPlaceholder': 'Ex: Sub-20',
+    'teams.new.submit': 'Criar Equipe',
+    'teams.new.cancel': 'Cancelar',
+    'teams.new.error': 'Erro ao criar a equipe',
+    'teams.new.selectSport': 'Selecione um esporte',
+    'auth.error.missing_email': 'Por favor, insira seu e-mail',
+    'auth.error.reset_error': 'Erro ao enviar o link de recuperação',
+    'auth.success.registration': 'Conta criada com sucesso!',
+    'auth.success.needsConfirmation': 'Enviamos um e-mail de confirmação. Verifique sua caixa de entrada para ativar sua conta.',
+    'auth.success.resetSent': 'Enviamos um link para redefinir sua senha. Verifique sua caixa de entrada.',
+    'auth.error.callback_failed': 'Erro ao confirmar sua conta. Tente novamente.',
+    // Dashboard
+    'dashboard.title': 'Dashboard',
+    'dashboard.welcome': 'Bem-vindo, {name}',
+    'dashboard.subtitle': 'Painel de controle',
+    'nav.logout': 'Sair',
+    'nav.dashboard': 'Dashboard',
 };
 
 export default pt;

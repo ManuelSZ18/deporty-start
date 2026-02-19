@@ -10,6 +10,9 @@ const es = {
     'nav.skipToContent': 'Saltar al contenido principal',
     'nav.mainNav': 'Navegación principal',
     'nav.goHome': 'Deporty - Ir a página principal',
+    'nav.login': 'Iniciar Sesión',
+    'nav.register': 'Registrarse',
+    // nav.dashboard y nav.logout ya estaban agregados al final del archivo
 
     // ─── Landing Page ─────────────────────────────────
     'landing.heroTitle1': 'Gestiona tus torneos',
@@ -90,6 +93,64 @@ const es = {
     'register.errorPasswordMismatch': 'Las contraseñas no coinciden',
     'register.errorPasswordShort': 'La contraseña debe tener al menos 8 caracteres',
     'register.successSimulated': 'Registro simulado. Esta pantalla es solo visual.',
+    // Auth — errores server-side
+    'auth.error.missing_fields': 'Por favor completa todos los campos',
+    'auth.error.password_short': 'La contraseña debe tener al menos 8 caracteres',
+    'auth.error.email_exists': 'Ya existe una cuenta con este correo electrónico',
+    'auth.error.invalid_email': 'Por favor ingresa un correo electrónico válido',
+    'auth.error.auth_error': 'Error de autenticación. Inténtalo de nuevo.',
+    'auth.error.invalid_credentials': 'Email o contraseña incorrectos',
+    'auth.error.email_not_confirmed': 'Debes confirmar tu email antes de iniciar sesión. Revisa tu bandeja de entrada.',
+
+    // ─── Organizaciones ───────────────────────────────
+    'organizations.title': 'Mis Organizaciones',
+    'organizations.subtitle': 'Gestiona tus ligas y clubes deportivos',
+    'organizations.create': 'Nueva Organización',
+    'organizations.empty': 'No tienes organizaciones aún',
+    'organizations.emptyCta': 'Crea tu primera organización para empezar a gestionar torneos y equipos.',
+    'organizations.members': 'Miembros',
+    'organizations.teams': 'Equipos',
+    'organizations.tournaments': 'Torneos',
+    'organizations.new.title': 'Nueva Organización',
+    'organizations.new.nameLabel': 'Nombre de la Organización',
+    'organizations.new.namePlaceholder': 'Ej: Liga de Fútbol del Sur',
+    'organizations.new.descriptionLabel': 'Descripción (Opcional)',
+    'organizations.new.submit': 'Crear Organización',
+    'organizations.new.cancel': 'Cancelar',
+    'organizations.new.success': 'Organización creada exitosamente',
+    'organizations.new.error': 'Error al crear la organización',
+
+    // ─── Detalles de Organización ─────────────────────
+    'organization.details.teams': 'Equipos Registrados',
+    'organization.details.newTeam': 'Nuevo Equipo',
+    'organization.details.noTeams': 'No hay equipos registrados en esta organización.',
+    'organization.details.createTeamCta': 'Crea el primer equipo para comenzar.',
+    'organization.details.members': 'Miembros de la Organización',
+    'organization.details.noMembers': 'No hay miembros aún.',
+
+    // ─── Equipos ──────────────────────────────────────
+    'teams.new.title': 'Nuevo Equipo',
+    'teams.new.nameLabel': 'Nombre del Equipo',
+    'teams.new.namePlaceholder': 'Ej: Los Rayos',
+    'teams.new.sportLabel': 'Deporte',
+    'teams.new.categoryLabel': 'Categoría (Opcional)',
+    'teams.new.categoryPlaceholder': 'Ej: Sub-20',
+    'teams.new.submit': 'Crear Equipo',
+    'teams.new.cancel': 'Cancelar',
+    'teams.new.error': 'Error al crear el equipo',
+    'teams.new.selectSport': 'Selecciona un deporte',
+    'auth.error.missing_email': 'Por favor ingresa tu correo electrónico',
+    'auth.error.reset_error': 'Error al enviar el enlace de recuperación',
+    'auth.success.registration': '¡Cuenta creada exitosamente!',
+    'auth.success.needsConfirmation': 'Te hemos enviado un correo de confirmación. Revisa tu bandeja de entrada para activar tu cuenta.',
+    'auth.success.resetSent': 'Te hemos enviado un enlace para restablecer tu contraseña. Revisa tu bandeja de entrada.',
+    'auth.error.callback_failed': 'Error al confirmar tu cuenta. Inténtalo de nuevo.',
+    // Dashboard
+    'dashboard.title': 'Dashboard',
+    'dashboard.welcome': 'Bienvenido, {name}',
+    'dashboard.subtitle': 'Panel de control',
+    'nav.logout': 'Cerrar Sesión',
+    'nav.dashboard': 'Dashboard',
 };
 
 export default es;
