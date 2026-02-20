@@ -3,6 +3,16 @@
 	import { t } from '$lib/i18n';
 	import LanguageSelector from '$lib/components/LanguageSelector.svelte';
 	let { children, data } = $props();
+
+	let menuOpen = $state(false);
+
+	function toggleMenu() {
+		menuOpen = !menuOpen;
+	}
+
+	function closeMenu() {
+		menuOpen = false;
+	}
 </script>
 
 <!-- Skip to main content (Accessibility) -->
@@ -58,7 +68,7 @@
 				</a>
 
 				<!-- Desktop Nav & Language -->
-				<div class="flex items-center gap-4">
+				<div class="hidden items-center gap-4 sm:flex">
 					<LanguageSelector />
 
 					{#if data.session}
@@ -71,28 +81,85 @@
 						<form method="POST" action="/logout">
 							<button
 								type="submit"
-								class="rounded-lg border border-red-200 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 hover:border-red-300"
+								class="rounded-lg border border-red-200 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:border-red-300 hover:bg-red-50"
 							>
 								{$t('nav.logout')}
 							</button>
 						</form>
+					{/if}
+				</div>
+
+				<!-- Mobile Hamburger Button -->
+				<button
+					type="button"
+					class="inline-flex items-center justify-center rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none sm:hidden"
+					aria-label={menuOpen ? $t('nav.closeMenu') : $t('nav.openMenu')}
+					aria-expanded={menuOpen}
+					onclick={toggleMenu}
+				>
+					{#if menuOpen}
+						<!-- X icon -->
+						<svg
+							class="h-6 w-6"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+							aria-hidden="true"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M6 18L18 6M6 6l12 12"
+							/>
+						</svg>
 					{:else}
-						<a
-							href="/login"
-							class="rounded-lg px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-100 hover:text-blue-600"
+						<!-- Hamburger icon -->
+						<svg
+							class="h-6 w-6"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+							aria-hidden="true"
 						>
-							{$t('nav.login')}
-						</a>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M4 6h16M4 12h16M4 18h16"
+							/>
+						</svg>
+					{/if}
+				</button>
+			</div>
+		</div>
+
+		<!-- Mobile Menu Dropdown -->
+		{#if menuOpen}
+			<div class="border-t border-gray-100 bg-white px-4 pt-2 pb-4 sm:hidden">
+				<div class="flex flex-col gap-1">
+					<LanguageSelector />
+
+					{#if data.session}
 						<a
-							href="/register"
-							class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition-all hover:bg-blue-700 hover:shadow-lg"
+							href="/dashboard"
+							class="rounded-lg px-4 py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-100 hover:text-blue-600"
+							onclick={closeMenu}
 						>
-							{$t('nav.register')}
+							{$t('nav.dashboard')}
 						</a>
+						<form method="POST" action="/logout">
+							<button
+								type="submit"
+								class="w-full rounded-lg px-4 py-3 text-left text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
+							>
+								{$t('nav.logout')}
+							</button>
+						</form>
 					{/if}
 				</div>
 			</div>
-		</div>
+		{/if}
 	</nav>
 
 	<!-- Main Content: ocupa el resto; scroll solo si el contenido lo requiere (p. ej. login/register) -->

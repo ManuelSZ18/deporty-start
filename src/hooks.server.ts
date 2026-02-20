@@ -11,39 +11,39 @@ import type { Handle } from '@sveltejs/kit';
  * 3. Adjuntar ambos a event.locals para uso en +page.server.ts, +server.ts, etc.
  */
 export const handle: Handle = async ({ event, resolve }) => {
-    // 1. Crear Supabase server client para este request
-    event.locals.supabase = createSupabaseServerClient(event);
+	// 1. Crear Supabase server client para este request
+	event.locals.supabase = createSupabaseServerClient(event);
 
-    // 2. Proveer helper seguro para obtener sesión
-    //    Usa getUser() que valida el JWT contra Supabase Auth,
-    //    a diferencia de getSession() que solo lee cookies (spoofeable).
-    event.locals.safeGetSession = async () => {
-        const {
-            data: { session },
-        } = await event.locals.supabase.auth.getSession();
+	// 2. Proveer helper seguro para obtener sesión
+	//    Usa getUser() que valida el JWT contra Supabase Auth,
+	//    a diferencia de getSession() que solo lee cookies (spoofeable).
+	event.locals.safeGetSession = async () => {
+		const {
+			data: { session }
+		} = await event.locals.supabase.auth.getSession();
 
-        if (!session) {
-            return { session: null, user: null };
-        }
+		if (!session) {
+			return { session: null, user: null };
+		}
 
-        // Validar el usuario con el servidor (seguro, no spoofeable)
-        const {
-            data: { user },
-            error,
-        } = await event.locals.supabase.auth.getUser();
+		// Validar el usuario con el servidor (seguro, no spoofeable)
+		const {
+			data: { user },
+			error
+		} = await event.locals.supabase.auth.getUser();
 
-        if (error) {
-            return { session: null, user: null };
-        }
+		if (error) {
+			return { session: null, user: null };
+		}
 
-        return { session, user };
-    };
+		return { session, user };
+	};
 
-    // 3. Resolver la ruta, permitiendo que Supabase serialice cookies en la respuesta
-    return resolve(event, {
-        filterSerializedResponseHeaders(name) {
-            // Supabase necesita pasar content-range para paginación
-            return name === 'content-range' || name === 'x-supabase-api-version';
-        },
-    });
+	// 3. Resolver la ruta, permitiendo que Supabase serialice cookies en la respuesta
+	return resolve(event, {
+		filterSerializedResponseHeaders(name) {
+			// Supabase necesita pasar content-range para paginación
+			return name === 'content-range' || name === 'x-supabase-api-version';
+		}
+	});
 };

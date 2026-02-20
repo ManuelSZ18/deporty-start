@@ -10,23 +10,26 @@ import type { RequestEvent } from '@sveltejs/kit';
  */
 export function createSupabaseServerClient(event: RequestEvent) {
 	const supabaseUrl = env.PUBLIC_SUPABASE_URL;
-	const supabaseKey = env.PUBLIC_SUPABASE_ANON_KEY ?? env['PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY'];
+	const supabaseKey =
+		env.PUBLIC_SUPABASE_ANON_KEY ?? env['PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY'];
 
 	if (!supabaseUrl || !supabaseKey) {
-		throw new Error('Missing Supabase public env vars: PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_ANON_KEY');
+		throw new Error(
+			'Missing Supabase public env vars: PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_ANON_KEY'
+		);
 	}
 
-    return createServerClient(supabaseUrl, supabaseKey, {
-        cookies: {
-            getAll: () => event.cookies.getAll(),
-            setAll: (cookiesToSet) => {
-                cookiesToSet.forEach(({ name, value, options }) => {
-                    event.cookies.set(name, value, {
-                        ...options,
-                        path: options?.path ?? '/',
-                    });
-                });
-            },
-        },
-    });
+	return createServerClient(supabaseUrl, supabaseKey, {
+		cookies: {
+			getAll: () => event.cookies.getAll(),
+			setAll: (cookiesToSet) => {
+				cookiesToSet.forEach(({ name, value, options }) => {
+					event.cookies.set(name, value, {
+						...options,
+						path: options?.path ?? '/'
+					});
+				});
+			}
+		}
+	});
 }

@@ -11,23 +11,23 @@ import type { RequestHandler } from './$types';
  * Extrae el code del query string y lo intercambia por una sesión.
  */
 export const GET: RequestHandler = async ({ url, locals }) => {
-    const code = url.searchParams.get('code');
-    const type = url.searchParams.get('type');
+	const code = url.searchParams.get('code');
+	const type = url.searchParams.get('type');
 
-    if (code) {
-        const { error } = await locals.supabase.auth.exchangeCodeForSession(code);
+	if (code) {
+		const { error } = await locals.supabase.auth.exchangeCodeForSession(code);
 
-        if (error) {
-            console.error('Auth callback error:', error.message);
-            redirect(303, '/login?error=callback_failed');
-        }
-    }
+		if (error) {
+			console.error('Auth callback error:', error.message);
+			redirect(303, '/login?error=callback_failed');
+		}
+	}
 
-    // Redirigir según el tipo de callback
-    if (type === 'recovery') {
-        // TODO: redirigir a página de cambiar contraseña
-        redirect(303, '/dashboard');
-    }
+	// Redirigir según el tipo de callback
+	if (type === 'recovery') {
+		// TODO: redirigir a página de cambiar contraseña
+		redirect(303, '/dashboard');
+	}
 
-    redirect(303, '/dashboard');
+	redirect(303, '/dashboard');
 };

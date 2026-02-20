@@ -19,12 +19,12 @@ PUBLIC_SUPABASE_ANON_KEY=tu_anon_key
 
 ## Configuracion de Auth (Supabase)
 
-1) En Supabase, activa Google en `Authentication -> Providers`.
-2) En `Authentication -> URL Configuration` define:
-	 - `Site URL`: tu URL de produccion en Vercel (por ejemplo `https://deporty-start.vercel.app`).
-	 - `Additional Redirect URLs`:
-		 - `http://localhost:5173/auth/callback`
-		 - `https://deporty-start.vercel.app/auth/callback` (o tu dominio final)
+1. En Supabase, activa Google en `Authentication -> Providers`.
+2. En `Authentication -> URL Configuration` define:
+   - `Site URL`: tu URL de produccion en Vercel (por ejemplo `https://deporty-start.vercel.app`).
+   - `Additional Redirect URLs`:
+     - `http://localhost:5173/auth/callback`
+     - `https://deporty-start.vercel.app/auth/callback` (o tu dominio final)
 
 Nota: el proyecto usa callback en `/auth/callback`.
 

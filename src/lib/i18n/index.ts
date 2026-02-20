@@ -22,27 +22,27 @@ export type SupportedLanguage = 'es' | 'pt';
 // ─── Diccionarios ─────────────────────────────────────
 
 const translations: Record<SupportedLanguage, Translations> = {
-    es,
-    pt,
+	es,
+	pt
 };
 
 // ─── Detectar idioma del navegador ────────────────────
 
 function detectBrowserLanguage(): SupportedLanguage {
-    if (!browser) return 'es';
+	if (!browser) return 'es';
 
-    // 1. Revisar si hay preferencia guardada
-    const stored = localStorage.getItem('deporty_language');
-    if (stored && (stored === 'es' || stored === 'pt')) {
-        return stored;
-    }
+	// 1. Revisar si hay preferencia guardada
+	const stored = localStorage.getItem('deporty_language');
+	if (stored && (stored === 'es' || stored === 'pt')) {
+		return stored;
+	}
 
-    // 2. Detectar del navegador
-    const browserLang = navigator.language.toLowerCase();
-    if (browserLang.startsWith('pt')) return 'pt';
+	// 2. Detectar del navegador
+	const browserLang = navigator.language.toLowerCase();
+	if (browserLang.startsWith('pt')) return 'pt';
 
-    // 3. Default: español
-    return 'es';
+	// 3. Default: español
+	return 'es';
 }
 
 // ─── Stores ───────────────────────────────────────────
@@ -52,27 +52,27 @@ export const locale = writable<SupportedLanguage>(detectBrowserLanguage());
 
 /** Función de traducción reactiva al idioma actual. */
 export const t = derived(locale, ($locale) => {
-    return (key: TranslationKey, params?: Record<string, string | number>): string => {
-        let text = translations[$locale]?.[key] ?? translations['es'][key] ?? key;
+	return (key: TranslationKey, params?: Record<string, string | number>): string => {
+		let text = translations[$locale]?.[key] ?? translations['es'][key] ?? key;
 
-        // Reemplazar parámetros: {nombre} → valor
-        if (params) {
-            for (const [param, value] of Object.entries(params)) {
-                text = text.replace(`{${param}}`, String(value));
-            }
-        }
+		// Reemplazar parámetros: {nombre} → valor
+		if (params) {
+			for (const [param, value] of Object.entries(params)) {
+				text = text.replace(`{${param}}`, String(value));
+			}
+		}
 
-        return text;
-    };
+		return text;
+	};
 });
 
 // ─── Funciones de utilidad ────────────────────────────
 
 /** Cambia el idioma y lo persiste en localStorage. */
 export function setLocale(lang: SupportedLanguage): void {
-    locale.set(lang);
-    if (browser) {
-        localStorage.setItem('deporty_language', lang);
-        document.documentElement.lang = lang;
-    }
+	locale.set(lang);
+	if (browser) {
+		localStorage.setItem('deporty_language', lang);
+		document.documentElement.lang = lang;
+	}
 }
