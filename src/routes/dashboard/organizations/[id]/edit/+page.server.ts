@@ -23,21 +23,19 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 export const actions: Actions = {
 	default: async ({ request, params, locals }) => {
 		const { user } = await locals.safeGetSession();
-		if (!user) return fail(401, { error: 'unauthorized', name: '', description: '' });
+		if (!user) return fail(401, { error: 'unauthorized', name: '' });
 
 		const formData = await request.formData();
 		const name = formData.get('name') as string;
-		const description = (formData.get('description') as string) || null;
 
 		if (!name || name.trim().length === 0) {
-			return fail(400, { error: 'missing_name', name: name ?? '', description: description ?? '' });
+			return fail(400, { error: 'missing_name', name: name ?? '' });
 		}
 
 		const { error: updateError } = await locals.supabase
 			.from('organization')
 			.update({
 				name,
-				description,
 				updated_at: new Date().toISOString()
 			})
 			.eq('organization_id', params.id)
@@ -45,9 +43,9 @@ export const actions: Actions = {
 
 		if (updateError) {
 			console.error('Organization update error:', updateError);
-			return fail(500, { error: 'db_error', name, description: description ?? '' });
+			return fail(500, { error: 'db_error', name });
 		}
 
-		redirect(303, `/dashboard/organizations/${params.id}`);
+		throw redirect(303, `/dashboard/organizations/${params.id}`);
 	}
 };

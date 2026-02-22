@@ -46,6 +46,6 @@ export const actions: Actions = {
 			return fail(500, { error: 'db_error', name, startDate, endDate, deadline: deadline ?? '' });
 		}
 
-		redirect(303, `/dashboard/organizations/${params.id}/tournaments`);
+		throw redirect(303, `/dashboard/organizations/${params.id}/tournaments`);
 	}
 };

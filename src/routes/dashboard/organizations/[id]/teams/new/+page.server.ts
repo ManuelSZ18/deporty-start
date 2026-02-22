@@ -33,7 +33,6 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const name = formData.get('name') as string;
 		const sport_id = formData.get('sport_id') as string;
-		const category = formData.get('category') as string;
 		const organization_id = params.id;
 
 		const { supabase } = locals;
@@ -43,30 +42,27 @@ export const actions: Actions = {
 			return fail(401, {
 				error: 'unauthorized',
 				name: undefined,
-				sport_id: undefined,
-				category: undefined
+				sport_id: undefined
 			});
 		}
 
 		if (!name || name.trim().length === 0) {
-			return fail(400, { error: 'missing_name', name, sport_id, category });
+			return fail(400, { error: 'missing_name', name, sport_id });
 		}
 
 		if (!sport_id) {
-			return fail(400, { error: 'missing_sport', name, sport_id, category });
+			return fail(400, { error: 'missing_sport', name, sport_id });
 		}
 
 		const { error: insertError } = await supabase.from('team').insert({
 			name,
 			organization_id,
-			sport_id,
-			category: category || null
-			// deleted_at is null by default
+			sport_id
 		});
 
 		if (insertError) {
 			console.error('Error creating team:', insertError);
-			return fail(500, { error: 'db_error', name, sport_id, category });
+			return fail(500, { error: 'db_error', name, sport_id });
 		}
 
 		throw redirect(303, `/dashboard/organizations/${organization_id}`);

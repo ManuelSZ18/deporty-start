@@ -4,10 +4,14 @@ import type { PageServerLoad, Actions } from './$types';
 export const load: PageServerLoad = async ({ locals }) => {
 	const { user } = await locals.safeGetSession();
 
+	if (!user) {
+		return { profile: null };
+	}
+
 	const { data: profile } = await locals.supabase
 		.from('profile')
 		.select('*')
-		.eq('profile_id', user!.id)
+		.eq('profile_id', user.id)
 		.single();
 
 	return {

@@ -46,22 +46,45 @@ export const actions: Actions = {
 		const { user } = await locals.safeGetSession();
 		if (!user) return fail(401, { error: 'unauthorized' });
 
+		// Verify user owns the organization
+		const { data: org } = await locals.supabase
+			.from('organization')
+			.select('owner_id')
+			.eq('organization_id', params.id)
+			.single();
+
+		if (org?.owner_id !== user.id) {
+			return fail(403, { error: 'forbidden' });
+		}
+
 		const { error: delError } = await locals.supabase
 			.from('tournament')
 			.update({ deleted_at: new Date().toISOString() })
-			.eq('tournament_id', params.tournamentId);
+			.eq('tournament_id', params.tournamentId)
+			.eq('organization_id', params.id);
 
 		if (delError) {
 			console.error('Tournament delete error:', delError);
 			return fail(500, { error: 'delete_error' });
 		}
 
-		redirect(303, `/dashboard/organizations/${params.id}/tournaments`);
+		throw redirect(303, `/dashboard/organizations/${params.id}/tournaments`);
 	},
 
-	deleteCategory: async ({ request, locals }) => {
+	deleteCategory: async ({ request, params, locals }) => {
 		const { user } = await locals.safeGetSession();
 		if (!user) return fail(401, { error: 'unauthorized' });
+
+		// Verify user owns the organization
+		const { data: org } = await locals.supabase
+			.from('organization')
+			.select('owner_id')
+			.eq('organization_id', params.id)
+			.single();
+
+		if (org?.owner_id !== user.id) {
+			return fail(403, { error: 'forbidden' });
+		}
 
 		const formData = await request.formData();
 		const categoryId = formData.get('categoryId') as string;

@@ -59,10 +59,10 @@ export const actions: Actions = {
 			return fail(500, { error: 'delete_error' });
 		}
 
-		redirect(303, '/dashboard/organizations');
+		throw redirect(303, '/dashboard/organizations');
 	},
 
-	deleteTeam: async ({ request, locals }) => {
+	deleteTeam: async ({ request, params, locals }) => {
 		const { user } = await locals.safeGetSession();
 		if (!user) return fail(401, { error: 'unauthorized' });
 
@@ -71,10 +71,22 @@ export const actions: Actions = {
 
 		if (!teamId) return fail(400, { error: 'missing_team_id' });
 
+		// Verify user owns the organization before deleting team
+		const { data: org } = await locals.supabase
+			.from('organization')
+			.select('owner_id')
+			.eq('organization_id', params.id)
+			.single();
+
+		if (org?.owner_id !== user.id) {
+			return fail(403, { error: 'forbidden' });
+		}
+
 		const { error: deleteError } = await locals.supabase
 			.from('team')
 			.update({ deleted_at: new Date().toISOString() })
-			.eq('team_id', teamId);
+			.eq('team_id', teamId)
+			.eq('organization_id', params.id);
 
 		if (deleteError) {
 			console.error('Error deleting team:', deleteError);
