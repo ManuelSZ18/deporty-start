@@ -172,6 +172,19 @@ const es = {
 	'sidebar.organizations': 'Organizaciones',
 	'sidebar.profile': 'Mi Perfil',
 	'sidebar.tournaments': 'Torneos',
+	'sidebar.settings': 'Ajustes',
+
+	// ─── Settings ─────────────────────────────────────
+	'settings.title': 'Ajustes',
+	'settings.subtitle': 'Configura las opciones de tu cuenta',
+	'settings.languageLabel': 'Idioma',
+	'settings.languageHint': 'Selecciona el idioma de la interfaz',
+
+	// ─── Logout Confirmation ──────────────────────────
+	'logout.confirmTitle': '¿Cerrar sesión?',
+	'logout.confirmMessage': 'Todos tus cambios han sido guardados. ¿Deseas cerrar sesión?',
+	'logout.confirm': 'Sí, cerrar sesión',
+	'logout.cancel': 'Cancelar',
 
 	// ─── Error Pages ─────────────────────────────────
 	'error.title': 'Algo salió mal',

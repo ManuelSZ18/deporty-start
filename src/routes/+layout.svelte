@@ -6,15 +6,7 @@
 	let { children, data } = $props();
 
 	const isComingSoon = env.PUBLIC_APP_MODE === 'coming_soon';
-	let menuOpen = $state(false);
-
-	function toggleMenu() {
-		menuOpen = !menuOpen;
-	}
-
-	function closeMenu() {
-		menuOpen = false;
-	}
+	let showLogoutConfirm = $state(false);
 </script>
 
 <!-- Skip to main content (Accessibility) -->
@@ -35,7 +27,7 @@
 	>
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 			<div class="flex h-[4.5rem] items-center justify-between sm:h-24">
-				<!-- Logo: siempre enlaza a la página de inicio -->
+				<!-- Logo -->
 				<a
 					href="/"
 					data-sveltekit-preload-data="hover"
@@ -69,102 +61,53 @@
 					</span>
 				</a>
 
-				<!-- Desktop Nav & Language -->
-				<div class="hidden items-center gap-4 sm:flex">
-					<LanguageSelector />
-
+				<!-- Right side -->
+				<div class="flex items-center gap-3">
 					{#if !isComingSoon && data.session}
+						<!-- Logged in: just logout button -->
+						<button
+							type="button"
+							onclick={() => (showLogoutConfirm = true)}
+							class="flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:border-red-300 hover:bg-red-50"
+						>
+							<svg
+								class="h-4 w-4"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+								aria-hidden="true"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+								/>
+							</svg>
+							<span class="hidden sm:inline">{$t('nav.logout')}</span>
+						</button>
+					{:else if !isComingSoon}
+						<!-- Not logged in: language selector + auth links -->
+						<LanguageSelector />
 						<a
-							href="/dashboard"
+							href="/login"
 							class="rounded-lg px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-100 hover:text-blue-600"
 						>
-							{$t('nav.dashboard')}
+							{$t('nav.login')}
 						</a>
-						<form method="POST" action="/logout">
-							<button
-								type="submit"
-								class="rounded-lg border border-red-200 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:border-red-300 hover:bg-red-50"
-							>
-								{$t('nav.logout')}
-							</button>
-						</form>
+						<a
+							href="/register"
+							class="rounded-lg bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-2 text-sm font-bold text-white shadow-md shadow-blue-500/30 transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/40"
+						>
+							{$t('nav.register')}
+						</a>
 					{/if}
 				</div>
-
-				<!-- Mobile Hamburger Button -->
-				<button
-					type="button"
-					class="inline-flex items-center justify-center rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none sm:hidden"
-					aria-label={menuOpen ? $t('nav.closeMenu') : $t('nav.openMenu')}
-					aria-expanded={menuOpen}
-					onclick={toggleMenu}
-				>
-					{#if menuOpen}
-						<!-- X icon -->
-						<svg
-							class="h-6 w-6"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-							aria-hidden="true"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M6 18L18 6M6 6l12 12"
-							/>
-						</svg>
-					{:else}
-						<!-- Hamburger icon -->
-						<svg
-							class="h-6 w-6"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-							aria-hidden="true"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M4 6h16M4 12h16M4 18h16"
-							/>
-						</svg>
-					{/if}
-				</button>
 			</div>
 		</div>
-
-		<!-- Mobile Menu Dropdown -->
-		{#if menuOpen}
-			<div class="border-t border-gray-100 bg-white px-4 pt-2 pb-4 sm:hidden">
-				<div class="flex flex-col gap-1">
-					<LanguageSelector />
-
-					{#if !isComingSoon && data.session}
-						<a
-							href="/dashboard"
-							class="rounded-lg px-4 py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-100 hover:text-blue-600"
-							onclick={closeMenu}
-						>
-							{$t('nav.dashboard')}
-						</a>
-						<form method="POST" action="/logout">
-							<button
-								type="submit"
-								class="w-full rounded-lg px-4 py-3 text-left text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
-							>
-								{$t('nav.logout')}
-							</button>
-						</form>
-					{/if}
-				</div>
-			</div>
-		{/if}
 	</nav>
 
-	<!-- Main Content: ocupa el resto; scroll solo si el contenido lo requiere (p. ej. login/register) -->
+	<!-- Main Content -->
 	<main id="main-content" class="min-h-0 flex-1 overflow-auto">
 		{@render children()}
 	</main>
@@ -176,3 +119,57 @@
 		</div>
 	</footer>
 </div>
+
+<!-- Logout Confirmation Modal -->
+{#if showLogoutConfirm}
+	<div
+		class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 backdrop-blur-sm"
+		role="dialog"
+		aria-modal="true"
+		tabindex="-1"
+		onclick={(e) => {
+			if (e.target === e.currentTarget) showLogoutConfirm = false;
+		}}
+		onkeydown={(e) => {
+			if (e.key === 'Escape') showLogoutConfirm = false;
+		}}
+	>
+		<div class="w-full max-w-sm rounded-2xl border border-gray-100 bg-white p-6 shadow-2xl">
+			<div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-50">
+				<svg
+					class="h-6 w-6 text-red-500"
+					fill="none"
+					stroke="currentColor"
+					viewBox="0 0 24 24"
+					aria-hidden="true"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+					/>
+				</svg>
+			</div>
+			<h3 class="mb-2 text-center text-lg font-bold text-gray-900">{$t('logout.confirmTitle')}</h3>
+			<p class="mb-6 text-center text-sm text-gray-500">{$t('logout.confirmMessage')}</p>
+			<div class="flex gap-3">
+				<button
+					type="button"
+					onclick={() => (showLogoutConfirm = false)}
+					class="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-700 transition-all hover:bg-gray-50"
+				>
+					{$t('logout.cancel')}
+				</button>
+				<form method="POST" action="/logout" class="flex-1">
+					<button
+						type="submit"
+						class="w-full rounded-xl bg-red-600 px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-red-700"
+					>
+						{$t('logout.confirm')}
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+{/if}

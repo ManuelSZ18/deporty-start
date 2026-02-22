@@ -171,6 +171,19 @@ const pt: Record<string, string> = {
 	'sidebar.organizations': 'Organizações',
 	'sidebar.profile': 'Meu Perfil',
 	'sidebar.tournaments': 'Torneios',
+	'sidebar.settings': 'Configurações',
+
+	// ─── Settings ─────────────────────────────────────
+	'settings.title': 'Configurações',
+	'settings.subtitle': 'Configure as opções da sua conta',
+	'settings.languageLabel': 'Idioma',
+	'settings.languageHint': 'Selecione o idioma da interface',
+
+	// ─── Logout Confirmation ──────────────────────────
+	'logout.confirmTitle': 'Encerrar sessão?',
+	'logout.confirmMessage': 'Todas as suas alterações foram salvas. Deseja encerrar a sessão?',
+	'logout.confirm': 'Sim, encerrar',
+	'logout.cancel': 'Cancelar',
 
 	// ─── Error Pages ─────────────────────────────────
 	'error.title': 'Algo deu errado',
