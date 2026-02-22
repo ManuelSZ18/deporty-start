@@ -11,13 +11,10 @@
 	}
 
 	/** Nickname si existe, sino first_name */
-	const displayName = $derived(
-		data.user?.user_metadata?.nickname || data.user?.user_metadata?.first_name || ''
-	);
+	const displayName = $derived(data.profile?.nickname || data.profile?.first_name || '');
 
 	const initials = $derived(
-		(data.user?.user_metadata?.first_name?.[0] ?? '?') +
-			(data.user?.user_metadata?.last_name?.[0] ?? '')
+		(data.profile?.first_name?.[0] ?? '?') + (data.profile?.last_name?.[0] ?? '')
 	);
 
 	const navItems = $derived([
@@ -131,9 +128,9 @@
 		<footer class="border-t border-gray-100 p-4">
 			<figure class="flex items-center gap-3">
 				<div class="relative shrink-0">
-					{#if data.user?.user_metadata?.avatar_url}
+					{#if data.profile?.avatar_url}
 						<img
-							src={data.user.user_metadata.avatar_url}
+							src={data.profile.avatar_url}
 							alt="User Avatar"
 							class="h-9 w-9 rounded-full object-cover shadow-sm"
 						/>
@@ -148,8 +145,8 @@
 				</div>
 				<figcaption class="min-w-0 flex-1">
 					<p class="truncate text-sm font-medium text-gray-900">
-						{data.user?.user_metadata?.first_name ?? ''}
-						{data.user?.user_metadata?.last_name ?? ''}
+						{data.profile?.first_name ?? ''}
+						{data.profile?.last_name ?? ''}
 					</p>
 					<p class="truncate text-xs text-gray-500">{data.user?.email ?? ''}</p>
 				</figcaption>
@@ -217,9 +214,9 @@
 			>
 				<span class="text-sm font-medium text-gray-700">{displayName}</span>
 				<div class="relative shrink-0">
-					{#if data.user?.user_metadata?.avatar_url}
+					{#if data.profile?.avatar_url}
 						<img
-							src={data.user.user_metadata.avatar_url}
+							src={data.profile.avatar_url}
 							alt="User Avatar"
 							class="h-8 w-8 rounded-full object-cover shadow-sm"
 						/>

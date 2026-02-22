@@ -112,13 +112,16 @@ describe('Register Action - Server-side Validation', () => {
         const formData = createFormData({ ...validInput, password: 'abcd1234' });
         const locals = createMockLocals();
 
-        const result = await action({
-            request: new Request('http://localhost', { method: 'POST', body: formData }),
-            locals
-        } as any);
-
-        // Should not fail with password_short
-        expect(result?.data?.error).not.toBe('password_short');
+        try {
+            await action({
+                request: new Request('http://localhost', { method: 'POST', body: formData }),
+                locals
+            } as any);
+            expect.unreachable('Expected redirect');
+        } catch (e: any) {
+            expect(e.status).toBe(303);
+            expect(e.location).toBe('/login?registered=true');
+        }
     });
 
     it('should fail with invalid_birth_date when date is invalid', async () => {

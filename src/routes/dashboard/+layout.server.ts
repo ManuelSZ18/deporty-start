@@ -9,8 +9,16 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		redirect(303, '/login');
 	}
 
+	// Obtener el perfil siempre fresco desde la base de datos
+	const { data: profile } = await locals.supabase
+		.from('profile')
+		.select('*')
+		.eq('profile_id', user.id)
+		.single();
+
 	return {
 		session,
-		user
+		user,
+		profile
 	};
 };
