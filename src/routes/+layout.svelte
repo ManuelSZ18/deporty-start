@@ -2,7 +2,6 @@
 	import './layout.css';
 	import { t } from '$lib/i18n';
 	import { env } from '$env/dynamic/public';
-	import LanguageSelector from '$lib/components/LanguageSelector.svelte';
 	let { children, data } = $props();
 
 	const isComingSoon = env.PUBLIC_APP_MODE === 'coming_soon';
@@ -89,19 +88,9 @@
 		</div>
 	</nav>
 
-	<!-- Main Content -->
 	<main id="main-content" class="min-h-0 flex-1 overflow-auto">
 		{@render children()}
 	</main>
-
-	<!-- Language Selector (public pages, above footer) -->
-	{#if !data.session}
-		<div class="flex-shrink-0 border-t border-gray-100 bg-white px-4 py-4">
-			<div class="mx-auto flex max-w-7xl justify-center">
-				<LanguageSelector />
-			</div>
-		</div>
-	{/if}
 
 	<!-- Footer -->
 	<footer class="flex-shrink-0 border-t border-gray-100 bg-white py-8">
