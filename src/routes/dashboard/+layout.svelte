@@ -10,6 +10,16 @@
 		sidebarOpen = false;
 	}
 
+	/** Nickname si existe, sino first_name */
+	const displayName = $derived(
+		data.user?.user_metadata?.nickname || data.user?.user_metadata?.first_name || ''
+	);
+
+	const initials = $derived(
+		(data.user?.user_metadata?.first_name?.[0] ?? '?') +
+			(data.user?.user_metadata?.last_name?.[0] ?? '')
+	);
+
 	const navItems = $derived([
 		{
 			href: '/dashboard',
@@ -61,9 +71,10 @@
 		class="fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-gray-200 bg-white transition-transform duration-200 ease-in-out lg:static lg:translate-x-0 {sidebarOpen
 			? 'translate-x-0'
 			: '-translate-x-full'}"
+		aria-label="Sidebar"
 	>
 		<!-- Sidebar Header -->
-		<div class="flex h-16 items-center justify-between border-b border-gray-100 px-4">
+		<header class="flex h-16 items-center justify-between border-b border-gray-100 px-4">
 			<span class="text-sm font-semibold tracking-wider text-gray-500 uppercase">
 				{$t('dashboard.title')}
 			</span>
@@ -87,7 +98,7 @@
 					/>
 				</svg>
 			</button>
-		</div>
+		</header>
 
 		<!-- Nav Links -->
 		<nav class="flex-1 space-y-1 px-3 py-4" aria-label="Dashboard">
@@ -117,22 +128,22 @@
 		</nav>
 
 		<!-- Sidebar Footer: User Info + Logout -->
-		<div class="border-t border-gray-100 p-4">
-			<div class="flex items-center gap-3">
+		<footer class="border-t border-gray-100 p-4">
+			<figure class="flex items-center gap-3">
 				<div
-					class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 text-sm font-bold text-white"
+					class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 text-sm font-bold text-white"
+					aria-hidden="true"
 				>
-					{data.user?.user_metadata?.first_name?.[0] ?? '?'}{data.user?.user_metadata
-						?.last_name?.[0] ?? ''}
+					{initials}
 				</div>
-				<div class="min-w-0 flex-1">
+				<figcaption class="min-w-0 flex-1">
 					<p class="truncate text-sm font-medium text-gray-900">
 						{data.user?.user_metadata?.first_name ?? ''}
 						{data.user?.user_metadata?.last_name ?? ''}
 					</p>
 					<p class="truncate text-xs text-gray-500">{data.user?.email ?? ''}</p>
-				</div>
-			</div>
+				</figcaption>
+			</figure>
 
 			<!-- Logout Button -->
 			<button
@@ -156,41 +167,59 @@
 				</svg>
 				{$t('nav.logout')}
 			</button>
-		</div>
+		</footer>
 	</aside>
 
-	<!-- Main Content -->
-	<div class="flex min-w-0 flex-1 flex-col">
+	<!-- Main Content Area -->
+	<section class="flex min-w-0 flex-1 flex-col">
 		<!-- Mobile Top Bar -->
-		<div class="flex items-center gap-3 border-b border-gray-100 bg-white px-4 py-3 lg:hidden">
-			<button
-				class="rounded-lg p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-				onclick={() => (sidebarOpen = true)}
-				aria-label={$t('nav.openMenu')}
+		<header
+			class="flex items-center justify-between border-b border-gray-100 bg-white px-4 py-3 lg:hidden"
+		>
+			<div class="flex items-center gap-3">
+				<button
+					class="rounded-lg p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+					onclick={() => (sidebarOpen = true)}
+					aria-label={$t('nav.openMenu')}
+				>
+					<svg
+						class="h-5 w-5"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
+						aria-hidden="true"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M4 6h16M4 12h16M4 18h16"
+						/>
+					</svg>
+				</button>
+				<span class="text-sm font-semibold text-gray-700">{$t('dashboard.title')}</span>
+			</div>
+
+			<!-- User avatar + nickname/name -->
+			<a
+				href="/dashboard/profile"
+				class="flex items-center gap-2 rounded-lg px-2 py-1 transition-colors hover:bg-gray-50"
 			>
-				<svg
-					class="h-5 w-5"
-					fill="none"
-					stroke="currentColor"
-					viewBox="0 0 24 24"
+				<span class="text-sm font-medium text-gray-700">{displayName}</span>
+				<div
+					class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 text-xs font-bold text-white"
 					aria-hidden="true"
 				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M4 6h16M4 12h16M4 18h16"
-					/>
-				</svg>
-			</button>
-			<span class="text-sm font-semibold text-gray-700">{$t('dashboard.title')}</span>
-		</div>
+					{initials}
+				</div>
+			</a>
+		</header>
 
 		<!-- Page Content -->
-		<div class="flex-1 overflow-auto bg-gray-50/50 p-4 sm:p-6 lg:p-8">
+		<article class="flex-1 overflow-auto bg-gray-50/50 p-4 sm:p-6 lg:p-8">
 			{@render children()}
-		</div>
-	</div>
+		</article>
+	</section>
 </div>
 
 <!-- Logout Confirmation Modal -->
@@ -208,7 +237,6 @@
 		}}
 	>
 		<div class="w-full max-w-sm rounded-2xl border border-gray-100 bg-white p-6 shadow-2xl">
-			<!-- Icon -->
 			<div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-50">
 				<svg
 					class="h-6 w-6 text-red-500"
@@ -225,10 +253,8 @@
 					/>
 				</svg>
 			</div>
-
 			<h3 class="mb-2 text-center text-lg font-bold text-gray-900">{$t('logout.confirmTitle')}</h3>
 			<p class="mb-6 text-center text-sm text-gray-500">{$t('logout.confirmMessage')}</p>
-
 			<div class="flex gap-3">
 				<button
 					type="button"
