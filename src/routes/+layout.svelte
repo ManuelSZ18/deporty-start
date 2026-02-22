@@ -1,9 +1,11 @@
 <script lang="ts">
 	import './layout.css';
 	import { t } from '$lib/i18n';
+	import { env } from '$env/dynamic/public';
 	import LanguageSelector from '$lib/components/LanguageSelector.svelte';
 	let { children, data } = $props();
 
+	const isComingSoon = env.PUBLIC_APP_MODE === 'coming_soon';
 	let menuOpen = $state(false);
 
 	function toggleMenu() {
@@ -71,7 +73,7 @@
 				<div class="hidden items-center gap-4 sm:flex">
 					<LanguageSelector />
 
-					{#if data.session}
+					{#if !isComingSoon && data.session}
 						<a
 							href="/dashboard"
 							class="rounded-lg px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-100 hover:text-blue-600"
@@ -140,7 +142,7 @@
 				<div class="flex flex-col gap-1">
 					<LanguageSelector />
 
-					{#if data.session}
+					{#if !isComingSoon && data.session}
 						<a
 							href="/dashboard"
 							class="rounded-lg px-4 py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-100 hover:text-blue-600"

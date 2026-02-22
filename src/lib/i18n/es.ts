@@ -240,7 +240,20 @@ const es = {
 	'categories.new.submit': 'Crear Categoría',
 	'categories.new.cancel': 'Cancelar',
 	'categories.new.error': 'Error al crear la categoría',
-	'categories.edit.title': 'Editar Categoría'
+	'categories.edit.title': 'Editar Categoría',
+
+	// ─── Coming Soon ──────────────────────────────────
+	'comingSoon.badge': 'En desarrollo',
+	'comingSoon.title1': 'El futuro del deporte',
+	'comingSoon.title2': 'está por llegar',
+	'comingSoon.subtitle':
+		'Estamos construyendo la plataforma definitiva para organizar torneos, gestionar equipos y seguir resultados en tiempo real. ¡Muy pronto!',
+	'comingSoon.feature1Title': 'Torneos',
+	'comingSoon.feature1Desc': 'Crea y administra torneos con brackets, fases y categorías.',
+	'comingSoon.feature2Title': 'Equipos',
+	'comingSoon.feature2Desc': 'Gestiona rosters, jugadores y estadísticas de cada equipo.',
+	'comingSoon.feature3Title': 'Resultados',
+	'comingSoon.feature3Desc': 'Sigue marcadores y posiciones en tiempo real.'
 };
 
 export default es;

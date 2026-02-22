@@ -239,7 +239,20 @@ const pt: Record<string, string> = {
 	'categories.new.submit': 'Criar Categoria',
 	'categories.new.cancel': 'Cancelar',
 	'categories.new.error': 'Erro ao criar a categoria',
-	'categories.edit.title': 'Editar Categoria'
+	'categories.edit.title': 'Editar Categoria',
+
+	// ─── Coming Soon ──────────────────────────────────
+	'comingSoon.badge': 'Em desenvolvimento',
+	'comingSoon.title1': 'O futuro do esporte',
+	'comingSoon.title2': 'está chegando',
+	'comingSoon.subtitle':
+		'Estamos construindo a plataforma definitiva para organizar torneios, gerenciar equipes e acompanhar resultados em tempo real. Em breve!',
+	'comingSoon.feature1Title': 'Torneios',
+	'comingSoon.feature1Desc': 'Crie e administre torneios com chaves, fases e categorias.',
+	'comingSoon.feature2Title': 'Equipes',
+	'comingSoon.feature2Desc': 'Gerencie elencos, jogadores e estatísticas de cada equipe.',
+	'comingSoon.feature3Title': 'Resultados',
+	'comingSoon.feature3Desc': 'Acompanhe placares e classificações em tempo real.'
 };
 
 export default pt;
