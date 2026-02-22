@@ -29,7 +29,7 @@ export const actions: Actions = {
 			return fail(500, { error: 'auth_error', email });
 		}
 
-		redirect(303, '/dashboard');
+		throw redirect(303, '/dashboard');
 	},
 
 	forgotPassword: async ({ request, locals, url }) => {

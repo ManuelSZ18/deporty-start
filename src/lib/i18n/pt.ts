@@ -152,6 +152,8 @@ const pt: Record<string, string> = {
 	'auth.success.registration': 'Conta criada com sucesso!',
 	'auth.success.needsConfirmation':
 		'Enviamos um e-mail de confirmação. Verifique sua caixa de entrada para ativar sua conta.',
+	'auth.success.registered':
+		'Conta criada com sucesso! Verifique seu e-mail para confirmá-la e faça login.',
 	'auth.success.resetSent':
 		'Enviamos um link para redefinir sua senha. Verifique sua caixa de entrada.',
 	'auth.error.callback_failed': 'Erro ao confirmar sua conta. Tente novamente.',

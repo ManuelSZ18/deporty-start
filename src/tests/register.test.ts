@@ -157,18 +157,22 @@ describe('Register Action - Server-side Validation', () => {
         expect(result?.data?.error).toBe('email_exists');
     });
 
-    it('should return needsConfirmation when signup succeeds but no session', async () => {
+    it('should redirect to /login?registered=true on successful signup', async () => {
         const action = await getRegisterAction();
         const formData = createFormData(validInput);
         const locals = createMockLocals();
 
-        const result = await action({
-            request: new Request('http://localhost', { method: 'POST', body: formData }),
-            locals
-        } as any);
-
-        expect(result?.success).toBe(true);
-        expect(result?.needsConfirmation).toBe(true);
+        try {
+            await action({
+                request: new Request('http://localhost', { method: 'POST', body: formData }),
+                locals
+            } as any);
+            // Should not reach here — redirect throws
+            expect.unreachable('Expected redirect to be thrown');
+        } catch (e: any) {
+            expect(e.status).toBe(303);
+            expect(e.location).toBe('/login?registered=true');
+        }
     });
 
     it('should pass birth_date in signUp metadata', async () => {
@@ -176,10 +180,14 @@ describe('Register Action - Server-side Validation', () => {
         const formData = createFormData(validInput);
         const locals = createMockLocals();
 
-        await action({
-            request: new Request('http://localhost', { method: 'POST', body: formData }),
-            locals
-        } as any);
+        try {
+            await action({
+                request: new Request('http://localhost', { method: 'POST', body: formData }),
+                locals
+            } as any);
+        } catch {
+            // redirect is expected
+        }
 
         expect(locals.supabase.auth.signUp).toHaveBeenCalledWith(
             expect.objectContaining({

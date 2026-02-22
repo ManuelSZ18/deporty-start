@@ -19,15 +19,15 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 
 		if (error) {
 			console.error('Auth callback error:', error.message);
-			redirect(303, '/login?error=callback_failed');
+			throw redirect(303, '/login?error=callback_failed');
 		}
 	}
 
 	// Redirigir según el tipo de callback
 	if (type === 'recovery') {
 		// TODO: redirigir a página de cambiar contraseña
-		redirect(303, '/dashboard');
+		throw redirect(303, '/dashboard');
 	}
 
-	redirect(303, '/dashboard');
+	throw redirect(303, '/dashboard');
 };

@@ -10,6 +10,7 @@
 	let showPassword = $state(false);
 	let isSubmitting = $state(false);
 	let errorMessage = $state('');
+	let registeredMessage = $state('');
 	let showForgotPasswordModal = $state(false);
 	let forgotEmail = $state('');
 	let isSendingReset = $state(false);
@@ -22,6 +23,10 @@
 		const error = $page.url.searchParams.get('error');
 		if (error) {
 			errorMessage = $t(`auth.error.${error}` as any);
+		}
+		const registered = $page.url.searchParams.get('registered');
+		if (registered === 'true') {
+			registeredMessage = $t('auth.success.registered');
 		}
 	});
 
@@ -81,6 +86,30 @@
 					</h2>
 					<p class="text-slate-400">{$t('login.subtitle')}</p>
 				</div>
+
+				<!-- Registration Success Banner -->
+				{#if registeredMessage}
+					<div
+						class="mb-6 rounded-xl border border-green-500/20 bg-green-500/10 p-4 text-sm text-green-400"
+					>
+						<div class="flex items-center gap-2">
+							<svg
+								class="h-5 w-5 flex-shrink-0"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+								/>
+							</svg>
+							{registeredMessage}
+						</div>
+					</div>
+				{/if}
 
 				<!-- Error Message -->
 				{#if errorMessage}

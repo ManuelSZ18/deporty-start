@@ -57,12 +57,7 @@ export const actions: Actions = {
 			return fail(400, { error: 'email_exists', email });
 		}
 
-		// 3. Si necesita confirmar email (email confirmation habilitado)
-		if (authData.user && !authData.session) {
-			return { success: true, needsConfirmation: true };
-		}
-
-		// Si hay sesión directa, redirect al dashboard
-		redirect(303, '/dashboard');
+		// 3. Registro exitoso → redirigir al login
+		throw redirect(303, '/login?registered=true');
 	}
 };

@@ -153,6 +153,8 @@ const es = {
 	'auth.success.registration': '¡Cuenta creada exitosamente!',
 	'auth.success.needsConfirmation':
 		'Te hemos enviado un correo de confirmación. Revisa tu bandeja de entrada para activar tu cuenta.',
+	'auth.success.registered':
+		'¡Cuenta creada exitosamente! Revisa tu correo para confirmarla e inicia sesión.',
 	'auth.success.resetSent':
 		'Te hemos enviado un enlace para restablecer tu contraseña. Revisa tu bandeja de entrada.',
 	'auth.error.callback_failed': 'Error al confirmar tu cuenta. Inténtalo de nuevo.',
