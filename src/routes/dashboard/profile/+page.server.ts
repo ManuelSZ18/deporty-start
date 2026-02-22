@@ -47,7 +47,22 @@ export const actions: Actions = {
 			});
 		}
 
-		const { error } = await locals.supabase
+		// Update user_metadata in Supabase Auth to keep session in sync
+		const { error: authError } = await locals.supabase.auth.updateUser({
+			data: {
+				first_name: firstName,
+				last_name: lastName,
+				nickname
+			}
+		});
+
+		if (authError) {
+			console.error('Auth metadata update error:', authError);
+			// We continue even if this fails, to not block the main profile update,
+			// but in an ideal scenario this should be an all-or-nothing transaction.
+		}
+
+		const { error: profileError } = await locals.supabase
 			.from('profile')
 			.update({
 				first_name: firstName,
@@ -58,8 +73,8 @@ export const actions: Actions = {
 			})
 			.eq('profile_id', user.id);
 
-		if (error) {
-			console.error('Profile update error:', error);
+		if (profileError) {
+			console.error('Profile update error:', profileError);
 			return fail(500, {
 				error: 'update_error',
 				firstName,
