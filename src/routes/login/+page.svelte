@@ -56,7 +56,7 @@
 </script>
 
 <div
-	class="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 px-4 py-12"
+	class="flex min-h-dvh items-center justify-center bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 px-4 py-12"
 >
 	<!-- Background Pattern (no captura clics) -->
 	<div
