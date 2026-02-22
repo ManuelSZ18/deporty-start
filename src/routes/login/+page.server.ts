@@ -29,6 +29,15 @@ export const actions: Actions = {
 			return fail(500, { error: 'auth_error', email });
 		}
 
+		// Check if profile is completed
+		const profileCompleted = error === null
+			? (await locals.supabase.auth.getUser()).data.user?.user_metadata?.profile_completed
+			: true; // fallback to true if error so we don't redirect
+
+		if (profileCompleted === false) {
+			throw redirect(303, '/dashboard/profile');
+		}
+
 		throw redirect(303, '/dashboard');
 	},
 

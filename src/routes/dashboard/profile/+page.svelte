@@ -4,6 +4,25 @@
 
 	let { data, form } = $props();
 	let isSubmitting = $state(false);
+	let avatarPreview: string | null = $state(null);
+
+	function handleAvatarChange(event: Event) {
+		const target = event.target as HTMLInputElement;
+		const file = target.files?.[0];
+		if (file) {
+			if (avatarPreview) URL.revokeObjectURL(avatarPreview);
+			avatarPreview = URL.createObjectURL(file);
+		} else {
+			if (avatarPreview) URL.revokeObjectURL(avatarPreview);
+			avatarPreview = null;
+		}
+	}
+
+	$effect(() => {
+		return () => {
+			if (avatarPreview) URL.revokeObjectURL(avatarPreview);
+		};
+	});
 </script>
 
 <div class="mx-auto w-full max-w-2xl">
@@ -15,6 +34,7 @@
 	<div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-xl shadow-blue-500/5 sm:p-10">
 		<form
 			method="POST"
+			enctype="multipart/form-data"
 			use:enhance={() => {
 				isSubmitting = true;
 				return async ({ update }) => {
@@ -33,10 +53,36 @@
 
 			<!-- Avatar -->
 			<div class="flex items-center gap-4">
-				<div
-					class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 text-2xl font-bold text-white shadow-lg"
-				>
-					{data.profile?.first_name?.[0] ?? '?'}{data.profile?.last_name?.[0] ?? ''}
+				<div class="group relative inline-block shrink-0">
+					<div
+						class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 text-2xl font-bold text-white shadow-lg"
+					>
+						{#if avatarPreview}
+							<img src={avatarPreview} alt="Avatar preview" class="h-full w-full object-cover" />
+						{:else if data.profile?.avatar_url}
+							<img
+								src={data.profile.avatar_url}
+								alt="Current avatar"
+								class="h-full w-full object-cover"
+							/>
+						{:else}
+							{data.profile?.first_name?.[0] ?? '?'}{data.profile?.last_name?.[0] ?? ''}
+						{/if}
+					</div>
+					<label
+						for="avatar-input"
+						class="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black/50 text-xs font-semibold text-white opacity-0 transition-opacity group-hover:opacity-100"
+					>
+						{$t('profile.changePhoto') || 'Foto'}
+					</label>
+					<input
+						type="file"
+						id="avatar-input"
+						name="avatar"
+						accept="image/*"
+						class="sr-only"
+						onchange={handleAvatarChange}
+					/>
 				</div>
 				<div>
 					<p class="text-lg font-semibold text-gray-900">

@@ -202,6 +202,7 @@ const es = {
 	'profile.emailHint': 'El email no se puede cambiar desde aquí.',
 	'profile.save': 'Guardar Cambios',
 	'profile.saving': 'Guardando...',
+	'profile.changePhoto': 'Cambiar foto',
 	'profile.success': 'Perfil actualizado exitosamente',
 	'profile.error': 'Error al actualizar el perfil',
 

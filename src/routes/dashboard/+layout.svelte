@@ -130,11 +130,21 @@
 		<!-- Sidebar Footer: User Info + Logout -->
 		<footer class="border-t border-gray-100 p-4">
 			<figure class="flex items-center gap-3">
-				<div
-					class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 text-sm font-bold text-white"
-					aria-hidden="true"
-				>
-					{initials}
+				<div class="relative shrink-0">
+					{#if data.user?.user_metadata?.avatar_url}
+						<img
+							src={data.user.user_metadata.avatar_url}
+							alt="User Avatar"
+							class="h-9 w-9 rounded-full object-cover shadow-sm"
+						/>
+					{:else}
+						<div
+							class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 text-sm font-bold text-white"
+							aria-hidden="true"
+						>
+							{initials}
+						</div>
+					{/if}
 				</div>
 				<figcaption class="min-w-0 flex-1">
 					<p class="truncate text-sm font-medium text-gray-900">
@@ -206,11 +216,21 @@
 				class="flex items-center gap-2 rounded-lg px-2 py-1 transition-colors hover:bg-gray-50"
 			>
 				<span class="text-sm font-medium text-gray-700">{displayName}</span>
-				<div
-					class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 text-xs font-bold text-white"
-					aria-hidden="true"
-				>
-					{initials}
+				<div class="relative shrink-0">
+					{#if data.user?.user_metadata?.avatar_url}
+						<img
+							src={data.user.user_metadata.avatar_url}
+							alt="User Avatar"
+							class="h-8 w-8 rounded-full object-cover shadow-sm"
+						/>
+					{:else}
+						<div
+							class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 text-xs font-bold text-white"
+							aria-hidden="true"
+						>
+							{initials}
+						</div>
+					{/if}
 				</div>
 			</a>
 		</header>

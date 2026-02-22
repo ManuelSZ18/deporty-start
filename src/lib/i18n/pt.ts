@@ -201,6 +201,7 @@ const pt: Record<string, string> = {
 	'profile.emailHint': 'O email não pode ser alterado aqui.',
 	'profile.save': 'Salvar Alterações',
 	'profile.saving': 'Salvando...',
+	'profile.changePhoto': 'Mudar foto',
 	'profile.success': 'Perfil atualizado com sucesso',
 	'profile.error': 'Erro ao atualizar o perfil',
 

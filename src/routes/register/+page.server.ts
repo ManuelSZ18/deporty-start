@@ -34,7 +34,8 @@ export const actions: Actions = {
 					first_name: firstName,
 					last_name: lastName,
 					nickname: nickname.trim() || undefined,
-					birth_date: birthDate
+					birth_date: birthDate,
+					profile_completed: false
 				}
 			}
 		});
