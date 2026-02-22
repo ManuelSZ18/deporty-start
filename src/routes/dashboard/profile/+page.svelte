@@ -4,14 +4,6 @@
 
 	let { data, form } = $props();
 	let isSubmitting = $state(false);
-	let showSuccess = $state(false);
-
-	$effect(() => {
-		if (form?.success) {
-			showSuccess = true;
-			setTimeout(() => (showSuccess = false), 3000);
-		}
-	});
 </script>
 
 <div class="mx-auto w-full max-w-2xl">
@@ -32,13 +24,6 @@
 			}}
 			class="space-y-6"
 		>
-			<!-- Success Message -->
-			{#if showSuccess}
-				<div class="rounded-lg bg-green-50 p-4 text-sm font-medium text-green-700">
-					{$t('profile.success')}
-				</div>
-			{/if}
-
 			<!-- Error Message -->
 			{#if form?.error}
 				<div class="rounded-lg bg-red-50 p-4 text-sm text-red-600">

@@ -1,4 +1,4 @@
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -84,6 +84,6 @@ export const actions: Actions = {
 			});
 		}
 
-		return { success: true };
+		redirect(303, '/dashboard');
 	}
 };
