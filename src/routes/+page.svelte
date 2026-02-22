@@ -143,14 +143,14 @@
 					style="animation-delay: 3s;"
 				></div>
 			</div>
-
-			<!-- Language Selector -->
-			<div class="relative z-10 pt-2 pb-4">
-				<div class="flex justify-center">
-					<LanguageSelector />
-				</div>
-			</div>
 		</section>
+
+		<!-- Language Selector (pinned to bottom) -->
+		<div class="relative z-10 mt-auto pb-4">
+			<div class="flex justify-center">
+				<LanguageSelector />
+			</div>
+		</div>
 	</main>
 {:else}
 	<!-- ═══════════ FULL APP MODE ═══════════ -->
@@ -244,13 +244,13 @@
 					style="animation-delay: 3s;"
 				></div>
 			</div>
-
-			<!-- Language Selector -->
-			<div class="relative z-10 pt-2 pb-4">
-				<div class="flex justify-center">
-					<LanguageSelector />
-				</div>
-			</div>
 		</section>
+
+		<!-- Language Selector (pinned to bottom) -->
+		<div class="relative z-10 mt-auto pb-4">
+			<div class="flex justify-center">
+				<LanguageSelector />
+			</div>
+		</div>
 	</main>
 {/if}
