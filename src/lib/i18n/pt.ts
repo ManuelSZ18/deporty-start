@@ -64,7 +64,8 @@ const pt: Record<string, string> = {
 	'register.lastNamePlaceholder': 'Silva',
 	'register.nicknameLabel': 'Apelido (opcional)',
 	'register.nicknamePlaceholder': 'Ex: Tigre',
-	'register.nicknameHint': 'Sera usado no app. Em torneios sera exibido Nome-Apelido-Sobrenome.',
+	'register.nicknameHint':
+		'O apelido é usado no aplicativo. Para torneios oficiais, serão usados os dados validados de seu documento de identidade.',
 	'register.birthDateLabel': 'Data de nascimento',
 	'register.birthDateHint': 'Necessaria para perfis e torneios.',
 	'register.emailLabel': 'Email',

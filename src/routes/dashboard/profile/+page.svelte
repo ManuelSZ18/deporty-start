@@ -7,6 +7,21 @@
 	let avatarPreview: string | null = $state(null);
 	let optimizedAvatarBlob: Blob | null = $state(null);
 
+	// Initialize a local state for the nickname input
+	let localApodo = $state('');
+
+	// Effect to sync the external data/form to the local input state when the component mounts or updates
+	$effect(() => {
+		// Prioritise form error data, then profile data
+		if (form?.nickname !== undefined) {
+			localApodo = form.nickname;
+		} else if (data.profile?.nickname) {
+			localApodo = data.profile.nickname;
+		}
+	});
+
+	const isNicknameValid = $derived(!localApodo || /^[a-zA-Z0-9]+$/.test(localApodo));
+
 	async function handleAvatarChange(event: Event) {
 		const target = event.target as HTMLInputElement;
 		const file = target.files?.[0];
@@ -228,11 +243,17 @@
 					type="text"
 					id="nickname"
 					name="nickname"
-					value={form?.nickname ?? data.profile?.nickname ?? ''}
+					bind:value={localApodo}
 					placeholder={$t('register.nicknamePlaceholder')}
-					class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 transition-colors focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+					class="block w-full rounded-lg border bg-gray-50 px-4 py-3 text-gray-900 transition-colors focus:bg-white focus:ring-2 focus:outline-none {isNicknameValid
+						? 'border-gray-300 focus:border-blue-500 focus:ring-blue-500/20'
+						: 'border-red-500 focus:border-red-500 focus:ring-red-500/20'}"
 				/>
-				<p class="mt-1 text-xs text-gray-400">{$t('register.nicknameHint')}</p>
+				{#if !isNicknameValid}
+					<p class="mt-1 text-xs font-medium text-red-500">{$t('auth.error.invalid_nickname')}</p>
+				{:else}
+					<p class="mt-1 text-xs text-gray-400">{$t('register.nicknameHint')}</p>
+				{/if}
 			</div>
 
 			<!-- Birth Date -->

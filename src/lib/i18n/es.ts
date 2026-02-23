@@ -63,10 +63,10 @@ const es = {
 	'register.lastNameLabel': 'Apellido',
 	'register.lastNamePlaceholder': 'Perez',
 	'register.nicknameLabel': 'Apodo (opcional)',
-	'register.nicknamePlaceholder': 'Ej: Tigre',
+	'register.nicknamePlaceholder': 'Ej: elrayo',
 	'register.nicknameHint':
-		'Se usara dentro de la app. En torneos se mostrara Nombre-Apodo-Apellido.',
-	'register.birthDateLabel': 'Fecha de nacimiento',
+		'El apodo se usa dentro de la aplicación. Para torneos oficiales se usarán los datos validados de su documento de identidad.',
+	'register.birthDateLabel': 'Fecha de Nacimiento',
 	'register.birthDateHint': 'Necesaria para perfiles y torneos.',
 	'register.emailLabel': 'Email',
 	'register.emailPlaceholder': 'tunombre@email.com',
