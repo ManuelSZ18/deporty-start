@@ -42,16 +42,17 @@ export const actions: Actions = {
 			return fail(401, {
 				error: 'unauthorized',
 				name: undefined,
-				sport_id: undefined
+				sport_id: undefined,
+				category: undefined
 			});
 		}
 
 		if (!name || name.trim().length === 0) {
-			return fail(400, { error: 'missing_name', name, sport_id });
+			return fail(400, { error: 'missing_name', name, sport_id, category: formData.get('category')?.toString() || '' });
 		}
 
 		if (!sport_id) {
-			return fail(400, { error: 'missing_sport', name, sport_id });
+			return fail(400, { error: 'missing_sport', name, sport_id, category: formData.get('category')?.toString() || '' });
 		}
 
 		const { error: insertError } = await supabase.from('team').insert({
@@ -62,7 +63,7 @@ export const actions: Actions = {
 
 		if (insertError) {
 			console.error('Error creating team:', insertError);
-			return fail(500, { error: 'db_error', name, sport_id });
+			return fail(500, { error: 'db_error', name, sport_id, category: formData.get('category')?.toString() || '' });
 		}
 
 		throw redirect(303, `/dashboard/organizations/${organization_id}`);

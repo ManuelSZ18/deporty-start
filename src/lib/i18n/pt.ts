@@ -164,6 +164,13 @@ const pt: Record<string, string> = {
 	'dashboard.title': 'Dashboard',
 	'dashboard.welcome': 'Bem-vindo, {name}',
 	'dashboard.subtitle': 'Painel de controle',
+	'dashboard.sportSelector.empty': 'Você não possui esportes ativos. Visite "Meus Esportes" para configurar seu perfil.',
+	'dashboard.cards.upcomingEvents': 'Próximos eventos',
+	'dashboard.cards.upcomingEventsDesc': 'Veja os próximos torneios e partidas',
+	'dashboard.cards.enrollEvents': 'Inscrição de eventos',
+	'dashboard.cards.enrollEventsDesc': 'Inscreva-se em novas competições',
+	'dashboard.cards.organizations': 'Organizações',
+	'dashboard.cards.organizationsDesc': 'Gerencie seus clubes e ligas',
 	'nav.logout': 'Sair',
 	'nav.dashboard': 'Dashboard',
 	'nav.openMenu': 'Abrir menu',
@@ -171,6 +178,7 @@ const pt: Record<string, string> = {
 
 	// ─── Dashboard Sidebar ───────────────────────────
 	'sidebar.home': 'Início',
+	'sidebar.sports': 'Meus Esportes',
 	'sidebar.organizations': 'Organizações',
 	'sidebar.profile': 'Meu Perfil',
 	'sidebar.tournaments': 'Torneios',
@@ -207,6 +215,19 @@ const pt: Record<string, string> = {
 	'profile.changePhoto': 'Mudar foto',
 	'profile.success': 'Perfil atualizado com sucesso',
 	'profile.error': 'Erro ao atualizar o perfil',
+
+	// ─── Sports Selection ────────────────────────────
+	'sports.title': 'Meus Esportes',
+	'sports.subtitle': 'Selecione os esportes que você pratica ou deseja participar',
+	'sports.futbol': 'Futebol',
+	'sports.natacion_carreras': 'Natação em Piscina',
+	'sports.aguas_abiertas': 'Águas Abertas',
+	'sports.padel': 'Pádel',
+	'sports.save': 'Salvar Esportes',
+	'sports.saving': 'Salvando...',
+	'sports.success': 'Esportes atualizados com sucesso',
+	'sports.error': 'Erro ao salvar os esportes',
+	'sports.empty': 'Você não possui esportes ativos. Configure-os em "Meus Esportes".',
 
 	// ─── CRUD Actions ────────────────────────────────
 	'crud.edit': 'Editar',

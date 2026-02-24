@@ -10,14 +10,19 @@
 	// Initialize a local state for the nickname input
 	let localApodo = $state('');
 
+	import { untrack } from 'svelte';
+
 	// Effect to sync the external data/form to the local input state when the component mounts or updates
 	$effect(() => {
-		// Prioritise form error data, then profile data
-		if (form?.nickname !== undefined) {
-			localApodo = form.nickname;
-		} else if (data.profile?.nickname) {
-			localApodo = data.profile.nickname;
-		}
+		// Untrack the external dependencies to initialize, preventing infinite reactive loops
+		const defaultNickname =
+			form?.nickname !== undefined ? form.nickname : data.profile?.nickname || '';
+
+		untrack(() => {
+			if (!localApodo && defaultNickname) {
+				localApodo = defaultNickname;
+			}
+		});
 	});
 
 	const isNicknameValid = $derived(!localApodo || /^[a-zA-Z0-9]+$/.test(localApodo));

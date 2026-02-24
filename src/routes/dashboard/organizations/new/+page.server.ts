@@ -9,12 +9,14 @@ export const actions: Actions = {
 		const { supabase } = locals;
 		const { user } = await locals.safeGetSession();
 
+		const description = formData.get('description')?.toString();
+
 		if (!user) {
-			return fail(401, { error: 'unauthorized', name: undefined });
+			return fail(401, { error: 'unauthorized', name: undefined, description: undefined });
 		}
 
 		if (!name || name.trim().length === 0) {
-			return fail(400, { error: 'missing_name', name });
+			return fail(400, { error: 'missing_name', name, description });
 		}
 
 		const { error } = await supabase.from('organization').insert({
@@ -24,7 +26,7 @@ export const actions: Actions = {
 
 		if (error) {
 			console.error('Error creating organization:', error);
-			return fail(500, { error: 'db_error', name });
+			return fail(500, { error: 'db_error', name, description });
 		}
 
 		throw redirect(303, '/dashboard/organizations');

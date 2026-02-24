@@ -2,7 +2,9 @@
 	import { enhance } from '$app/forms';
 	import { t } from '$lib/i18n';
 
-	let { data, form } = $props();
+	import type { ActionData, PageData } from './$types';
+
+	let { data, form }: { data: PageData; form: ActionData } = $props();
 	let isSubmitting = $state(false);
 </script>
 

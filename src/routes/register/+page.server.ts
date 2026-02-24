@@ -1,8 +1,19 @@
 import { fail, redirect } from '@sveltejs/kit';
+import { RateLimiter } from '$lib/server/rate-limit';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
-	register: async ({ request, locals }) => {
+	register: async (event) => {
+		const { request, locals, getClientAddress } = event;
+
+		// --- Security: Rate Limiting ---
+		const clientIp = RateLimiter.getClientIp(request, getClientAddress);
+		if (RateLimiter.isRateLimited(clientIp, 3, 300000)) {
+			console.warn(`[SECURITY] Registration rate limit exceeded for IP: ${clientIp}`);
+			return fail(429, { error: 'rate_limited', email: '' });
+		}
+		// --- End Security ---
+
 		const formData = await request.formData();
 		const firstName = formData.get('firstName') as string;
 		const lastName = formData.get('lastName') as string;

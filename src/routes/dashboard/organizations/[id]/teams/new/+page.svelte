@@ -2,8 +2,10 @@
 	import { enhance } from '$app/forms';
 	import { t } from '$lib/i18n';
 
+	import type { ActionData, PageData } from './$types';
+
 	let isSubmitting = $state(false);
-	let { data, form } = $props();
+	let { data, form }: { data: PageData; form: ActionData } = $props();
 	let { sports, organizationId } = $derived(data);
 </script>
 
