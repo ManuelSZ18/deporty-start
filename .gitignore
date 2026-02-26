@@ -21,3 +21,16 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Local diagnostics and temporary artifacts
+reset_out*.log
+svelte-check-*.log
+svelte-check-full.log
+svelte-check-head.log
+temp_diff*.txt
+test_out.txt
+list.txt
+list2.txt
+supabase/*_dump.sql
+supabase/*_dump_*.sql
+supabase/*_postrestart.sql
