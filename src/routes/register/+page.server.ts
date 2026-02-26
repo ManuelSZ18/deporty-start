@@ -1,19 +1,8 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { RateLimiter } from '$lib/server/rate-limit';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
-	register: async (event) => {
-		const { request, locals, getClientAddress } = event;
-
-		// --- Security: Rate Limiting ---
-		const clientIp = RateLimiter.getClientIp(request, getClientAddress);
-		if (RateLimiter.isRateLimited(clientIp, 3, 300000)) {
-			console.warn(`[SECURITY] Registration rate limit exceeded for IP: ${clientIp}`);
-			return fail(429, { error: 'rate_limited', email: '' });
-		}
-		// --- End Security ---
-
+	register: async ({ request, locals }) => {
 		const formData = await request.formData();
 		const firstName = formData.get('firstName') as string;
 		const lastName = formData.get('lastName') as string;
@@ -35,12 +24,8 @@ export const actions: Actions = {
 			return fail(400, { error: 'password_short', email });
 		}
 
-		if (nickname && !/^[a-zA-Z0-9]+$/.test(nickname)) {
-			return fail(400, { error: 'invalid_nickname', email });
-		}
-
 		// 1. Crear usuario en Supabase Auth
-		// El profile se crea automáticamente via trigger on_auth_user_created
+		// El profile se crea automáticamente via trigger en la BD
 		const { data: authData, error: authError } = await locals.supabase.auth.signUp({
 			email,
 			password,
@@ -48,9 +33,8 @@ export const actions: Actions = {
 				data: {
 					first_name: firstName,
 					last_name: lastName,
-					nickname: nickname.trim() || undefined,
 					birth_date: birthDate,
-					profile_completed: false
+					nickname: nickname.trim() || undefined
 				}
 			}
 		});
@@ -73,7 +57,27 @@ export const actions: Actions = {
 			return fail(400, { error: 'email_exists', email });
 		}
 
-		// 3. Registro exitoso → redirigir al login
+		// 2.1 Crear perfil en tabla profile
+		if (!authData.user?.id) {
+			return fail(500, { error: 'profile_error', email });
+		}
+
+		const { error: profileError } = await locals.supabase.from('profile').upsert(
+			{
+				profile_id: authData.user.id,
+				first_name: firstName,
+				last_name: lastName,
+				nickname: nickname.trim() || null,
+				birth_date: birthDate
+			},
+			{ onConflict: 'profile_id' }
+		);
+
+		if (profileError) {
+			console.error('Profile insert error:', profileError.message);
+			return fail(500, { error: 'profile_error', email });
+		}
+
 		throw redirect(303, '/login?registered=true');
 	}
 };

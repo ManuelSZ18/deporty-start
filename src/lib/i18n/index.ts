@@ -13,8 +13,8 @@ import pt from './pt';
 /** Tipo para un diccionario de traducciones */
 export type Translations = Record<string, string>;
 
-/** Tipo para las claves de traducción (inferido del archivo español) */
-export type TranslationKey = keyof typeof es;
+/** Tipo para las claves de traducción */
+export type TranslationKey = string;
 
 /** Idiomas soportados */
 export type SupportedLanguage = 'es' | 'pt';

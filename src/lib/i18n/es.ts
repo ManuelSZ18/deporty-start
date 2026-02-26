@@ -63,10 +63,10 @@ const es = {
 	'register.lastNameLabel': 'Apellido',
 	'register.lastNamePlaceholder': 'Perez',
 	'register.nicknameLabel': 'Apodo (opcional)',
-	'register.nicknamePlaceholder': 'Ej: elrayo',
+	'register.nicknamePlaceholder': 'Ej: Tigre',
 	'register.nicknameHint':
-		'El apodo se usa dentro de la aplicación. Para torneos oficiales se usarán los datos validados de su documento de identidad.',
-	'register.birthDateLabel': 'Fecha de Nacimiento',
+		'Se usara dentro de la app. En torneos se mostrara Nombre-Apodo-Apellido.',
+	'register.birthDateLabel': 'Fecha de nacimiento',
 	'register.birthDateHint': 'Necesaria para perfiles y torneos.',
 	'register.emailLabel': 'Email',
 	'register.emailPlaceholder': 'tunombre@email.com',
@@ -98,11 +98,9 @@ const es = {
 	'register.errorEmailMismatch': 'Los correos no coinciden',
 	'register.errorPasswordMismatch': 'Las contraseñas no coinciden',
 	'register.errorPasswordShort': 'La contraseña debe tener al menos 8 caracteres',
-	'register.errorInvalidNickname': 'El apodo solo puede contener letras y números, sin espacios',
 	// Auth — errores server-side
 	'auth.error.missing_fields': 'Por favor completa todos los campos',
 	'auth.error.password_short': 'La contraseña debe tener al menos 8 caracteres',
-	'auth.error.invalid_nickname': 'El apodo solo puede contener letras y números, sin espacios',
 	'auth.error.email_exists': 'Ya existe una cuenta con este correo electrónico',
 	'auth.error.invalid_email': 'Por favor ingresa un correo electrónico válido',
 	'auth.error.invalid_birth_date': 'Fecha de nacimiento inválida',
@@ -155,8 +153,6 @@ const es = {
 	'auth.success.registration': '¡Cuenta creada exitosamente!',
 	'auth.success.needsConfirmation':
 		'Te hemos enviado un correo de confirmación. Revisa tu bandeja de entrada para activar tu cuenta.',
-	'auth.success.registered':
-		'¡Cuenta creada exitosamente! Revisa tu correo para confirmarla e inicia sesión.',
 	'auth.success.resetSent':
 		'Te hemos enviado un enlace para restablecer tu contraseña. Revisa tu bandeja de entrada.',
 	'auth.error.callback_failed': 'Error al confirmar tu cuenta. Inténtalo de nuevo.',
@@ -164,13 +160,13 @@ const es = {
 	'dashboard.title': 'Dashboard',
 	'dashboard.welcome': 'Bienvenido, {name}',
 	'dashboard.subtitle': 'Panel de control',
-	'dashboard.sportSelector.empty': 'No tienes deportes activos. Visita "Mis Deportes" para configurar tu perfil.',
+	'dashboard.sportSelector.empty': 'Aún no tienes deportes seleccionados.',
 	'dashboard.cards.upcomingEvents': 'Próximos eventos',
-	'dashboard.cards.upcomingEventsDesc': 'Ver los próximos torneos y partidos',
-	'dashboard.cards.enrollEvents': 'Inscripción de eventos',
-	'dashboard.cards.enrollEventsDesc': 'Inscríbete en nuevas competiciones',
-	'dashboard.cards.organizations': 'Organizaciones',
-	'dashboard.cards.organizationsDesc': 'Gestiona tus clubes y ligas',
+	'dashboard.cards.upcomingEventsDesc': 'Consulta calendarios y fechas importantes de tu deporte.',
+	'dashboard.cards.enrollEvents': 'Inscribirme a eventos',
+	'dashboard.cards.enrollEventsDesc': 'Encuentra torneos abiertos e inscríbete rápidamente.',
+	'dashboard.cards.organizations': 'Mis organizaciones',
+	'dashboard.cards.organizationsDesc': 'Gestiona tus organizaciones, equipos y torneos.',
 	'nav.logout': 'Cerrar Sesión',
 	'nav.dashboard': 'Dashboard',
 	'nav.openMenu': 'Abrir menú',
@@ -178,23 +174,23 @@ const es = {
 
 	// ─── Dashboard Sidebar ───────────────────────────
 	'sidebar.home': 'Inicio',
-	'sidebar.sports': 'Mis Deportes',
+	'sidebar.sports': 'Deportes',
+	'sidebar.calendar': 'Calendario deportivo',
 	'sidebar.organizations': 'Organizaciones',
 	'sidebar.profile': 'Mi Perfil',
+	'sidebar.settings': 'Configuración',
 	'sidebar.tournaments': 'Torneos',
-	'sidebar.settings': 'Ajustes',
 
-	// ─── Settings ─────────────────────────────────────
-	'settings.title': 'Ajustes',
-	'settings.subtitle': 'Configura las opciones de tu cuenta',
-	'settings.languageLabel': 'Idioma',
-	'settings.languageHint': 'Selecciona el idioma de la interfaz',
-
-	// ─── Logout Confirmation ──────────────────────────
-	'logout.confirmTitle': '¿Cerrar sesión?',
-	'logout.confirmMessage': 'Todos tus cambios han sido guardados. ¿Deseas cerrar sesión?',
-	'logout.confirm': 'Sí, cerrar sesión',
-	'logout.cancel': 'Cancelar',
+	// ─── Sports ──────────────────────────────────────
+	'sports.title': 'Mis deportes',
+	'sports.subtitle': 'Selecciona los deportes que practicas.',
+	'sports.error': 'No se pudo guardar tu configuración de deportes.',
+	'sports.save': 'Guardar deportes',
+	'sports.saving': 'Guardando...',
+	'sports.futbol': 'Fútbol',
+	'sports.natacion_carreras': 'Natación carreras',
+	'sports.aguas_abiertas': 'Aguas abiertas',
+	'sports.padel': 'Pádel',
 
 	// ─── Error Pages ─────────────────────────────────
 	'error.title': 'Algo salió mal',
@@ -212,22 +208,8 @@ const es = {
 	'profile.emailHint': 'El email no se puede cambiar desde aquí.',
 	'profile.save': 'Guardar Cambios',
 	'profile.saving': 'Guardando...',
-	'profile.changePhoto': 'Cambiar foto',
 	'profile.success': 'Perfil actualizado exitosamente',
 	'profile.error': 'Error al actualizar el perfil',
-
-	// ─── Sports Selection ────────────────────────────
-	'sports.title': 'Mis Deportes',
-	'sports.subtitle': 'Selecciona los deportes que practicas o quieres participar',
-	'sports.futbol': 'Fútbol',
-	'sports.natacion_carreras': 'Natación Carreras',
-	'sports.aguas_abiertas': 'Aguas Abiertas',
-	'sports.padel': 'Pádel',
-	'sports.save': 'Guardar Deportes',
-	'sports.saving': 'Guardando...',
-	'sports.success': 'Deportes actualizados exitosamente',
-	'sports.error': 'Error al guardar los deportes',
-	'sports.empty': 'No tienes deportes activos. Configúralos en "Mis Deportes".',
 
 	// ─── CRUD Actions ────────────────────────────────
 	'crud.edit': 'Editar',
@@ -265,6 +247,32 @@ const es = {
 	'tournaments.status.active': 'Activo',
 	'tournaments.status.finished': 'Finalizado',
 
+	// ─── Calendar ────────────────────────────────────
+	'calendar.heroTitle': 'Calendario Deportivo',
+	'calendar.heroDesc': 'Organiza y consulta eventos deportivos en un solo lugar.',
+	'calendar.heroCta': 'Explorar calendario',
+	'calendar.title': 'Calendario Deportivo',
+	'calendar.subtitle': 'Consulta eventos por país, deporte y fecha.',
+	'calendar.filterCountry': 'País',
+	'calendar.filterSport': 'Deporte',
+	'calendar.filterAllSports': 'Todos los deportes',
+	'calendar.viewYear': 'Vista anual',
+	'calendar.viewMonth': 'Vista mensual',
+	'calendar.addEvent': 'Agregar evento',
+	'calendar.noEvents': 'No hay eventos para los filtros seleccionados.',
+	'calendar.eventSuccess': 'Evento creado correctamente.',
+	'calendar.eventError': 'No se pudo crear el evento. Inténtalo de nuevo.',
+	'calendar.eventName': 'Nombre del evento',
+	'calendar.eventNamePlaceholder': 'Ej: Torneo Apertura',
+	'calendar.eventSport': 'Deporte del evento',
+	'calendar.eventStartDate': 'Fecha de inicio',
+	'calendar.eventEndDate': 'Fecha de fin',
+	'calendar.eventColor': 'Color del evento',
+	'calendar.eventRecurring': 'Evento recurrente',
+	'calendar.eventCancel': 'Cancelar',
+	'calendar.eventCreating': 'Creando evento...',
+	'calendar.eventSubmit': 'Guardar evento',
+
 	// ─── Categories ──────────────────────────────────
 	'categories.new.title': 'Nueva Categoría',
 	'categories.new.nameLabel': 'Nombre de la categoría',
@@ -279,53 +287,7 @@ const es = {
 	'categories.new.submit': 'Crear Categoría',
 	'categories.new.cancel': 'Cancelar',
 	'categories.new.error': 'Error al crear la categoría',
-	'categories.edit.title': 'Editar Categoría',
-
-	// ─── Coming Soon ──────────────────────────────────
-	'comingSoon.badge': 'En desarrollo',
-	'comingSoon.title1': 'El futuro del deporte',
-	'comingSoon.title2': 'está por llegar',
-	'comingSoon.subtitle':
-		'Estamos construyendo la plataforma definitiva para organizar torneos, gestionar equipos y seguir resultados en tiempo real. ¡Muy pronto!',
-	'comingSoon.feature1Title': 'Torneos',
-	'comingSoon.feature1Desc': 'Crea y administra torneos con brackets, fases y categorías.',
-	'comingSoon.feature2Title': 'Equipos',
-	'comingSoon.feature2Desc': 'Gestiona rosters, jugadores y estadísticas de cada equipo.',
-	'comingSoon.feature3Title': 'Resultados',
-	'comingSoon.feature3Desc': 'Sigue marcadores y posiciones en tiempo real.',
-
-	// ─── Calendario Deportivo ─────────────────────────
-	'calendar.title': 'Calendario Deportivo',
-	'calendar.subtitle': 'Explora todos los eventos deportivos en tu ciudad',
-	'calendar.filterCountry': 'País',
-	'calendar.filterCity': 'Ciudad',
-	'calendar.filterCityPlaceholder': 'Selecciona una ciudad',
-	'calendar.filterSport': 'Deporte',
-	'calendar.filterSportPlaceholder': 'Todos los deportes',
-	'calendar.filterAllSports': 'Todos los deportes',
-	'calendar.viewYear': 'Año',
-	'calendar.viewMonth': 'Mes',
-	'calendar.today': 'Hoy',
-	'calendar.noEvents': 'No hay eventos para los filtros seleccionados',
-	'calendar.addEvent': 'Agregar Evento',
-	'calendar.loginToAdd': 'Inicia sesión para agregar eventos',
-	'calendar.eventName': 'Nombre del evento',
-	'calendar.eventNamePlaceholder': 'Ej: Copa Verano 2026',
-	'calendar.eventSport': 'Deporte',
-	'calendar.eventCity': 'Ciudad',
-	'calendar.eventColor': 'Color',
-	'calendar.eventStartDate': 'Fecha de inicio',
-	'calendar.eventEndDate': 'Fecha de fin',
-	'calendar.eventRecurring': 'Evento recurrente (se repite cada año)',
-	'calendar.eventSubmit': 'Crear Evento',
-	'calendar.eventCancel': 'Cancelar',
-	'calendar.eventSuccess': 'Evento creado exitosamente',
-	'calendar.eventError': 'Error al crear el evento',
-	'calendar.heroTitle': 'Calendario Deportivo',
-	'calendar.heroDesc': 'Descubre todos los eventos deportivos cerca de ti. Filtra por ciudad y deporte.',
-	'calendar.heroCta': 'Explorar Calendario',
-	'calendar.detecting': 'Detectando ubicación...',
-	'calendar.eventCreating': 'Creando...'
+	'categories.edit.title': 'Editar Categoría'
 };
 
 export default es;

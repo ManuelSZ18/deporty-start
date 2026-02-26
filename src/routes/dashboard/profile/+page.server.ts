@@ -68,8 +68,8 @@ export const actions: Actions = {
 			// Limpiar cualquier imagen anterior que tenga otra extensión (png, jpg, jpeg)
 			// para no acumular basura si el usuario sube diferentes formatos.
 			const possibleOldFiles = ['avatar.png', 'avatar.jpg', 'avatar.jpeg', 'avatar.webp']
-				.filter(name => name !== `avatar.${fileExt}`)
-				.map(name => `${user.id}/${name}`);
+				.filter((name) => name !== `avatar.${fileExt}`)
+				.map((name) => `${user.id}/${name}`);
 
 			await locals.supabase.storage.from('avatars').remove(possibleOldFiles);
 

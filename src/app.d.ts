@@ -21,4 +21,10 @@ declare global {
 	}
 }
 
+declare module '*.svelte?client' {
+	import type { Component } from 'svelte';
+	const component: Component<any>;
+	export default component;
+}
+
 export {};

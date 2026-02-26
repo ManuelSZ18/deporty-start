@@ -11,9 +11,9 @@
 		MONTH_NAMES_PT,
 		WEEKDAY_SHORT_ES,
 		WEEKDAY_SHORT_PT,
-		type CalendarEvent,
-		type AdjustedEvent
+		type CalendarEvent
 	} from '$lib/utils/calendarUtils';
+	import { createSupabaseBrowserClient } from '$lib/supabaseClient';
 
 	let { data } = $props();
 
@@ -23,35 +23,100 @@
 	let selectedMonth = $state(currentDate.getMonth());
 	let viewMode = $state<'year' | 'month'>('year');
 	let selectedCountryIso = $state('');
+	let selectedDepartmentId = $state('');
 	let selectedCityId = $state('');
 	let selectedSportId = $state('');
+	let eventSportId = $state('');
 	let showAddModal = $state(false);
 	let formLoading = $state(false);
 	let formMessage = $state('');
 	let formError = $state(false);
 	let detectedCountry = $state('');
+	let loadedCities = $state<{ city_id: string; name: string; department_id: string }[]>([]);
+	let loadingCities = $state(false);
+
+	type SportOption = { sport_id: string; name: string };
 
 	// ─── Derived ────────────────────────────────────────
 
 	const monthNames = $derived($locale === 'pt' ? MONTH_NAMES_PT : MONTH_NAMES_ES);
 	const weekdayShort = $derived($locale === 'pt' ? WEEKDAY_SHORT_PT : WEEKDAY_SHORT_ES);
 
-	// Countries that have cities
-	const countriesWithCities = $derived(() => {
-		const countryIds = new Set(
-			(data.cities ?? []).map((c: { country_id: number }) => c.country_id)
-		);
-		return (data.countries ?? []).filter((c: { id: number }) => countryIds.has(c.id));
+	function normalizeSportText(text: string): string {
+		return text
+			.normalize('NFD')
+			.replace(/[\u0300-\u036f]/g, '')
+			.toLowerCase();
+	}
+
+	function getPreferredSportId(sports: SportOption[]): string {
+		if (sports.length === 0) return '';
+
+		const preferred = sports.find((sport) => {
+			const haystack = normalizeSportText(`${sport.sport_id} ${sport.name}`);
+			return (
+				haystack.includes('natacion') || haystack.includes('natacao') || haystack.includes('swim')
+			);
+		});
+
+		return preferred?.sport_id ?? sports[0].sport_id;
+	}
+
+	// Countries (returning all loaded LatAm countries)
+	const getCountries = $derived(() => {
+		return data.countries ?? [];
 	});
 
-	// Cities filtered by selected country
-	const filteredCities = $derived(() => {
-		if (!selectedCountryIso) return data.cities ?? [];
+	// Departments filtered by selected country
+	const filteredDepartments = $derived(() => {
+		if (!selectedCountryIso) return [];
 		const country = (data.countries ?? []).find(
 			(c: { iso_code: string }) => c.iso_code === selectedCountryIso
 		);
-		if (!country) return data.cities ?? [];
-		return (data.cities ?? []).filter((c: { country_id: number }) => c.country_id === country.id);
+		if (!country) return [];
+		return (data.departments ?? []).filter(
+			(d: { country_id: number }) => d.country_id === country.id
+		);
+	});
+
+	$effect(() => {
+		const sports = (data.sports ?? []) as SportOption[];
+		if (sports.length === 0) {
+			selectedSportId = '';
+			eventSportId = '';
+			return;
+		}
+
+		const preferredSportId = getPreferredSportId(sports);
+		const selectedExists = sports.some((sport) => sport.sport_id === selectedSportId);
+		const eventExists = sports.some((sport) => sport.sport_id === eventSportId);
+
+		if (!selectedExists) {
+			selectedSportId = preferredSportId;
+		}
+
+		if (!eventExists) {
+			eventSportId = preferredSportId;
+		}
+	});
+
+	// Fetch Municipalities dynamically to avoid URL Too Long Error initially
+	$effect(() => {
+		if (selectedDepartmentId) {
+			loadingCities = true;
+			const client = createSupabaseBrowserClient();
+			client
+				.from('city')
+				.select('city_id, name, department_id')
+				.eq('department_id', selectedDepartmentId)
+				.order('name')
+				.then(({ data }) => {
+					loadedCities = data ?? [];
+					loadingCities = false;
+				});
+		} else {
+			loadedCities = [];
+		}
 	});
 
 	// Events filtered by city and sport
@@ -86,10 +151,17 @@
 	if (browser) {
 		detectCountryFromGeolocation().then((iso) => {
 			detectedCountry = iso;
-			// Auto-select if the detected country exists in our list
-			const match = (data.countries ?? []).find((c: { iso_code: string }) => c.iso_code === iso);
-			if (match) {
-				selectedCountryIso = iso;
+			// Auto-select if no country is already explicitly selected by the user
+			if (!selectedCountryIso) {
+				const match = (data.countries ?? []).find((c: { iso_code: string }) => c.iso_code === iso);
+				if (match) {
+					// Preselect the detected LatAm country
+					selectedCountryIso = iso;
+				} else {
+					// Fallback to the first LatAm country if the detected one isn't supported
+					const firstCountry = (data.countries ?? [])[0];
+					if (firstCountry) selectedCountryIso = firstCountry.iso_code;
+				}
 			}
 		});
 	}
@@ -129,6 +201,11 @@
 			window.location.href = '/register';
 			return;
 		}
+
+		if (!eventSportId) {
+			eventSportId = getPreferredSportId((data.sports ?? []) as SportOption[]);
+		}
+
 		showAddModal = true;
 		formMessage = '';
 		formError = false;
@@ -171,6 +248,14 @@
 			<p class="text-sm text-slate-400 sm:text-base">{$t('calendar.subtitle')}</p>
 		</header>
 
+		{#if data.errorMsg}
+			<div
+				class="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 p-4 text-center text-red-400"
+			>
+				{data.errorMsg}
+			</div>
+		{/if}
+
 		<!-- ═══ FILTERS BAR ═══ -->
 		<div
 			class="mb-6 flex flex-wrap items-end gap-3 rounded-2xl border border-slate-700/50 bg-slate-800/50 p-4 backdrop-blur-sm"
@@ -184,13 +269,35 @@
 					id="filter-country"
 					bind:value={selectedCountryIso}
 					onchange={() => {
+						selectedDepartmentId = '';
 						selectedCityId = '';
 					}}
 					class="w-full rounded-lg border border-slate-600 bg-slate-700/80 px-3 py-2 text-sm text-white transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 				>
 					<option value="">—</option>
-					{#each countriesWithCities() as country (country.id)}
+					{#each getCountries() as country (country.id)}
 						<option value={country.iso_code}>{country.name}</option>
+					{/each}
+				</select>
+			</div>
+
+			<!-- Department filter -->
+			<div class="min-w-[160px] flex-1">
+				<label for="filter-department" class="mb-1 block text-xs font-medium text-slate-400">
+					Departamento/Provincia
+				</label>
+				<select
+					id="filter-department"
+					bind:value={selectedDepartmentId}
+					disabled={!selectedCountryIso}
+					onchange={() => {
+						selectedCityId = '';
+					}}
+					class="w-full rounded-lg border border-slate-600 bg-slate-700/80 px-3 py-2 text-sm text-white transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50"
+				>
+					<option value="">Selecciona un depto.</option>
+					{#each filteredDepartments() as dept (dept.id)}
+						<option value={dept.id}>{dept.name}</option>
 					{/each}
 				</select>
 			</div>
@@ -198,15 +305,16 @@
 			<!-- City filter -->
 			<div class="min-w-[160px] flex-1">
 				<label for="filter-city" class="mb-1 block text-xs font-medium text-slate-400">
-					{$t('calendar.filterCity')}
+					Municipio/Ciudad
 				</label>
 				<select
 					id="filter-city"
 					bind:value={selectedCityId}
-					class="w-full rounded-lg border border-slate-600 bg-slate-700/80 px-3 py-2 text-sm text-white transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+					disabled={!selectedDepartmentId || loadingCities}
+					class="w-full rounded-lg border border-slate-600 bg-slate-700/80 px-3 py-2 text-sm text-white transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50"
 				>
-					<option value="">{$t('calendar.filterCityPlaceholder')}</option>
-					{#each filteredCities() as city (city.city_id)}
+					<option value="">{loadingCities ? 'Cargando...' : 'Selecciona una ciudad'}</option>
+					{#each loadedCities as city (city.city_id)}
 						<option value={city.city_id}>{city.name}</option>
 					{/each}
 				</select>
@@ -635,32 +743,82 @@
 					<select
 						id="event-sport"
 						name="sport_id"
+						bind:value={eventSportId}
 						required
 						class="w-full rounded-lg border border-slate-600 bg-slate-700/80 px-3 py-2 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 					>
-						<option value="">—</option>
+						<option value="" disabled>—</option>
 						{#each data.sports ?? [] as sport (sport.sport_id)}
 							<option value={sport.sport_id}>{sport.name}</option>
 						{/each}
 					</select>
 				</div>
 
-				<!-- City -->
-				<div>
-					<label for="event-city" class="mb-1 block text-sm font-medium text-slate-300">
-						{$t('calendar.eventCity')}
-					</label>
-					<select
-						id="event-city"
-						name="city_id"
-						required
-						class="w-full rounded-lg border border-slate-600 bg-slate-700/80 px-3 py-2 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-					>
-						<option value="">—</option>
-						{#each data.cities ?? [] as city (city.city_id)}
-							<option value={city.city_id}>{city.name}</option>
-						{/each}
-					</select>
+				<!-- Location Selection -->
+				<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+					<!-- Country -->
+					<div>
+						<label for="event-country" class="mb-1 block text-sm font-medium text-slate-300">
+							{$t('calendar.filterCountry')}
+						</label>
+						<select
+							id="event-country"
+							bind:value={selectedCountryIso}
+							onchange={() => {
+								selectedDepartmentId = '';
+								selectedCityId = '';
+							}}
+							required
+							class="w-full rounded-lg border border-slate-600 bg-slate-700/80 px-3 py-2 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+						>
+							<option value="">—</option>
+							{#each getCountries() as country (country.id)}
+								<option value={country.iso_code}>{country.name}</option>
+							{/each}
+						</select>
+					</div>
+
+					<!-- Department -->
+					<div>
+						<label for="event-department" class="mb-1 block text-sm font-medium text-slate-300">
+							Depto./Prov.
+						</label>
+						<select
+							id="event-department"
+							bind:value={selectedDepartmentId}
+							disabled={!selectedCountryIso}
+							onchange={() => {
+								selectedCityId = '';
+							}}
+							required
+							class="w-full rounded-lg border border-slate-600 bg-slate-700/80 px-3 py-2 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50"
+						>
+							<option value="">—</option>
+							{#each filteredDepartments() as dept (dept.id)}
+								<option value={dept.id}>{dept.name}</option>
+							{/each}
+						</select>
+					</div>
+
+					<!-- City -->
+					<div>
+						<label for="event-city" class="mb-1 block text-sm font-medium text-slate-300">
+							Municipio
+						</label>
+						<select
+							id="event-city"
+							name="city_id"
+							bind:value={selectedCityId}
+							disabled={!selectedDepartmentId || loadingCities}
+							required
+							class="w-full rounded-lg border border-slate-600 bg-slate-700/80 px-3 py-2 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50"
+						>
+							<option value="">{loadingCities ? 'Cargando...' : '—'}</option>
+							{#each loadedCities as city (city.city_id)}
+								<option value={city.city_id}>{city.name}</option>
+							{/each}
+						</select>
+					</div>
 				</div>
 
 				<!-- Dates -->
@@ -693,10 +851,10 @@
 
 				<!-- Color -->
 				<div>
-					<label class="mb-2 block text-sm font-medium text-slate-300"
-						>{$t('calendar.eventColor')}</label
-					>
-					<div class="flex flex-wrap gap-2">
+					<p id="event-color-label" class="mb-2 block text-sm font-medium text-slate-300">
+						{$t('calendar.eventColor')}
+					</p>
+					<div role="radiogroup" aria-labelledby="event-color-label" class="flex flex-wrap gap-2">
 						{#each colorPresets as preset (preset)}
 							<label class="cursor-pointer">
 								<input

@@ -18,25 +18,30 @@ export const handle: Handle = async ({ event, resolve }) => {
 	//    Usa getUser() que valida el JWT contra Supabase Auth,
 	//    a diferencia de getSession() que solo lee cookies (spoofeable).
 	event.locals.safeGetSession = async () => {
-		const {
-			data: { session }
-		} = await event.locals.supabase.auth.getSession();
+		try {
+			const {
+				data: { session }
+			} = await event.locals.supabase.auth.getSession();
 
-		if (!session) {
+			if (!session) {
+				return { session: null, user: null };
+			}
+
+			// Validar el usuario con el servidor (seguro, no spoofeable)
+			const {
+				data: { user },
+				error
+			} = await event.locals.supabase.auth.getUser();
+
+			if (error) {
+				return { session: null, user: null };
+			}
+
+			return { session, user };
+		} catch (e) {
+			console.error('safeGetSession failed: network or db error', e);
 			return { session: null, user: null };
 		}
-
-		// Validar el usuario con el servidor (seguro, no spoofeable)
-		const {
-			data: { user },
-			error
-		} = await event.locals.supabase.auth.getUser();
-
-		if (error) {
-			return { session: null, user: null };
-		}
-
-		return { session, user };
 	};
 
 	// 3. Resolver la ruta e Inyectar Cabeceras de Seguridad

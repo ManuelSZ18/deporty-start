@@ -1,42 +1,44 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/svelte';
-import SportsPage from '../dashboard/sports/+page.svelte';
+import SportsPage from '../routes/dashboard/sports/+page.svelte';
 
 vi.mock('$lib/i18n', () => ({
-    t: {
-        subscribe: (fn: any) => {
-            fn((key: string) => key);
-            return () => { };
-        }
-    }
+	t: {
+		subscribe: (fn: any) => {
+			fn((key: string) => key);
+			return () => {};
+		}
+	}
 }));
-
-import { page } from '$app/stores';
-import { writable } from 'svelte/store';
 
 // Mock routing so enhance forms don't crash the context
 vi.mock('$app/stores', () => ({
-    page: writable({ url: new URL('http://localhost') })
+	page: {
+		subscribe: (fn: any) => {
+			fn({ url: new URL('http://localhost') });
+			return () => {};
+		}
+	}
 }));
 vi.mock('$app/forms', () => ({
-    enhance: () => { }
+	enhance: () => {}
 }));
 
 describe('Profile Sports Configuration Page', () => {
-    it('should render the sports grid and check active sports by default', () => {
-        const mockData = {
-            profile: {
-                sports: ['natacion_carreras']
-            }
-        };
+	it('should render the sports grid and check active sports by default', () => {
+		const mockData = {
+			profile: {
+				sports: ['natacion_carreras']
+			}
+		};
 
-        render(SportsPage, { data: mockData as any });
+		render(SportsPage as any, { props: { data: mockData as any, form: null } });
 
-        // General texts
-        expect(screen.getByText('dashboard.activities.title')).toBeTruthy();
-        expect(screen.getByText('dashboard.activities.subtitle')).toBeTruthy();
+		// General texts
+		expect(screen.getByText('sports.title')).toBeTruthy();
+		expect(screen.getByText('sports.subtitle')).toBeTruthy();
 
-        // Submit button
-        expect(screen.getByText('profile.save')).toBeTruthy();
-    });
+		// Submit button
+		expect(screen.getByText('sports.save')).toBeTruthy();
+	});
 });

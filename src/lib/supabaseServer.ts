@@ -24,14 +24,10 @@ export function createSupabaseServerClient(event: RequestEvent) {
 			getAll: () => event.cookies.getAll(),
 			setAll: (cookiesToSet) => {
 				cookiesToSet.forEach(({ name, value, options }) => {
-					try {
-						event.cookies.set(name, value, {
-							...options,
-							path: options?.path ?? '/'
-						});
-					} catch {
-						// Ignorar: cookies.set() después de que la respuesta fue generada
-					}
+					event.cookies.set(name, value, {
+						...options,
+						path: options?.path ?? '/'
+					});
 				});
 			}
 		}
