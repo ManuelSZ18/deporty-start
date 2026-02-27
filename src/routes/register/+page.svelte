@@ -2,8 +2,7 @@
 	import { t } from '$lib/i18n';
 	import { enhance } from '$app/forms';
 	import { signInWithGoogle } from '$lib/auth/googleAuth';
-	import IntlTelInput from 'intl-tel-input/svelteWithUtils';
-	import 'intl-tel-input/styles';
+	import PhoneInput from '$lib/components/PhoneInput.svelte';
 
 	let nombres = $state('');
 	let apellidos = $state('');
@@ -301,22 +300,14 @@
 							>{$t('register.phoneLabel')}</label
 						>
 						<div class="rounded-xl border border-slate-700 bg-slate-800/50 px-2 py-2">
-							<IntlTelInput
+							<PhoneInput
 								options={phoneOptions}
-								inputProps={{
-									id: 'phone',
-									class:
-										'w-full bg-transparent px-2 py-2 text-white placeholder-slate-500 outline-none',
-									placeholder: $t('register.phonePlaceholder'),
-									autocomplete: 'tel',
-									required: true
-								}}
-								onChangeNumber={(number: string) => {
-									phone = number;
-								}}
-								onChangeValidity={(isValid: boolean) => {
-									phoneValid = isValid;
-								}}
+								id="phone"
+								class="w-full bg-transparent px-2 py-2 text-white placeholder-slate-500 outline-none"
+								placeholder={$t('register.phonePlaceholder')}
+								required={true}
+								bind:value={phone}
+								bind:isValid={phoneValid}
 							/>
 						</div>
 						<input type="hidden" name="phone" value={phone} />

@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { t } from '$lib/i18n';
-	import IntlTelInput from 'intl-tel-input/svelteWithUtils';
-	import 'intl-tel-input/styles';
+	import PhoneInput from '$lib/components/PhoneInput.svelte';
 
 	let { data, form } = $props();
 	let isSubmitting = $state(false);
@@ -310,23 +309,14 @@
 				<div
 					class="rounded-lg border border-gray-300 bg-gray-50 px-2 py-2 focus-within:border-blue-500"
 				>
-					<IntlTelInput
+					<PhoneInput
 						options={phoneOptions}
-						inputProps={{
-							id: 'phone',
-							class:
-								'w-full bg-transparent px-2 py-2 text-gray-900 placeholder-gray-400 outline-none',
-							placeholder: $t('register.phonePlaceholder'),
-							autocomplete: 'tel',
-							required: true,
-							value: phone
-						}}
-						onChangeNumber={(number: string) => {
-							phone = number;
-						}}
-						onChangeValidity={(isValid: boolean) => {
-							phoneValid = isValid;
-						}}
+						id="phone"
+						class="w-full bg-transparent px-2 py-2 text-gray-900 placeholder-gray-400 outline-none"
+						placeholder={$t('register.phonePlaceholder')}
+						required={true}
+						bind:value={phone}
+						bind:isValid={phoneValid}
 					/>
 				</div>
 				<input type="hidden" name="phone" value={phone} />
