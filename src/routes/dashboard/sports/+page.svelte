@@ -16,17 +16,7 @@
 	];
 
 	// Parse current sports string array from the DB
-	let userSports = $state<string[]>([]);
-
-	import { untrack } from 'svelte';
-
-	$effect(() => {
-		untrack(() => {
-			if (data.profile?.sports && userSports.length === 0) {
-				userSports = data.profile.sports;
-			}
-		});
-	});
+	let userSports = $state<string[]>(data.profile?.sports || []);
 
 	function toggleSport(sportId: string) {
 		if (userSports.includes(sportId)) {
