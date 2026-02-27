@@ -6,20 +6,27 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const { user } = await locals.safeGetSession();
 
 	// Load all available sports
-	const { data: allSports } = await supabase
+	const { data: allSports, error: sportsError } = await supabase
 		.from('sport')
 		.select('sport_id, name')
 		.is('deleted_at', null)
 		.order('name');
 
+	if (sportsError) {
+		console.error('Error loading sports:', sportsError);
+	}
+
 	// Load user's selected sports via relational table
 	let userSportsIds: string[] = [];
 	if (user) {
-		const { data: userSports } = await supabase
+		const { data: userSports, error: userSportsError } = await supabase
 			.from('profile_sport')
 			.select('sport_id')
 			.eq('profile_id', user.id);
 
+		if (userSportsError) {
+			console.error('Error loading user sports:', userSportsError);
+		}
 		userSportsIds = (userSports ?? []).map(s => s.sport_id);
 	}
 

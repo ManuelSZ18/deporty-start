@@ -4,8 +4,8 @@
 
 	let { data }: { data: PageData } = $props();
 
-	// Array of strings corresponding to the sports the user has active
-	let userSports = $derived(data.profile?.sports || []);
+	// Array of sport objects from the relational junction table
+	let userSports = $derived(data.userSports || []);
 
 	import { untrack } from 'svelte';
 
@@ -15,7 +15,7 @@
 	$effect(() => {
 		untrack(() => {
 			if (!selectedSport && userSports.length > 0) {
-				selectedSport = userSports[0];
+				selectedSport = userSports[0].sport_id;
 			}
 		});
 	});
@@ -66,8 +66,7 @@
 							class="w-full appearance-none rounded-xl border border-gray-200 bg-gray-50 py-3 pr-10 pl-4 font-medium text-gray-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
 						>
 							{#each userSports as sport}
-								<!-- @ts-ignore - dynamic dictionary string bypass -->
-								<option value={sport}>{$t(`sports.${sport}` as any)}</option>
+								<option value={sport.sport_id}>{sport.name}</option>
 							{/each}
 						</select>
 						<div

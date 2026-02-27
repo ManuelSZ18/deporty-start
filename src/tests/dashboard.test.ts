@@ -7,7 +7,7 @@ vi.mock('$lib/i18n', () => ({
 	t: {
 		subscribe: (fn: any) => {
 			fn((key: string) => key);
-			return () => {};
+			return () => { };
 		}
 	}
 }));
@@ -16,10 +16,10 @@ describe('Dashboard Main Page', () => {
 	it('should render the Call to Action when the user has no sports active', () => {
 		const mockData = {
 			profile: {
-				sports: [],
 				first_name: 'Test',
 				nickname: 'Tester'
-			}
+			},
+			userSports: []
 		};
 
 		render(DashboardPage as any, { props: { data: mockData as any } });
@@ -33,10 +33,13 @@ describe('Dashboard Main Page', () => {
 	it('should render the sport dropdown and contextual cards when user has sports', () => {
 		const mockData = {
 			profile: {
-				sports: ['futbol', 'padel'],
 				first_name: 'Test',
 				nickname: 'Tester'
-			}
+			},
+			userSports: [
+				{ sport_id: 'uuid-futbol', name: 'Fútbol' },
+				{ sport_id: 'uuid-padel', name: 'Pádel' }
+			]
 		};
 
 		render(DashboardPage as any, { props: { data: mockData as any } });
@@ -45,9 +48,9 @@ describe('Dashboard Main Page', () => {
 		const selectElement = screen.getByRole('combobox');
 		expect(selectElement).toBeTruthy();
 
-		// Should render translation keys mapped to their sports
-		expect(screen.getByText('sports.futbol')).toBeTruthy();
-		expect(screen.getByText('sports.padel')).toBeTruthy();
+		// Should render real sport names
+		expect(screen.getByText('Fútbol')).toBeTruthy();
+		expect(screen.getByText('Pádel')).toBeTruthy();
 
 		// Dashboard Cards should be active
 		expect(screen.getByText('dashboard.cards.upcomingEvents')).toBeTruthy();
