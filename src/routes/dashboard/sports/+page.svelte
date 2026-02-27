@@ -16,7 +16,14 @@
 	];
 
 	// Parse current sports string array from the DB
-	let userSports = $state<string[]>(data.profile?.sports || []);
+	let userSports = $state<string[]>([]);
+
+	// Svelte 5 recommends re-syncing props into state if the load data changes
+	$effect(() => {
+		if (data.profile?.sports) {
+			userSports = data.profile.sports;
+		}
+	});
 
 	function toggleSport(sportId: string) {
 		if (userSports.includes(sportId)) {
