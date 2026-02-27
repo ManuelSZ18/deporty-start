@@ -17,6 +17,7 @@
 	let resetSuccessMessage = $state('');
 	let resetErrorMessage = $state('');
 	let isGoogleSubmitting = $state(false);
+	let registeredMessageTimer: ReturnType<typeof setTimeout> | null = null;
 
 	// Check for callback errors from URL params
 	$effect(() => {
@@ -27,7 +28,28 @@
 		const registered = $page.url.searchParams.get('registered');
 		if (registered === 'true') {
 			registeredMessage = $t('auth.success.registered');
+
+			if (typeof window !== 'undefined') {
+				const cleanUrl = new URL(window.location.href);
+				cleanUrl.searchParams.delete('registered');
+				window.history.replaceState(window.history.state, '', cleanUrl.toString());
+			}
+
+			if (registeredMessageTimer) {
+				clearTimeout(registeredMessageTimer);
+			}
+			registeredMessageTimer = setTimeout(() => {
+				registeredMessage = '';
+				registeredMessageTimer = null;
+			}, 2000);
 		}
+
+		return () => {
+			if (registeredMessageTimer) {
+				clearTimeout(registeredMessageTimer);
+				registeredMessageTimer = null;
+			}
+		};
 	});
 
 	function openForgotPasswordModal() {

@@ -34,6 +34,9 @@
 	let detectedCountry = $state('');
 	let loadedCities = $state<{ city_id: string; name: string; department_id: string }[]>([]);
 	let loadingCities = $state(false);
+	let loadedEvents = $state<CalendarEvent[]>([]);
+	let loadingEvents = $state(false);
+	let eventsRequestToken = 0;
 
 	type SportOption = { sport_id: string; name: string };
 
@@ -116,19 +119,66 @@
 				});
 		} else {
 			loadedCities = [];
+			loadingCities = false;
 		}
 	});
 
-	// Events filtered by city and sport
-	const filteredEvents = $derived(() => {
-		let events = data.events ?? [];
-		if (selectedCityId) {
-			events = events.filter((e: any) => e.city_id === selectedCityId);
+	// Fetch events dynamically only after municipality/city is selected
+	$effect(() => {
+		if (!selectedCityId) {
+			loadedEvents = [];
+			loadingEvents = false;
+			return;
 		}
+
+		const requestToken = ++eventsRequestToken;
+		loadingEvents = true;
+
+		const client = createSupabaseBrowserClient();
+		let query = client
+			.from('calendar_event')
+			.select(
+				`
+				event_id,
+				name,
+				sport_id,
+				city_id,
+				created_by,
+				color,
+				reference_start,
+				reference_end,
+				start_day_of_week,
+				end_day_of_week,
+				is_recurring,
+				sport ( name ),
+				city ( name, department_id )
+			`
+			)
+			.eq('city_id', selectedCityId)
+			.is('deleted_at', null)
+			.order('reference_start');
+
 		if (selectedSportId) {
-			events = events.filter((e: any) => e.sport_id === selectedSportId);
+			query = query.eq('sport_id', selectedSportId);
 		}
-		return events as CalendarEvent[];
+
+		query.then(({ data: events }) => {
+			if (requestToken !== eventsRequestToken) {
+				return;
+			}
+
+			loadedEvents = (events ?? []) as CalendarEvent[];
+			loadingEvents = false;
+		});
+	});
+
+	// Events to render (requires selected municipality/city)
+	const filteredEvents = $derived(() => {
+		if (!selectedCityId) {
+			return [] as CalendarEvent[];
+		}
+
+		return loadedEvents;
 	});
 
 	// Adjusted events for the selected year
@@ -166,15 +216,33 @@
 		});
 	}
 
-	// ─── Event Colors (legend) ──────────────────────────
-	const eventLegend = $derived(() => {
-		const seen = new Map<string, { name: string; color: string }>();
+	// ─── Active month events (month view footer list) ─────────────────
+	const activeMonthEvents = $derived(() => {
+		if (!selectedCityId) return [];
+
+		const monthStart = new Date(selectedYear, selectedMonth, 1);
+		const monthEnd = new Date(selectedYear, selectedMonth + 1, 0);
+
+		const seen = new Map<
+			string,
+			{ event_id: string; name: string; color: string; created_by?: string | null }
+		>();
+
 		for (const ev of adjustedEvents()) {
-			if (!seen.has(ev.event_id)) {
-				seen.set(ev.event_id, { name: ev.name, color: ev.color });
+			const overlapsMonth = ev.adjustedStart <= monthEnd && ev.adjustedEnd >= monthStart;
+			if (!overlapsMonth || seen.has(ev.event_id)) {
+				continue;
 			}
+
+			seen.set(ev.event_id, {
+				event_id: ev.event_id,
+				name: ev.name,
+				color: ev.color,
+				created_by: ev.created_by ?? null
+			});
 		}
-		return Array.from(seen.values());
+
+		return Array.from(seen.values()).sort((a, b) => a.name.localeCompare(b.name));
 	});
 
 	// ─── Helpers ────────────────────────────────────────
@@ -209,6 +277,15 @@
 		showAddModal = true;
 		formMessage = '';
 		formError = false;
+	}
+
+	function confirmDeleteEvent(): boolean {
+		const confirmText =
+			$locale === 'pt'
+				? 'Tem certeza de que deseja excluir este evento?'
+				: '¿Seguro que deseas eliminar este evento?';
+
+		return window.confirm(confirmText);
 	}
 
 	// Color presets
@@ -637,35 +714,52 @@
 			</div>
 		{/if}
 
-		<!-- ═══ EVENT LEGEND ═══ -->
-		{#if eventLegend().length > 0}
-			<div
-				class="mt-6 flex flex-wrap items-center justify-center gap-3 rounded-xl border border-slate-700/50 bg-slate-800/40 p-3 backdrop-blur-sm"
-			>
-				{#each eventLegend() as item (item.name)}
-					<div class="flex items-center gap-2">
-						<span class="h-3 w-3 rounded-full" style="background-color: {item.color};"></span>
-						<span class="text-xs text-slate-300">{item.name}</span>
-					</div>
-				{/each}
-			</div>
-		{:else}
-			<div class="mt-6 rounded-xl border border-slate-700/30 bg-slate-800/20 p-8 text-center">
-				<svg
-					class="mx-auto mb-3 h-12 w-12 text-slate-600"
-					fill="none"
-					stroke="currentColor"
-					viewBox="0 0 24 24"
+		{#if viewMode === 'month'}
+			{#if !selectedCityId}
+				<div class="mt-6 rounded-xl border border-slate-700/30 bg-slate-800/20 p-8 text-center">
+					<p class="text-sm text-slate-400">{$t('calendar.selectCityToView')}</p>
+				</div>
+			{:else if loadingEvents}
+				<div class="mt-6 rounded-xl border border-slate-700/30 bg-slate-800/20 p-8 text-center">
+					<p class="text-sm text-slate-400">{$t('calendar.loadingEvents')}</p>
+				</div>
+			{:else if activeMonthEvents().length > 0}
+				<div
+					class="mt-6 flex flex-wrap items-center justify-center gap-3 rounded-xl border border-slate-700/50 bg-slate-800/40 p-3 backdrop-blur-sm"
 				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="1.5"
-						d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-					/>
-				</svg>
-				<p class="text-sm text-slate-500">{$t('calendar.noEvents')}</p>
-			</div>
+					{#each activeMonthEvents() as item (item.event_id)}
+						<div
+							class="flex items-center gap-2 rounded-lg border border-slate-700/40 bg-slate-800/60 px-2 py-1"
+						>
+							<span class="h-3 w-3 rounded-full" style="background-color: {item.color};"></span>
+							<span class="text-xs text-slate-300">{item.name}</span>
+							{#if data.isLoggedIn && data.currentUserId && item.created_by === data.currentUserId}
+								<form
+									method="POST"
+									action="?/deleteEvent"
+									onsubmit={(event) => {
+										if (!confirmDeleteEvent()) {
+											event.preventDefault();
+										}
+									}}
+								>
+									<input type="hidden" name="event_id" value={item.event_id} />
+									<button
+										type="submit"
+										class="rounded border border-red-500/40 px-1.5 py-0.5 text-[10px] font-semibold text-red-300 transition-colors hover:bg-red-500/10"
+									>
+										{$t('crud.delete')}
+									</button>
+								</form>
+							{/if}
+						</div>
+					{/each}
+				</div>
+			{:else}
+				<div class="mt-6 rounded-xl border border-slate-700/30 bg-slate-800/20 p-8 text-center">
+					<p class="text-sm text-slate-500">{$t('calendar.noEvents')}</p>
+				</div>
+			{/if}
 		{/if}
 	</div>
 </div>

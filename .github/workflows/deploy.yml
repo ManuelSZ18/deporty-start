@@ -1,12 +1,67 @@
 name: Deploy to Vercel
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
+  quality_gate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type and Svelte checks
+        run: npm run check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Tests
+        run: npm run test
+
+      - name: Production build
+        run: npm run build
+
+      - name: Smoke test (local preview)
+        shell: bash
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > preview.log 2>&1 &
+          PREVIEW_PID=$!
+
+          cleanup() {
+            kill "$PREVIEW_PID" >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+
+          curl -fsS http://127.0.0.1:4173/ >/dev/null
+          curl -fsS http://127.0.0.1:4173/calendariodeportivo >/dev/null
+
   deploy:
+    needs: quality_gate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -20,7 +75,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
@@ -36,4 +91,18 @@ jobs:
         run: vercel build --prod --token=$VERCEL_TOKEN
 
       - name: Deploy to Vercel
-        run: vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+        id: deploy
+        shell: bash
+        run: |
+          DEPLOY_OUTPUT=$(vercel deploy --prebuilt --prod --yes --token=$VERCEL_TOKEN)
+          echo "$DEPLOY_OUTPUT"
+          DEPLOYMENT_URL=$(echo "$DEPLOY_OUTPUT" | tail -n 1 | tr -d '\r')
+          echo "deployment_url=$DEPLOYMENT_URL" >> "$GITHUB_OUTPUT"
+
+      - name: Smoke test (production deployment)
+        shell: bash
+        run: |
+          DEPLOYMENT_URL="${{ steps.deploy.outputs.deployment_url }}"
+          echo "Smoke testing: $DEPLOYMENT_URL"
+          curl -fsS "$DEPLOYMENT_URL" >/dev/null
+          curl -fsS "$DEPLOYMENT_URL/calendariodeportivo" >/dev/null

@@ -67,6 +67,9 @@ const pt: Record<string, string> = {
 	'register.nicknameHint': 'Sera usado no app. Em torneios sera exibido Nome-Apelido-Sobrenome.',
 	'register.birthDateLabel': 'Data de nascimento',
 	'register.birthDateHint': 'Necessaria para perfis e torneios.',
+	'register.phoneLabel': 'Telefone',
+	'register.phonePlaceholder': 'Digite seu número',
+	'register.phoneHint': 'Inclua seu código internacional (ex: +55).',
 	'register.emailLabel': 'Email',
 	'register.emailPlaceholder': 'seunome@email.com',
 	'register.confirmEmailLabel': 'Confirmar Email',
@@ -103,11 +106,13 @@ const pt: Record<string, string> = {
 	'auth.error.email_exists': 'Já existe uma conta com este e-mail',
 	'auth.error.invalid_email': 'Por favor, insira um e-mail válido',
 	'auth.error.invalid_birth_date': 'Data de nascimento inválida',
+	'auth.error.invalid_phone': 'Número de telefone inválido',
 	'auth.error.profile_error': 'Nao foi possivel criar seu perfil. Tente novamente.',
 	'auth.error.auth_error': 'Erro de autenticação. Tente novamente.',
 	'auth.error.invalid_credentials': 'E-mail ou senha incorretos',
 	'auth.error.email_not_confirmed':
 		'Você precisa confirmar seu e-mail antes de entrar. Verifique sua caixa de entrada.',
+	'auth.success.registered': 'Registro bem-sucedido',
 
 	// ─── Organizações ────────────────────────────────
 	'organizations.title': 'Minhas Organizações',
@@ -258,6 +263,8 @@ const pt: Record<string, string> = {
 	'calendar.viewYear': 'Visão anual',
 	'calendar.viewMonth': 'Visão mensal',
 	'calendar.addEvent': 'Adicionar evento',
+	'calendar.selectCityToView': 'Selecione um município/cidade para exibir o calendário.',
+	'calendar.loadingEvents': 'Carregando eventos...',
 	'calendar.noEvents': 'Não há eventos para os filtros selecionados.',
 	'calendar.eventSuccess': 'Evento criado com sucesso.',
 	'calendar.eventError': 'Não foi possível criar o evento. Tente novamente.',

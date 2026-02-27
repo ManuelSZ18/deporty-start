@@ -41,6 +41,7 @@ const validInput = {
 	lastName: 'Pérez',
 	nickname: 'JP',
 	birthDate: '1990-05-15',
+	phone: '+573001234567',
 	email: 'juan@example.com',
 	password: 'Str0ngP@ss!'
 };
@@ -140,6 +141,20 @@ describe('Register Action - Server-side Validation', () => {
 
 		expect(result?.status).toBe(400);
 		expect(result?.data?.error).toBe('invalid_birth_date');
+	});
+
+	it('should fail with invalid_phone when phone is invalid', async () => {
+		const action = await getRegisterAction();
+		const formData = createFormData({ ...validInput, phone: '3001234567' });
+		const locals = createMockLocals();
+
+		const result = await action({
+			request: new Request('http://localhost', { method: 'POST', body: formData }),
+			locals
+		} as any);
+
+		expect(result?.status).toBe(400);
+		expect(result?.data?.error).toBe('invalid_phone');
 	});
 
 	it('should detect email_exists when user has no identities', async () => {

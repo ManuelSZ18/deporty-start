@@ -1,5 +1,6 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
+import { normalizeToIsoDate } from '$lib/utils/dateUtils';
 
 export const actions: Actions = {
 	register: async ({ request, locals }) => {
@@ -7,16 +8,24 @@ export const actions: Actions = {
 		const firstName = formData.get('firstName') as string;
 		const lastName = formData.get('lastName') as string;
 		const nickname = (formData.get('nickname') as string) ?? '';
-		const birthDate = formData.get('birthDate') as string;
+		const birthDateInput = formData.get('birthDate') as string;
+		const phoneInput = (formData.get('phone') as string) ?? '';
 		const email = formData.get('email') as string;
 		const password = formData.get('password') as string;
+		const birthDate = normalizeToIsoDate(birthDateInput);
+		const phone = phoneInput.trim();
+		const e164Regex = /^\+[1-9]\d{6,14}$/;
 
 		// Validación server-side
-		if (!firstName || !lastName || !birthDate || !email || !password) {
+		if (!firstName || !lastName || !birthDateInput || !phone || !email || !password) {
 			return fail(400, { error: 'missing_fields', email });
 		}
 
-		if (Number.isNaN(Date.parse(birthDate))) {
+		if (!e164Regex.test(phone)) {
+			return fail(400, { error: 'invalid_phone', email });
+		}
+
+		if (!birthDate) {
 			return fail(400, { error: 'invalid_birth_date', email });
 		}
 
@@ -34,7 +43,8 @@ export const actions: Actions = {
 					first_name: firstName,
 					last_name: lastName,
 					birth_date: birthDate,
-					nickname: nickname.trim() || undefined
+					nickname: nickname.trim() || undefined,
+					phone
 				}
 			}
 		});
@@ -68,7 +78,8 @@ export const actions: Actions = {
 				first_name: firstName,
 				last_name: lastName,
 				nickname: nickname.trim() || null,
-				birth_date: birthDate
+				birth_date: birthDate,
+				phone
 			},
 			{ onConflict: 'profile_id' }
 		);

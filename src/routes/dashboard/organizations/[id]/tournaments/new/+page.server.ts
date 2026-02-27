@@ -1,5 +1,6 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
+import { normalizeToIsoDate } from '$lib/utils/dateUtils';
 
 export const load: PageServerLoad = async ({ params }) => {
 	return { organizationId: params.id };
@@ -19,17 +20,37 @@ export const actions: Actions = {
 
 		const formData = await request.formData();
 		const name = formData.get('name') as string;
-		const startDate = formData.get('startDate') as string;
-		const endDate = formData.get('endDate') as string;
-		const deadline = (formData.get('deadline') as string) || null;
+		const startDateInput = formData.get('startDate') as string;
+		const endDateInput = formData.get('endDate') as string;
+		const deadlineInput = (formData.get('deadline') as string) || null;
 
-		if (!name?.trim() || !startDate || !endDate) {
+		const startDate = normalizeToIsoDate(startDateInput);
+		const endDate = normalizeToIsoDate(endDateInput);
+		const deadlineDatePart = deadlineInput ? deadlineInput.split('T')[0] : null;
+		const normalizedDeadlineDate = deadlineDatePart ? normalizeToIsoDate(deadlineDatePart) : null;
+		const deadline = deadlineInput
+			? deadlineInput.includes('T')
+				? deadlineInput
+				: normalizedDeadlineDate
+			: null;
+
+		if (!name?.trim() || !startDateInput || !endDateInput) {
 			return fail(400, {
 				error: 'missing_fields',
 				name: name ?? '',
-				startDate: startDate ?? '',
-				endDate: endDate ?? '',
-				deadline: deadline ?? ''
+				startDate: startDateInput ?? '',
+				endDate: endDateInput ?? '',
+				deadline: deadlineInput ?? ''
+			});
+		}
+
+		if (!startDate || !endDate || (deadlineInput && !normalizedDeadlineDate)) {
+			return fail(400, {
+				error: 'invalid_dates',
+				name: name ?? '',
+				startDate: startDateInput ?? '',
+				endDate: endDateInput ?? '',
+				deadline: deadlineInput ?? ''
 			});
 		}
 

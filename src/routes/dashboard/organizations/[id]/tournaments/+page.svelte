@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { t } from '$lib/i18n';
+	import { formatDateLatam } from '$lib/utils/dateUtils';
 
 	let { data } = $props();
 	let tournaments = $derived(data.tournaments);
@@ -89,15 +90,13 @@
 						</h3>
 						<div class="mt-3 space-y-1 text-sm text-gray-500">
 							<p>
-								📅 {new Date(tournament.start_date).toLocaleDateString()} — {new Date(
-									tournament.end_date
-								).toLocaleDateString()}
+								📅 {formatDateLatam(tournament.start_date)} — {formatDateLatam(tournament.end_date)}
 							</p>
 							{#if tournament.registration_deadline}
 								<p>
-									⏰ {$t('tournaments.detail.deadline')}: {new Date(
+									⏰ {$t('tournaments.detail.deadline')}: {formatDateLatam(
 										tournament.registration_deadline
-									).toLocaleDateString()}
+									)}
 								</p>
 							{/if}
 						</div>

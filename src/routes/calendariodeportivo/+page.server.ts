@@ -1,5 +1,6 @@
-import { fail, error } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
+import { normalizeToIsoDate } from '$lib/utils/dateUtils';
 
 /**
  * Calendario Deportivo — Server Load & Actions.
@@ -9,7 +10,7 @@ import type { PageServerLoad, Actions } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { supabase } = locals;
-	const { session } = await locals.safeGetSession();
+	const { session, user } = await locals.safeGetSession();
 
 	try {
 		// Load countries (only Latin American by ISO code)
@@ -66,45 +67,25 @@ export const load: PageServerLoad = async ({ locals }) => {
 			.order('name');
 		if (errorSports) throw new Error(`Sports Error: ${errorSports.message}`);
 
-		// Load calendar events
-		const { data: events, error: errorEvents } = await supabase
-			.from('calendar_event')
-			.select(
-				`
-                event_id,
-                name,
-                sport_id,
-                city_id,
-                color,
-                reference_start,
-                reference_end,
-                start_day_of_week,
-                end_day_of_week,
-                is_recurring,
-                sport ( name ),
-                city ( name, department_id )
-            `
-			)
-			.is('deleted_at', null)
-			.order('reference_start');
-		if (errorEvents) throw new Error(`Events Error: ${errorEvents.message}`);
-
 		return {
 			countries: countries ?? [],
 			departments: departments ?? [],
 			cities: cities ?? [],
 			sports: sports ?? [],
-			events: events ?? [],
-			isLoggedIn: !!session
+			events: [],
+			isLoggedIn: !!session,
+			currentUserId: user?.id ?? null
 		};
 	} catch (e) {
 		console.error('Error loading calendar data:', e);
 		return {
 			countries: [],
+			departments: [],
 			cities: [],
 			sports: [],
 			events: [],
 			isLoggedIn: !!session,
+			currentUserId: user?.id ?? null,
 			errorMsg: 'No se pudo conectar con la base de datos. Por favor, intenta de nuevo más tarde.'
 		};
 	}
@@ -124,12 +105,18 @@ export const actions: Actions = {
 		const sport_id = formData.get('sport_id') as string;
 		const city_id = formData.get('city_id') as string;
 		const color = formData.get('color') as string;
-		const reference_start = formData.get('reference_start') as string;
-		const reference_end = formData.get('reference_end') as string;
+		const referenceStartInput = formData.get('reference_start') as string;
+		const referenceEndInput = formData.get('reference_end') as string;
+		const reference_start = normalizeToIsoDate(referenceStartInput);
+		const reference_end = normalizeToIsoDate(referenceEndInput);
 		const is_recurring = formData.get('is_recurring') === 'on';
 
 		// Validation
-		if (!name || !sport_id || !city_id || !reference_start || !reference_end) {
+		if (!name || !sport_id || !city_id || !referenceStartInput || !referenceEndInput) {
+			return fail(400, { error: 'missing_fields' });
+		}
+
+		if (!reference_start || !reference_end) {
 			return fail(400, { error: 'missing_fields' });
 		}
 
@@ -159,6 +146,53 @@ export const actions: Actions = {
 
 		if (error) {
 			console.error('Error creating calendar event:', error);
+			return fail(500, { error: 'db_error' });
+		}
+
+		return { success: true };
+	},
+
+	deleteEvent: async ({ request, locals }) => {
+		const { supabase } = locals;
+		const { user } = await locals.safeGetSession();
+
+		if (!user) {
+			return fail(401, { error: 'unauthorized' });
+		}
+
+		const formData = await request.formData();
+		const eventId = formData.get('event_id');
+
+		if (!eventId || typeof eventId !== 'string') {
+			return fail(400, { error: 'missing_fields' });
+		}
+
+		const { data: ownedEvent, error: ownershipError } = await supabase
+			.from('calendar_event')
+			.select('event_id')
+			.eq('event_id', eventId)
+			.eq('created_by', user.id)
+			.is('deleted_at', null)
+			.maybeSingle();
+
+		if (ownershipError) {
+			console.error('Error validating event ownership:', ownershipError);
+			return fail(500, { error: 'db_error' });
+		}
+
+		if (!ownedEvent) {
+			return fail(403, { error: 'forbidden' });
+		}
+
+		const { error } = await supabase
+			.from('calendar_event')
+			.update({ deleted_at: new Date().toISOString() })
+			.eq('event_id', eventId)
+			.eq('created_by', user.id)
+			.is('deleted_at', null);
+
+		if (error) {
+			console.error('Error deleting calendar event:', error);
 			return fail(500, { error: 'db_error' });
 		}
 

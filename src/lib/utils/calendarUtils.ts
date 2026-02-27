@@ -10,6 +10,7 @@ export interface CalendarEvent {
 	name: string;
 	sport_id: string;
 	city_id: string;
+	created_by?: string | null;
 	color: string;
 	reference_start: string; // ISO date string
 	reference_end: string;
@@ -17,7 +18,7 @@ export interface CalendarEvent {
 	end_day_of_week: number;
 	is_recurring: boolean;
 	sport?: { name: string }[] | { name: string } | null;
-	city?: { name: string; country_id: number }[] | { name: string; country_id: number } | null;
+	city?: { name: string; department_id: string }[] | { name: string; department_id: string } | null;
 }
 
 export interface AdjustedEvent extends CalendarEvent {

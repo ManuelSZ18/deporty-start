@@ -1,5 +1,6 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
+import { normalizeToIsoDate } from '$lib/utils/dateUtils';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { user } = await locals.safeGetSession();
@@ -28,23 +29,51 @@ export const actions: Actions = {
 				firstName: '',
 				lastName: '',
 				nickname: '',
-				birthDate: ''
+				birthDate: '',
+				phone: ''
 			});
 
 		const formData = await request.formData();
 		const firstName = formData.get('firstName') as string;
 		const lastName = formData.get('lastName') as string;
 		const nickname = (formData.get('nickname') as string)?.trim() || null;
-		const birthDate = formData.get('birthDate') as string;
+		const birthDateInput = formData.get('birthDate') as string;
+		const phoneInput = (formData.get('phone') as string) ?? '';
+		const birthDate = normalizeToIsoDate(birthDateInput);
+		const phone = phoneInput.trim();
+		const e164Regex = /^\+[1-9]\d{6,14}$/;
 		const avatarFile = formData.get('avatar') as File | null;
 
-		if (!firstName || !lastName || !birthDate) {
+		if (!firstName || !lastName || !birthDateInput || !phone) {
 			return fail(400, {
 				error: 'missing_fields',
 				firstName: firstName ?? '',
 				lastName: lastName ?? '',
 				nickname: nickname ?? '',
-				birthDate: birthDate ?? ''
+				birthDate: birthDateInput ?? '',
+				phone
+			});
+		}
+
+		if (!birthDate) {
+			return fail(400, {
+				error: 'invalid_birth_date',
+				firstName,
+				lastName,
+				nickname: nickname ?? '',
+				birthDate: birthDateInput,
+				phone
+			});
+		}
+
+		if (!e164Regex.test(phone)) {
+			return fail(400, {
+				error: 'invalid_phone',
+				firstName,
+				lastName,
+				nickname: nickname ?? '',
+				birthDate,
+				phone
 			});
 		}
 
@@ -54,7 +83,8 @@ export const actions: Actions = {
 				firstName,
 				lastName,
 				nickname,
-				birthDate
+				birthDate,
+				phone
 			});
 		}
 
@@ -97,6 +127,7 @@ export const actions: Actions = {
 			first_name: firstName,
 			last_name: lastName,
 			nickname,
+			phone,
 			profile_completed: true // Marcar como completo al guardar el perfil
 		};
 		if (avatarUrl) {
@@ -119,6 +150,7 @@ export const actions: Actions = {
 			last_name: lastName,
 			nickname,
 			birth_date: birthDate,
+			phone,
 			updated_at: new Date().toISOString()
 		};
 		if (avatarUrl) {
@@ -137,7 +169,8 @@ export const actions: Actions = {
 				firstName,
 				lastName,
 				nickname: nickname ?? '',
-				birthDate
+				birthDate,
+				phone
 			});
 		}
 

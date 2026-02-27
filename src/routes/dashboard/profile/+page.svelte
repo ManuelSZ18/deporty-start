@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { t } from '$lib/i18n';
+	import IntlTelInput from 'intl-tel-input/svelteWithUtils';
+	import 'intl-tel-input/styles';
 
 	let { data, form } = $props();
 	let isSubmitting = $state(false);
@@ -9,6 +11,23 @@
 
 	// Initialize a local state for the nickname input
 	let localApodo = $state('');
+	let phone = $state('');
+	let phoneValid = $state(false);
+
+	const phoneOptions = {
+		initialCountry: 'auto',
+		nationalMode: false,
+		strictMode: true,
+		geoIpLookup: async (callback: (countryCode: string) => void) => {
+			try {
+				const response = await fetch('https://ipapi.co/json/');
+				const locationData = await response.json();
+				callback((locationData?.country_code ?? 'CO').toLowerCase());
+			} catch {
+				callback('co');
+			}
+		}
+	};
 
 	import { untrack } from 'svelte';
 
@@ -17,10 +36,15 @@
 		// Untrack the external dependencies to initialize, preventing infinite reactive loops
 		const defaultNickname =
 			form?.nickname !== undefined ? form.nickname : data.profile?.nickname || '';
+		const defaultPhone = form?.phone !== undefined ? form.phone : data.profile?.phone || '';
 
 		untrack(() => {
 			if (!localApodo && defaultNickname) {
 				localApodo = defaultNickname;
+			}
+
+			if (!phone && defaultPhone) {
+				phone = defaultPhone;
 			}
 		});
 	});
@@ -140,6 +164,8 @@
 				<div class="rounded-lg bg-red-50 p-4 text-sm text-red-600">
 					{#if form.error === 'invalid_nickname'}
 						{$t('auth.error.invalid_nickname')}
+					{:else if form.error === 'invalid_phone'}
+						{$t('auth.error.invalid_phone')}
 					{:else}
 						{$t('profile.error')}
 					{/if}
@@ -274,6 +300,41 @@
 					required
 					class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 transition-colors focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
 				/>
+			</div>
+
+			<!-- Phone -->
+			<div>
+				<label for="phone" class="mb-2 block text-sm font-medium text-gray-700">
+					{$t('register.phoneLabel')}
+				</label>
+				<div
+					class="rounded-lg border border-gray-300 bg-gray-50 px-2 py-2 focus-within:border-blue-500"
+				>
+					<IntlTelInput
+						options={phoneOptions}
+						inputProps={{
+							id: 'phone',
+							class:
+								'w-full bg-transparent px-2 py-2 text-gray-900 placeholder-gray-400 outline-none',
+							placeholder: $t('register.phonePlaceholder'),
+							autocomplete: 'tel',
+							required: true,
+							value: phone
+						}}
+						onChangeNumber={(number: string) => {
+							phone = number;
+						}}
+						onChangeValidity={(isValid: boolean) => {
+							phoneValid = isValid;
+						}}
+					/>
+				</div>
+				<input type="hidden" name="phone" value={phone} />
+				{#if phone && !phoneValid}
+					<p class="mt-1 text-xs font-medium text-red-500">{$t('auth.error.invalid_phone')}</p>
+				{:else}
+					<p class="mt-1 text-xs text-gray-400">{$t('register.phoneHint')}</p>
+				{/if}
 			</div>
 
 			<!-- Submit -->

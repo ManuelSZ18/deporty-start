@@ -2,11 +2,15 @@
 	import { t } from '$lib/i18n';
 	import { enhance } from '$app/forms';
 	import { signInWithGoogle } from '$lib/auth/googleAuth';
+	import IntlTelInput from 'intl-tel-input/svelteWithUtils';
+	import 'intl-tel-input/styles';
 
 	let nombres = $state('');
 	let apellidos = $state('');
 	let apodo = $state('');
 	let birthDate = $state('');
+	let phone = $state('');
+	let phoneValid = $state(false);
 	let email = $state('');
 	let confirmEmail = $state('');
 	let password = $state('');
@@ -17,6 +21,21 @@
 	let isSubmitting = $state(false);
 	let errorMessage = $state('');
 	let successMessage = $state('');
+
+	const phoneOptions = {
+		initialCountry: 'auto',
+		nationalMode: false,
+		strictMode: true,
+		geoIpLookup: async (callback: (countryCode: string) => void) => {
+			try {
+				const response = await fetch('https://ipapi.co/json/');
+				const data = await response.json();
+				callback((data?.country_code ?? 'CO').toLowerCase());
+			} catch {
+				callback('co');
+			}
+		}
+	};
 
 	const passwordStrength = $derived(getPasswordStrength(password));
 	const strengthColor = $derived(getPasswordStrengthColor(passwordStrength));
@@ -80,12 +99,16 @@
 			!nombres ||
 			!apellidos ||
 			!birthDate ||
+			!phone ||
 			!email ||
 			!confirmEmail ||
 			!password ||
 			!confirmPassword
 		) {
 			return $t('register.errorEmpty');
+		}
+		if (!phoneValid) {
+			return $t('auth.error.invalid_phone');
 		}
 		if (email !== confirmEmail) {
 			return $t('register.errorEmailMismatch');
@@ -270,6 +293,38 @@
 							required
 						/>
 						<p class="text-xs text-slate-500">{$t('register.birthDateHint')}</p>
+					</div>
+
+					<!-- Phone -->
+					<div class="space-y-2">
+						<label for="phone" class="text-sm font-semibold text-slate-300"
+							>{$t('register.phoneLabel')}</label
+						>
+						<div class="rounded-xl border border-slate-700 bg-slate-800/50 px-2 py-2">
+							<IntlTelInput
+								options={phoneOptions}
+								inputProps={{
+									id: 'phone',
+									class:
+										'w-full bg-transparent px-2 py-2 text-white placeholder-slate-500 outline-none',
+									placeholder: $t('register.phonePlaceholder'),
+									autocomplete: 'tel',
+									required: true
+								}}
+								onChangeNumber={(number: string) => {
+									phone = number;
+								}}
+								onChangeValidity={(isValid: boolean) => {
+									phoneValid = isValid;
+								}}
+							/>
+						</div>
+						<input type="hidden" name="phone" value={phone} />
+						{#if phone && !phoneValid}
+							<p class="text-xs text-red-400">{$t('auth.error.invalid_phone')}</p>
+						{:else}
+							<p class="text-xs text-slate-500">{$t('register.phoneHint')}</p>
+						{/if}
 					</div>
 
 					<!-- Email -->
