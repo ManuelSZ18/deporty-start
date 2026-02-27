@@ -3,6 +3,7 @@
 	import { enhance } from '$app/forms';
 	import { signInWithGoogle } from '$lib/auth/googleAuth';
 	import PhoneInput from '$lib/components/PhoneInput.svelte';
+	import DateInput from '$lib/components/DateInput.svelte';
 
 	let nombres = $state('');
 	let apellidos = $state('');
@@ -283,13 +284,12 @@
 						<label for="birthDate" class="text-sm font-semibold text-slate-300"
 							>{$t('register.birthDateLabel')}</label
 						>
-						<input
+						<DateInput
 							id="birthDate"
 							name="birthDate"
-							type="date"
 							bind:value={birthDate}
 							class="w-full rounded-xl border border-slate-700 bg-slate-800/50 px-4 py-3 text-white placeholder-slate-500 transition-all outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-							required
+							required={true}
 						/>
 						<p class="text-xs text-slate-500">{$t('register.birthDateHint')}</p>
 					</div>

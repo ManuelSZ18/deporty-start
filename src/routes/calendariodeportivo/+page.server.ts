@@ -144,6 +144,21 @@ export const actions: Actions = {
 			created_by: user.id
 		});
 
+		import('fs').then((fs) => {
+			fs.writeFileSync(
+				'last_calendar_debug.txt',
+				JSON.stringify(
+					{
+						formData: Object.fromEntries(formData.entries()),
+						error: error || 'NONE - SUCCESS',
+						dates: { reference_start, reference_end, start_day_of_week, end_day_of_week }
+					},
+					null,
+					2
+				)
+			);
+		});
+
 		if (error) {
 			console.error('Error creating calendar event:', error);
 			return fail(500, { error: 'db_error' });

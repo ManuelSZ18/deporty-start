@@ -1,5 +1,7 @@
+import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
-	return {};
+	// Temporalmente redirige la portada al calendario deportivo a petición del usuario
+	throw redirect(303, '/calendariodeportivo');
 };

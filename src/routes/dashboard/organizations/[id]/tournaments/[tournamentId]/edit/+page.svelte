@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { t } from '$lib/i18n';
+	import DateInput from '$lib/components/DateInput.svelte';
 
 	let { data, form } = $props();
 	let isSubmitting = $state(false);
@@ -56,12 +57,11 @@
 					<label for="startDate" class="mb-2 block text-sm font-medium text-gray-700"
 						>{$t('tournaments.new.startDateLabel')}</label
 					>
-					<input
-						type="date"
+					<DateInput
 						id="startDate"
 						name="startDate"
 						value={form?.startDate ?? data.tournament.start_date}
-						required
+						required={true}
 						class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 transition-colors focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
 					/>
 				</div>
@@ -69,12 +69,11 @@
 					<label for="endDate" class="mb-2 block text-sm font-medium text-gray-700"
 						>{$t('tournaments.new.endDateLabel')}</label
 					>
-					<input
-						type="date"
+					<DateInput
 						id="endDate"
 						name="endDate"
 						value={form?.endDate ?? data.tournament.end_date}
-						required
+						required={true}
 						class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 transition-colors focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
 					/>
 				</div>

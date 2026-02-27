@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms';
 	import { t } from '$lib/i18n';
 	import PhoneInput from '$lib/components/PhoneInput.svelte';
+	import DateInput from '$lib/components/DateInput.svelte';
 
 	let { data, form } = $props();
 	let isSubmitting = $state(false);
@@ -291,12 +292,11 @@
 				<label for="birthDate" class="mb-2 block text-sm font-medium text-gray-700">
 					{$t('register.birthDateLabel')}
 				</label>
-				<input
-					type="date"
+				<DateInput
 					id="birthDate"
 					name="birthDate"
 					value={form?.birthDate ?? data.profile?.birth_date ?? ''}
-					required
+					required={true}
 					class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 transition-colors focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
 				/>
 			</div>

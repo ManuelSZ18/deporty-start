@@ -89,6 +89,10 @@ export const actions: Actions = {
 			return fail(500, { error: 'profile_error', email });
 		}
 
+		if (authData.session) {
+			throw redirect(303, '/dashboard');
+		}
+
 		throw redirect(303, '/login?registered=true');
 	}
 };

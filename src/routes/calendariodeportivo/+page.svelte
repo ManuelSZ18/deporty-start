@@ -14,6 +14,7 @@
 		type CalendarEvent
 	} from '$lib/utils/calendarUtils';
 	import { createSupabaseBrowserClient } from '$lib/supabaseClient';
+	import DateInput from '$lib/components/DateInput.svelte';
 
 	let { data } = $props();
 
@@ -36,7 +37,7 @@
 	let loadingCities = $state(false);
 	let loadedEvents = $state<CalendarEvent[]>([]);
 	let loadingEvents = $state(false);
-	let eventsRequestToken = 0;
+	let eventsRequestToken = $state(0);
 
 	type SportOption = { sport_id: string; name: string };
 
@@ -125,13 +126,15 @@
 
 	// Fetch events dynamically only after municipality/city is selected
 	$effect(() => {
+		// Read token to establish reactive dependency
+		const trigger = eventsRequestToken;
+
 		if (!selectedCityId) {
 			loadedEvents = [];
 			loadingEvents = false;
 			return;
 		}
 
-		const requestToken = ++eventsRequestToken;
 		loadingEvents = true;
 
 		const client = createSupabaseBrowserClient();
@@ -163,7 +166,7 @@
 		}
 
 		query.then(({ data: events }) => {
-			if (requestToken !== eventsRequestToken) {
+			if (trigger !== eventsRequestToken) {
 				return;
 			}
 
@@ -802,9 +805,9 @@
 						if (result.type === 'success') {
 							formMessage = $t('calendar.eventSuccess');
 							formError = false;
+							eventsRequestToken++; // Trigger background refetch seamlessly
 							setTimeout(() => {
 								showAddModal = false;
-								window.location.reload();
 							}, 1200);
 						} else {
 							formMessage = $t('calendar.eventError');
@@ -921,11 +924,10 @@
 						<label for="event-start" class="mb-1 block text-sm font-medium text-slate-300">
 							{$t('calendar.eventStartDate')}
 						</label>
-						<input
-							type="date"
+						<DateInput
 							id="event-start"
 							name="reference_start"
-							required
+							required={true}
 							class="w-full rounded-lg border border-slate-600 bg-slate-700/80 px-3 py-2 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 						/>
 					</div>
@@ -933,11 +935,10 @@
 						<label for="event-end" class="mb-1 block text-sm font-medium text-slate-300">
 							{$t('calendar.eventEndDate')}
 						</label>
-						<input
-							type="date"
+						<DateInput
 							id="event-end"
 							name="reference_end"
-							required
+							required={true}
 							class="w-full rounded-lg border border-slate-600 bg-slate-700/80 px-3 py-2 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 						/>
 					</div>
