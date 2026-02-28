@@ -468,7 +468,6 @@
 					bind:value={selectedSportId}
 					class="w-full rounded-lg border border-slate-600 bg-slate-700/80 px-3 py-2 text-sm text-white transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 				>
-					<option value="">{$t('calendar.filterAllSports')}</option>
 					{#each data.sports ?? [] as sport (sport.sport_id)}
 						<option value={sport.sport_id}>{sport.name}</option>
 					{/each}
