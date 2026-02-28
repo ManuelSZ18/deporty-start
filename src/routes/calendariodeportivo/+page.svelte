@@ -893,23 +893,45 @@
 					/>
 				</div>
 
-				<!-- Sport -->
-				<div>
-					<label for="event-sport" class="mb-1 block text-sm font-medium text-slate-300">
-						{$t('calendar.eventSport')}
-					</label>
-					<select
-						id="event-sport"
-						name="sport_id"
-						bind:value={eventSportId}
-						required
-						class="w-full rounded-lg border border-slate-600 bg-slate-700/80 px-3 py-2 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-					>
-						<option value="" disabled>—</option>
-						{#each data.sports ?? [] as sport (sport.sport_id)}
-							<option value={sport.sport_id}>{sport.name}</option>
-						{/each}
-					</select>
+				<!-- Sport and Participant Type -->
+				<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+					<div>
+						<label for="event-sport" class="mb-1 block text-sm font-medium text-slate-300">
+							{$t('calendar.eventSport')}
+						</label>
+						<select
+							id="event-sport"
+							name="sport_id"
+							bind:value={eventSportId}
+							required
+							class="w-full rounded-lg border border-slate-600 bg-slate-700/80 px-3 py-2 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+						>
+							<option value="" disabled>—</option>
+							{#each data.sports ?? [] as sport (sport.sport_id)}
+								<option value={sport.sport_id}>{sport.name}</option>
+							{/each}
+						</select>
+					</div>
+
+					<div>
+						<label
+							for="event-participant-type"
+							class="mb-1 block text-sm font-medium text-slate-300"
+						>
+							Tipo de Participante
+						</label>
+						<select
+							id="event-participant-type"
+							name="participant_type"
+							required
+							class="w-full rounded-lg border border-slate-600 bg-slate-700/80 px-3 py-2 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+						>
+							<option value="" disabled selected>—</option>
+							<option value="federado">Federado</option>
+							<option value="no_federado">No Federado</option>
+							<option value="ambos">Ambos (Mixto)</option>
+						</select>
+					</div>
 				</div>
 
 				<!-- Location Selection -->

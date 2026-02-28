@@ -136,9 +136,10 @@ export const actions: Actions = {
 		const reference_end = normalizeToIsoDate(referenceEndInput);
 		const is_recurring = formData.get('is_recurring') === 'on';
 		const categoryIds = formData.getAll('categories') as string[];
+		const participant_type = formData.get('participant_type') as string;
 
 		// Validation
-		if (!name || !sport_id || !city_id || !referenceStartInput || !referenceEndInput) {
+		if (!name || !sport_id || !city_id || !referenceStartInput || !referenceEndInput || !participant_type) {
 			return fail(400, { error: 'missing_fields' });
 		}
 
@@ -167,6 +168,7 @@ export const actions: Actions = {
 			start_day_of_week,
 			end_day_of_week,
 			is_recurring,
+			participant_type,
 			created_by: user.id
 		}).select('event_id').single();
 
